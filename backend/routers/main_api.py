@@ -1,27 +1,27 @@
-from flask import Blueprint, jsonify
+from fastapi import APIRouter
 
-main_views = Blueprint('main_views', __name__)
+router = APIRouter()
 
-@main_views.route('/api/index')
+@router.get("/api/index")
 def index():
-    return jsonify({
+    return {
         "title": "Hi, I’m Tseng Yuan Che",
         "intro": "I’m a developer with a background in chemistry, now building full-stack web applications and exploring AI.",
         "desc": "I specialize in Python and Flask, and I’m passionate about creating efficient, elegant, and impactful software."
-    })
+    }
 
-@main_views.route('/api/about')
+@router.get("/api/about")
 def about():
-    return jsonify({
+    return {
         "name": "Tseng Yuan Che",
         "role": "Software Developer",
         "description": "I build intelligent, efficient digital experiences with Python, Flask, and modern tools.",
         "skills": ["Python", "Flask", "Vue.js", "SQL", "AI"]
-    })
+    }
 
-@main_views.route('/api/projects')
+@router.get("/api/projects")
 def projects():
-    return jsonify({
+    return {
         "projects": [
             {
                 "title": "AI Care Website",
@@ -36,4 +36,4 @@ def projects():
                 "description": "Integration tool for collecting and summarizing YouTube + Podcast content."
             }
         ]
-    })
+    }

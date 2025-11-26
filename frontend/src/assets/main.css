@@ -1,0 +1,107 @@
+:root {
+  --site-bg: #0c1a2b; /* 深藍色 */
+  --site-text: #e4e9f0;
+  --site-secondary: #8fa3bd;
+}
+
+body {
+  background-color: var(--site-bg);
+  margin: 0;
+  padding: 0;
+}
+
+/* 整體左固定 + 右滾動布局 */
+.layout-container {
+  background-color: var(--site-bg);
+  display: flex;
+  height: 100vh; /* 固定高度 */
+  overflow: hidden; /* 阻止整頁滾動 */
+}
+
+/* 左側 Sidebar 固定 */
+.sidebar {
+  width: 280px;
+  background-color: var(--site-bg);
+  color: var(--site-text);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  overflow: hidden;
+}
+
+/* 右側內容區 */
+.content-area {
+  background-color: var(--site-bg);
+  color: var(--site-text);
+  margin-left: 280px; /* 讓開 sidebar */
+  padding: 2rem 3rem;
+  overflow-y: auto; /* 可滾動 */
+  width: calc(100% - 280px);
+}
+
+/* Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Sidebar Links */
+.nav-menu .nav-link {
+  color: #9bbcff;
+  font-weight: 500;
+}
+
+.nav-menu .nav-link:hover {
+  color: #0d6efd;
+  transform: translateX(4px);
+  transition: 0.2s ease;
+}
+
+.text-secondary {
+  color: var(--site-secondary);
+}
+
+/* for scoical media icon */
+.social-icons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+  }
+  
+  .social-icons a {
+    font-size: 2rem; /* icon 變大 */
+    color: #6c757d;
+    transition: 0.2s ease;
+  }
+  
+  .social-icons a:hover {
+    color: #0d6efd;
+    transform: translateY(-3px) scale(1.15);
+  }
+
+/* ----------------------- */
+
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(
+    circle,
+    rgba(0, 150, 255, 0.35),
+    rgba(0, 150, 255, 0.05),
+    transparent 60%
+  );
+  pointer-events: none; /* 不影響點擊 */
+  filter: blur(60px);
+  border-radius: 50%;
+  transform: translate(-9999px, -9999px); /* 初始隱藏 */
+  transition: transform 0.008s linear; /* 緊跟滑鼠 */
+  z-index: 9999; /* 永遠在最上層 */
+}
