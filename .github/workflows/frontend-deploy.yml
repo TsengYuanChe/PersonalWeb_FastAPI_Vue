@@ -64,11 +64,9 @@ jobs:
       # 7. Deploy to Cloud Run
       # ---------------------------------------------------
       - name: Deploy to Cloud Run
-        shell: bash
         run: |
-            gcloud run deploy fastapi-backend \
-            --image="$IMAGE:latest" \
-            --platform=managed \
-            --region="${{ secrets.CLOUD_RUN_REGION }}" \
-            --port=8080 \
-            --allow-unauthenticated
+          gcloud run deploy fastapi-backend \
+              --image="$IMAGE:latest" \
+              --platform=managed \
+              --region=${{ secrets.CLOUD_RUN_REGION }} \
+              --port=8080
