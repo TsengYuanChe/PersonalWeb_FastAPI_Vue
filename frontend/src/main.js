@@ -9,6 +9,7 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 import './assets/main.css'
 import './assets/projects.css'
 import './assets/about.css'
+import './assets/exp.css'
 
 const app = createApp(App)
 

@@ -44,7 +44,7 @@
           <p class="last-updated mt-3 text-secondary small">
             Last updated: {{ updatedTime }}
           </p>
-          
+
         </div>
       </aside>
 
@@ -53,6 +53,8 @@
 
         <!-- ABOUT -->
         <section id="about" class="mb-5 about-section">
+          <h2 class="fw-bold">Profile</h2>
+
           <div class="about-text mt-3">
             <p
               v-for="(p, index) in aboutData.paragraphs"
@@ -67,12 +69,37 @@
         <!-- EXPERIENCES -->
         <section id="exp">
           <h2 class="fw-bold">Experiences</h2>
-          <p class="mt-3">{{ expData.description }}</p>
+          
+          <div
+            v-for="(exp, index) in expData.experience" 
+            :key="index"
+            class="exp-card mb-5"
+          >
+            <!-- Top Row: Position + Duration -->
+            <div class="d-flex justify-content-between align-items-center">
+              <h4 class="text-info mb-1">{{ exp.position }}</h4>
+              <span class="text-secondary small">{{ exp.duration }}</span>
+            </div>
 
-          <h5 class="mt-4 text-info">Skills</h5>
-          <ul>
-            <li v-for="skill in expData.skills" :key="skill">{{ skill }}</li>
-          </ul>
+            <!-- Location -->
+            <h5 class="text-light mb-3">{{ exp.location }}</h5>
+
+            <!-- Details -->
+            <ul class="text-secondary mb-3 exp-detail-list">
+              <li v-for="(d, i) in exp.details" :key="i">{{ d }}</li>
+            </ul>
+
+            <!-- Skills -->
+            <div class="tag-group mt-2">
+              <span 
+                v-for="skill in exp.skills" 
+                :key="skill" 
+                class="tag exp-skill-tag"
+              >
+                {{ skill }}
+              </span>
+            </div>
+          </div>
         </section>
 
         <!-- PROJECTS -->

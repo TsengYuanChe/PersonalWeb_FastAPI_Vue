@@ -1,0 +1,49 @@
+name: Deploy Vue Frontend to Cloud Run
+
+on:
+  push:
+    paths:
+      - "frontend/**"
+      - ".github/workflows/frontend-deploy.yml"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Cloud SDK
+      uses: google-github-actions/setup-gcloud@v2
+      with:
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
+
+    - name: Configure Docker for Artifact Registry
+      run: |
+        gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
+
+    - name: Build Frontend Docker Image
+      run: |
+        cd frontend
+        docker build --platform linux/amd64 -t vue-frontend .
+
+    - name: Tag Docker Image
+      run: |
+        docker tag vue-frontend \
+        ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/frontend/vue-frontend:latest
+
+    - name: Push Docker Image
+      run: |
+        docker push \
+        ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/frontend/vue-frontend:latest
+
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy ${{ secrets.FRONTEND_SERVICE }} \
+          --image=${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/frontend/vue-frontend:latest \
+          --region=${{ secrets.GCP_REGION }} \
+          --allow-unauthenticated \
+          --platform=managed

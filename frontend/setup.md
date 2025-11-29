@@ -4,23 +4,17 @@ conda activate fastapi-env
 
 uvicorn main:app --reload --host 127.0.0.1 --port 8000
 
-# Create requirements.txt
-
-source venv/bin/activate
-
-pip freeze > requirements.txt
-
 # Test docker file
 
-docker build --platform linux/amd64 -t fastapi-backend .
+docker build --platform linux/amd64 -t vue-frontend .
 
-docker run -p 8080:8080 fastapi-backend
+docker run -p 8080:8080 vue-frontend
 
 ## 建立 Artifact Registry repository
 
 Artifact Registry → Repositories → 建立 repository
 
-Repository name：backend
+Repository name：frontend
 
 Format：Docker
 
@@ -40,9 +34,9 @@ gcloud config set project personal-website-479501
 
 gcloud auth configure-docker asia-east1-docker.pkg.dev
 
-docker tag fastapi-backend asia-east1-docker.pkg.dev/personal-website-479501/backend/fastapi-backend
+docker tag vue-frontend asia-east1-docker.pkg.dev/personal-website-479501/frontend/vue-frontend
 
-docker push asia-east1-docker.pkg.dev/personal-website-479501/backend/fastapi-backend
+docker push asia-east1-docker.pkg.dev/personal-website-479501/frontend/vue-frontend
 
 # Deploy steps
 

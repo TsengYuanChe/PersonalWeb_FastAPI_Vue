@@ -6,6 +6,8 @@ export function usePageData() {
   const projectList = ref([])
   const updatedTime = ref('—')
 
+  const API_BASE = import.meta.env.VITE_API_BASE
+
   function pickLatestTime(...time) {
     const validTimes = time.filter(Boolean)
     if (validTimes.length === 0) return '—'
@@ -18,15 +20,15 @@ export function usePageData() {
   }
 
   onMounted(async () => {
-    const aboutRes = await fetch('http://127.0.0.1:8000/api/about')
+    const aboutRes = await fetch(`${API_BASE}/api/about`)
     const aboutJson = await aboutRes.json()
     aboutData.value = aboutJson
 
-    const expRes = await fetch('http://127.0.0.1:8000/api/experience')
+    const expRes = await fetch(`${API_BASE}/api/experience`)
     const expJson = await expRes.json()
     expData.value = expJson
 
-    const projectRes = await fetch('http://127.0.0.1:8000/api/projects')
+    const projectRes = await fetch(`${API_BASE}/api/projects`)
     const projectJson = await projectRes.json()
     projectList.value = projectJson.projects
 
