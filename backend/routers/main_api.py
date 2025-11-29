@@ -1,39 +1,32 @@
 from fastapi import APIRouter
+from datetime import datetime
+import os, json
 
 router = APIRouter()
 
-@router.get("/api/index")
-def index():
-    return {
-        "title": "Hi, I’m Tseng Yuan Che",
-        "intro": "I’m a developer with a background in chemistry, now building full-stack web applications and exploring AI.",
-        "desc": "I specialize in Python and Flask, and I’m passionate about creating efficient, elegant, and impactful software."
-    }
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(BASE_DIR, "data")
+
+def load_json(filename):
+    filepath = os.path.join(DATA_DIR, filename)
+    
+    with open(filepath, "r", encoding="utf-8") as f:
+        data = json.load(f)
+        
+    last_modified = os.path.getmtime(filepath)
+    updated_at = datetime.fromtimestamp(last_modified).strftime("%Y-%m-%d %H:%M:%S")
+    
+    data["updated_at"] = updated_at
+    return data 
 
 @router.get("/api/about")
 def about():
-    return {
-        "name": "Tseng Yuan Che",
-        "role": "Software Developer",
-        "description": "I build intelligent, efficient digital experiences with Python, Flask, and modern tools.",
-        "skills": ["Python", "Flask", "Vue.js", "SQL", "AI"]
-    }
+    return load_json("about.json")
+
+@router.get("/api/experience")
+def experience():
+    return load_json("exp.json")
 
 @router.get("/api/projects")
 def projects():
-    return {
-        "projects": [
-            {
-                "title": "AI Care Website",
-                "description": "Flask-based AI-powered care system with OpenCV and health education integration."
-            },
-            {
-                "title": "Financial Report Crawler",
-                "description": "Crawler that automates financial report download from TWSE for analysts."
-            },
-            {
-                "title": "yt_pod",
-                "description": "Integration tool for collecting and summarizing YouTube + Podcast content."
-            }
-        ]
-    }
+    return load_json("projects.json")

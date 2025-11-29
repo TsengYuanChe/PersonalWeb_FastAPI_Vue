@@ -1,0 +1,13 @@
+.about-section h2 {
+    font-size: 2.2rem;
+    margin-bottom: 0;
+  }
+  
+  .about-section h5 {
+    opacity: 0.8;
+  }
+  
+  .about-text p {
+    line-height: 1.65;
+    font-size: 1rem;
+  }

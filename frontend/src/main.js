@@ -7,6 +7,8 @@ import 'bootstrap-icons/font/bootstrap-icons.css'
 
 // 自己的全域 CSS
 import './assets/main.css'
+import './assets/projects.css'
+import './assets/about.css'
 
 const app = createApp(App)
 

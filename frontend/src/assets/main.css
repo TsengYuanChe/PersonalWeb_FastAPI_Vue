@@ -4,55 +4,111 @@
   --site-secondary: #8fa3bd;
 }
 
+/* ---------------------------
+   Global
+---------------------------- */
+
 body {
   background-color: var(--site-bg);
   margin: 0;
   padding: 0;
 }
 
-/* 整體左固定 + 右滾動布局 */
-.layout-container {
-  background-color: var(--site-bg);
-  display: flex;
-  height: 100vh; /* 固定高度 */
-  overflow: hidden; /* 阻止整頁滾動 */
-}
-
-/* 左側 Sidebar 固定 */
-.sidebar {
-  width: 280px;
-  background-color: var(--site-bg);
-  color: var(--site-text);
-  padding: 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  overflow: hidden;
-}
-
-/* 右側內容區 */
-.content-area {
-  background-color: var(--site-bg);
-  color: var(--site-text);
-  margin-left: 280px; /* 讓開 sidebar */
-  padding: 2rem 3rem;
-  overflow-y: auto; /* 可滾動 */
-  width: calc(100% - 280px);
-}
-
-/* Smooth Scroll */
 html {
   scroll-behavior: smooth;
 }
 
-/* Sidebar Links */
+/* ---------------------------
+   Outer Wrapper (整體置中)
+---------------------------- */
+
+.app-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* ---------------------------
+   Grid Layout：sidebar + main content
+---------------------------- */
+
+.layout-container {
+  background-color: var(--site-bg);
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  width: 1300px;      /* ⭐ 整個網站置中寬度 */
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ---------------------------
+   Sidebar（左側固定不脫格）
+---------------------------- */
+
+.sidebar {
+  width: 350px;
+  padding: 40px 30px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  position: sticky;   /* ⭐ 取代 fixed，才不會脫離 Grid */
+  top: 0;
+  height: 100vh;
+
+  background-color: var(--site-bg);
+  color: var(--site-text);
+}
+
+/* ---------------------------
+   Main Content（右側置中）
+---------------------------- */
+
+.main-content {
+  overflow-y: auto;
+  background-color: var(--site-bg);
+
+  max-width: 1000px;   /* ⭐ 內容寬度 */
+  width: 100%;
+  margin: 0 auto;      /* ⭐ 在右側空間內水平置中 */
+
+  padding: 30px 120px;
+}
+
+/* ---------------------------
+   Section Layout
+---------------------------- */
+
+.section {
+  margin-bottom: 80px;
+}
+
+.section h2 {
+  margin-bottom: 20px;
+}
+
+/* ---------------------------
+   Text
+---------------------------- */
+
+.text-secondary {
+  color: var(--site-secondary);
+}
+
+.section p {
+  line-height: 1.7;
+  font-size: 1.05rem;
+}
+
+/* ---------------------------
+   Sidebar Links
+---------------------------- */
+
 .nav-menu .nav-link {
   color: #9bbcff;
   font-weight: 500;
+  cursor: pointer;
 }
 
 .nav-menu .nav-link:hover {
@@ -61,30 +117,43 @@ html {
   transition: 0.2s ease;
 }
 
-.text-secondary {
-  color: var(--site-secondary);
+/* ---------------------------
+   Social Icons
+---------------------------- */
+
+.social-icons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 35px;
+  align-items: center;
+}
+  
+.social-icons a {
+  font-size: 2rem; /* icon 變大 */
+  color: #6c757d;
+  transition: 0.2s ease;
+}
+  
+.social-icons a:hover {
+  color: #0d6efd;
+  transform: translateY(-3px) scale(1.15);
 }
 
-/* for scoical media icon */
-.social-icons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 2rem;
-  }
-  
-  .social-icons a {
-    font-size: 2rem; /* icon 變大 */
-    color: #6c757d;
-    transition: 0.2s ease;
-  }
-  
-  .social-icons a:hover {
-    color: #0d6efd;
-    transform: translateY(-3px) scale(1.15);
-  }
+.bottom-area {
+  margin-top: auto;
+  text-align: center;
+}
 
-/* ----------------------- */
+.last-updated {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  text-align: left;
+  width: 100%;
+}
+
+/* ---------------------------
+   Cursor Glow
+---------------------------- */
 
 .cursor-glow {
   position: fixed;
