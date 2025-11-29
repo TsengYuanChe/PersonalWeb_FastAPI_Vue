@@ -69,4 +69,5 @@ jobs:
               --image="$IMAGE:latest" \
               --platform=managed \
               --region=${{ secrets.CLOUD_RUN_REGION }} \
+              --allow-unauthenticated \
               --port=8080
