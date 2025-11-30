@@ -1,5 +1,5 @@
 # === Build Stage ===
-FROM node:20 AS builder
+FROM node:20-bookeorm-slim AS builder
 
 WORKDIR /app
 
@@ -10,7 +10,7 @@ COPY . .
 RUN npm run build
 
 # === Production Stage ===
-FROM nginx:1.25
+FROM nginx:stable-alpine-slim
 
 # Cloud Run 需要服務監聽 $PORT
 ENV PORT=8080
