@@ -1,5 +1,5 @@
 # Use official Python runtime
-FROM python:3.13.9-bookworm-slim
+FROM python:3.13.9
 
 # Set working directory
 WORKDIR /app

@@ -1,5 +1,5 @@
 # === Build Stage ===
-FROM node:20-bookeorm-slim AS builder
+FROM node:20 AS builder
 
 WORKDIR /app
 
