@@ -1,0 +1,90 @@
+/* ============================================
+   Projects Page - Responsive Styles (RWD)
+   Based on your original project.css design
+============================================ */
+
+/* ---------- Mobile (max-width: 768px) ---------- */
+@media (max-width: 768px) {
+
+  /* 整體 Project 區塊縮小左右留白 */
+  .projects-section {
+    padding-bottom: 2rem !important;
+  }
+
+  /* Project 卡片縮小 padding、圓角稍微減少 */
+  .project-card {
+    padding: 1.2rem 1.1rem !important;
+    border-radius: 14px !important;
+    margin-bottom: 1.6rem !important;
+  }
+
+  /* Title 字體縮小 */
+  .project-card h4 {
+    font-size: 1.1rem !important;
+  }
+
+  /* Code Button 調整大小與間距 */
+  .code-btn {
+    padding: 5px 12px !important;
+    font-size: 0.75rem !important;
+  }
+
+  /* Description 字體縮小，行距調整 */
+  .project-card p {
+    font-size: 0.9rem !important;
+    line-height: 1.5 !important;
+    margin-bottom: 0.9rem !important;
+  }
+
+  /* Tag 外觀縮小，圓角保留 (pill-style) */
+  .tag-group {
+    gap: 6px !important;
+  }
+
+  .tag {
+    padding: 4px 10px !important;
+    font-size: 0.75rem !important;
+    border-radius: 999px !important;
+  }
+
+  /* Blue tag 在小螢幕降低透明度，增強可讀性 */
+  .tag-lang {
+    background: rgba(80, 180, 255, 0.22) !important;
+    border-color: rgba(80, 180, 255, 0.45) !important;
+    color: #d2ecff !important;
+  }
+
+  /* Green tag 亮度小幅提升 */
+  .tag-tool {
+    background: rgba(100, 255, 218, 0.22) !important;
+    border-color: rgba(100, 255, 218, 0.45) !important;
+    color: #e0fff6 !important;
+  }
+
+  /* Hover 在手機不應該使用位移強效果 → 弱化 */
+  .tag:hover {
+    transform: none !important;
+    opacity: 0.9;
+  }
+
+  .project-card:hover {
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* ---------- Tablet (max-width: 1024px) ---------- */
+@media (max-width: 1024px) {
+  .project-card {
+    padding: 1.5rem 1.3rem;
+  }
+
+  .project-card h4 {
+    font-size: 1.25rem;
+  }
+
+  .tag {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+  }
+}

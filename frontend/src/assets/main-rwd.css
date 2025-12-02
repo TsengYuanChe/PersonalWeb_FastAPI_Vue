@@ -1,0 +1,69 @@
+/* ----- Hide glow on mobile ----- */
+@media (max-width: 768px) {
+  .cursor-glow {
+    display: none;
+  }
+}
+
+/* ----- Tablet ----- */
+@media (max-width: 1024px) {
+  .layout-container {
+    width: 100%;
+  }
+}
+
+/* ----- Mobile RWD ----- */
+@media (max-width: 768px) {
+
+  /* Sidebar becomes top bar */
+  .layout-container {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .nav-menu {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .nav-menu .nav-link:hover {
+    transform: none;
+  }
+
+  /* main content full width */
+  .main-content {
+    margin-left: 0;
+    padding: 20px;
+    max-width: 100%;
+    overflow-y: visible;
+  }
+
+  /* section spacing */
+  .section {
+    margin-bottom: 40px;
+  }
+
+  .section p {
+    font-size: 0.95rem;
+  }
+
+  /* Project cards */
+  .project-card {
+    padding: 16px 18px;
+  }
+}

@@ -1,0 +1,66 @@
+/* ============================================
+   Experience Page - Responsive Styles (RWD)
+   Based on your original exp.css design
+============================================ */
+
+/* ---------- Mobile (max-width: 768px) ---------- */
+@media (max-width: 768px) {
+
+  /* Experience 卡片縮小 padding、圓角調整 */
+  .exp-card {
+    padding: 16px 18px !important;
+    border-radius: 10px !important;
+    margin-bottom: 1.4rem !important;
+  }
+
+  /* Hover 效果在手機移除避免卡住 */
+  .exp-card:hover {
+    background: rgba(255, 255, 255, 0.05) !important;
+    transform: none !important;
+  }
+
+  /* Experience 標題 */
+  .exp-card h4 {
+    font-size: 1.1rem !important;
+    margin-bottom: 6px !important;
+  }
+
+  /* 位置 / 時間字體縮小 */
+  .exp-card .exp-meta,
+  .exp-card .exp-location,
+  .exp-card .exp-duration {
+    font-size: 0.85rem !important;
+    opacity: 0.8 !important;
+  }
+
+  /* 詳細條列縮小字體 & 行距 */
+  .exp-detail-list li {
+    font-size: 0.9rem !important;
+    line-height: 1.45 !important;
+    margin-bottom: 5px !important;
+  }
+
+  /* Skill tag group 排列變緊湊 */
+  .exp-skill-tag {
+    font-size: 0.75rem !important;
+    padding: 5px 12px !important;
+    margin-right: 6px !important;
+    margin-bottom: 6px !important;
+  }
+}
+
+/* ---------- Tablet (max-width: 1024px) ---------- */
+@media (max-width: 1024px) {
+  .exp-card {
+    padding: 18px 20px;
+  }
+
+  .exp-skill-tag {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+  }
+
+  .exp-detail-list li {
+    font-size: 0.95rem;
+  }
+}
