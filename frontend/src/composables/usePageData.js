@@ -19,6 +19,10 @@ export function usePageData() {
     return latest.split(" ")[0]
   }
 
+  function getLogoUrl(file) {
+    return new URL(`/src/assets/images/exp/${file}`, import.meta.url).href
+  }
+
   onMounted(async () => {
     const aboutRes = await fetch(`${API_BASE}/api/about`)
     const aboutJson = await aboutRes.json()
@@ -44,5 +48,6 @@ export function usePageData() {
     expData,
     projectList,
     updatedTime,
+    getLogoUrl,
   }
 }

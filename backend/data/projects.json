@@ -1,25 +1,48 @@
 {
   "projects": [
     {
-      "title": "AI Care Website",
       "description": "Flask-based AI-powered care system with OpenCV and health education integration.",
-      "url": "https://github.com/TsengYuanChe/AI_care_website",
-      "languages": ["Python", "JavaScript", "HTML", "CSS"],
-      "tools": ["Flask", "OpenCV", "Bootstrap", "SQLite"]
+      "languages": [
+        "Python",
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
+      "title": "AI Care Website",
+      "tools": [
+        "Flask",
+        "OpenCV",
+        "Bootstrap",
+        "SQLite"
+      ],
+      "url": "https://github.com/TsengYuanChe/AI_care_website"
     },
     {
-      "title": "Financial Report Crawler",
       "description": "Crawler that automates financial report download from TWSE for analysts.",
-      "url": "https://github.com/TsengYuanChe/Financial_report_crawler",
-      "languages": ["Python"],
-      "tools": ["Selenium", "BeautifulSoup", "Webdriver"]
+      "languages": [
+        "Python"
+      ],
+      "title": "Financial Report Crawler",
+      "tools": [
+        "Selenium",
+        "BeautifulSoup",
+        "Webdriver"
+      ],
+      "url": "https://github.com/TsengYuanChe/Financial_report_crawler"
     },
     {
-      "title": "yt_pod",
       "description": "Integration tool for collecting and summarizing YouTube + Podcast content.",
-      "url": "https://github.com/TsengYuanChe/yt_pod_crawler",
-      "languages": ["Python"],
-      "tools": ["YouTube API", "Podcast API", "Whisper", "GPT-3"]
+      "languages": [
+        "Python"
+      ],
+      "title": "yt_pod",
+      "tools": [
+        "YouTube API",
+        "Podcast API",
+        "Whisper",
+        "GPT-3"
+      ],
+      "url": "https://github.com/TsengYuanChe/yt_pod_crawler"
     }
   ]
 }

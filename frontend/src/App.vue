@@ -75,17 +75,32 @@
             :key="index"
             class="exp-card mb-5"
           >
-            <!-- Top Row: Position + Duration -->
-            <div class="d-flex justify-content-between align-items-center">
-              <h4 class="text-info mb-1">{{ exp.position }}</h4>
-              <span class="text-secondary small">{{ exp.duration }}</span>
+            <!-- Top Row -->
+            <div class="d-flex align-items-center gap-3">
+
+              <!-- LOGO -->
+              <div class="exp-logo-wrapper">
+                <img
+                  v-if="exp.logo"
+                  class="exp-logo"
+                  :src="getLogoUrl(exp.logo)"
+                  alt="logo"
+                />
+              </div>
+
+              <!-- Title + Duration -->
+              <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                  <h4 class="text-info mb-1">{{ exp.position }}</h4>
+                  <span class="text-secondary small">{{ exp.duration }}</span>
+                </div>
+                <h5 class="text-light mb-0">{{ exp.location }}</h5>
+              </div>
+
             </div>
 
-            <!-- Location -->
-            <h5 class="text-light mb-3">{{ exp.location }}</h5>
-
             <!-- Details -->
-            <ul class="text-secondary mb-3 exp-detail-list">
+            <ul class="text-secondary mt-3 mb-3 exp-detail-list">
               <li v-for="(d, i) in exp.details" :key="i">{{ d }}</li>
             </ul>
 
@@ -99,6 +114,7 @@
                 {{ skill }}
               </span>
             </div>
+            
           </div>
         </section>
 
@@ -148,7 +164,7 @@ import { useScrollProxy } from './composables/useScrollProxy';
 import { useMouseGlow } from './composables/useMouseGlow';
 import { useSmoothScroll } from './composables/useSmoothScroll'
 
-const { aboutData, expData, projectList, updatedTime } = usePageData()
+const { aboutData, expData, projectList, updatedTime, getLogoUrl} = usePageData()
 const { scrollToSection } = useSmoothScroll()
 
 useScrollProxy();
