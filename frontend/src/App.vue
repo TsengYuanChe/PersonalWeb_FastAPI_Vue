@@ -114,7 +114,7 @@
                 {{ skill }}
               </span>
             </div>
-            
+
           </div>
         </section>
 
@@ -137,15 +137,12 @@
             <p class="text-secondary mt-2 mb-2">{{ project.description }}</p>
 
             <!-- Languages -->
-            <div class="tag-group">
-              <span v-for="lang in project.languages" :key="lang" class="tag tag-lang">
+            <div class="tag-group mt-2">
+              <span v-for="lang in project.languages" :key="`lang-${lang}`" class="tag tag-lang">
                 {{ lang }}
               </span>
-            </div>
 
-            <!-- Tools -->
-            <div class="tag-group mt-2">
-              <span v-for="tool in project.tools" :key="tool" class="tag tag-tool">
+              <span v-for="tool in project.tools" :key="`tool-${tool}`" class="tag tag-tool">
                 {{ tool }}
               </span>
             </div>
