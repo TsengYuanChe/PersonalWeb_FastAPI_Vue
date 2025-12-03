@@ -90,11 +90,23 @@
 
               <!-- Title + Duration -->
               <div class="flex-grow-1">
+
                 <div class="d-flex justify-content-between align-items-center flex-wrap">
                   <h4 class="text-info mb-1">{{ exp.position }}</h4>
                   <span class="text-secondary small">{{ exp.duration }}</span>
                 </div>
-                <h5 class="text-light mb-0">{{ exp.location }}</h5>
+
+                <div class="d-flex justify-content-between align-items-center flex-wrap mt-1">
+                  <h5 class="text-light mb-0">{{ exp.location }}</h5>
+                  <!-- GPA：只有大學會出現 -->
+                  <span 
+                    v-if="exp.gpa"
+                    class="text-secondary small d-block mt-1"
+                    style="opacity: 0.9;"
+                  >
+                    {{ exp.gpa }}
+                  </span>
+                </div>
               </div>
 
             </div>

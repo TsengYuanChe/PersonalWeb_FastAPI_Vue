@@ -2,12 +2,27 @@
   "experience": [
     {
       "details": [
+        "Developed web applications and services using Flask framework.",
+        "Integrated third-party APIs to enhance application functionality."
+      ],
+      "duration": "Jul 2025 - Present",
+      "location": "eZoom Information, Inc.",
+      "position": "Software Developnment Engineering",
+      "skills": [
+        "Python",
+        "Web Development",
+        "APIs"
+      ],
+      "logo": "ezoom.png"
+    },
+    {
+      "details": [
         "Conduct research on machine learning applications in chemical data analysis.",
         "Developed a predictive model for chemical reactions using Python and TensorFlow."
       ],
-      "duration": "Sep 2022 - Present",
+      "duration": "Sep 2021 - Dec 2024",
       "location": "National Yang Ming Chiao Tung University",
-      "position": "Master's Student Researcher is Department of Applied Chemistry",
+      "position": "Department of Applied Chemistry - Master",
       "skills": [
         "Python",
         "Machine Learning",
@@ -20,30 +35,17 @@
         "Assisted in research projects focused on chemical synthesis and analysis.",
         "Created data visualizations to present research findings using Matplotlib and Seaborn."
       ],
-      "duration": "Sep 2018 - Jun 2022",
+      "duration": "Sep 2017 - Jun 2021",
       "location": "National Chung Hsing University",
-      "position": "Bachelor's Student Researcher in Department of Chemistry",
+      "position": "Department of Chemistry — Undergraduate",
       "skills": [
-        "Python",
-        "Data Visualization",
-        "Statistical Analysis"
+        "Matlab",
+        "Organic Synthesis",
+        "Experiment Design",
+        "Data Analysis"
       ],
-      "logo": "nchu.png"
-    },
-    {
-      "details": [
-        "Developed web applications and services using Flask framework.",
-        "Integrated third-party APIs to enhance application functionality."
-      ],
-      "duration": "Jul 2021 - Aug 2021",
-      "location": "eZoom Information, Inc.",
-      "position": "Software Developnment Engineering",
-      "skills": [
-        "Python",
-        "Web Development",
-        "APIs"
-      ],
-      "logo": "ezoom.png"
+      "logo": "nchu.png",
+      "gpa": "GPA: 3.8 / 4.3"
     }
   ]
 }

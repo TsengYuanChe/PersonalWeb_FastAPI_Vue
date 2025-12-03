@@ -1,6 +1,6 @@
 export function useSmoothScroll() {
     const scrollToSection = (id) => {
-      const container = document.querySelector('.content-area')
+      const container = document.querySelector('.main-content')
       const target = document.querySelector(id)
   
       if (!container || !target) return
