@@ -15,38 +15,64 @@
   background: rgba(255, 255, 255, 0.06);
   transform: translateY(-3px);
 }
+
+.exp-card a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+}
+
+.exp-card a:hover {
+  color: #fff;
+  border-bottom-color: rgba(255, 255, 255, 0.6);
+}
   
 /* Details list */
 .exp-detail-list li {
   margin-bottom: 6px;
+}
+
+/* EXP tag container */
+.exp-tag-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 14px;      /* ↑ 垂直 12px，水平 16px，讓排版更舒服 */
+  margin-top: 1rem;
 }
   
 /* Skill tags */
 .exp-skill-tag {
   display: inline-block;
   background: rgba(150, 120, 255, 0.18);
-  color: #e3d7ff;
-  padding: 6px 14px;
-  margin-right: 8px;
-  margin-bottom: 8px;
-  border-radius: 20px;
-  font-size: 0.85rem;
   border: 1px solid rgba(180, 150, 255, 0.35);
+  color: #e3d7ff;
+  padding: 8px 18px;
+  border-radius: 22px;
+  font-size: 0.85rem;
+  letter-spacing: 0.3px;
+  white-space: nowrap; /* 防止換行破版 */
   transition: 0.2s ease;
+}
+
+.exp-skill-tag:hover {
+  background: rgba(150, 120, 255, 0.28);
+  border-color: rgba(200, 170, 255, 0.55);
+  transform: translateY(-2px);
 }
 
 /* Logo images */
 .exp-logo {
-  width: 48px;
-  height: 48px;
+  width: 56px;
+  height: 56px;
   object-fit: contain;
   border-radius: 8px;
-  background: rgba(255,255,255,0.05);
-  padding: 6px;
+  padding: 0;
+  background: none;
+  box-shadow: none;
 }
 
 .exp-logo-wrapper {
-  width: 48px;        /* 固定容器寬 */
+  width: 64px;        /* 固定容器寬 */
+  height: 64px;
   flex-shrink: 0;     /* 避免壓縮 */
   display: flex;
   justify-content: center;

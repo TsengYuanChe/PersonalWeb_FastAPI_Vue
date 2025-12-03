@@ -113,15 +113,15 @@
 
             <!-- Details -->
             <ul class="text-secondary mt-3 mb-3 exp-detail-list">
-              <li v-for="(d, i) in exp.details" :key="i">{{ d }}</li>
+              <li v-for="(d, i) in exp.details" :key="i" class="text-secondry mb-2" v-html="d"></li>
             </ul>
 
             <!-- Skills -->
-            <div class="tag-group mt-2">
+            <div class="exp-tag-group">
               <span 
                 v-for="skill in exp.skills" 
                 :key="skill" 
-                class="tag exp-skill-tag"
+                class="exp-skill-tag"
               >
                 {{ skill }}
               </span>

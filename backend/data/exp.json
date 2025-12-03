@@ -28,20 +28,25 @@
         "Machine Learning",
         "Data Analysis"
       ],
-      "logo": "nycu.png"
+      "logo": "nycu.png",
+      "gpa": "4.1 / 4.3"
     },
     {
       "details": [
-        "Assisted in research projects focused on chemical synthesis and analysis.",
-        "Created data visualizations to present research findings using Matplotlib and Seaborn."
+        "Conducted research under <a href=\"https://arspb.nstc.gov.tw/NSCWebFront/modules/talentSearch/talentSearch.do?action=initBasic&rsNo=5c0c516dd31d4d83aae898bdd5835add&LANG=chi\" target=\"_blank\">Prof. Chin-Fa Lee</a>, a well-known scholar in organometallic catalysis and former department chair.",
+        "Focused on experimental design, organic synthesis, methodology development, and reaction optimization to identify effective catalytic systems.",
+        "Processed and visualized analytical data using Origin and MATLAB, including results obtained from GC-MS and HPLC, for quantitative and qualitative chemical analysis.",
+        "Developed practical laboratory skills in synthesis planning, catalyst evaluation, reaction monitoring, and scientific data interpretation."
       ],
       "duration": "Sep 2017 - Jun 2021",
       "location": "National Chung Hsing University",
       "position": "Department of Chemistry — Undergraduate",
       "skills": [
-        "Matlab",
+        "MATLAB",
+        "Origin",
         "Organic Synthesis",
-        "Experiment Design",
+        "Experimental Design",
+        "Method Development",
         "Data Analysis"
       ],
       "logo": "nchu.png",
