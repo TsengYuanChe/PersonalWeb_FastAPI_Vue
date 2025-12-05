@@ -2,34 +2,50 @@
   "experience": [
     {
       "details": [
-        "Developed web applications and services using Flask framework.",
-        "Integrated third-party APIs to enhance application functionality."
+        "Serving as a research and development substitute service (RDSS) engineer, participating in full-stack development across government-related maritime information platforms.",
+        "Implemented frontend features using Vue, Kendo UI, and legacy cshtml Razor pages, ensuring smooth migration and compatibility between new and existing systems.",
+        "Developed backend services using .NET (C#) as the primary stack, supplemented with Python-based FastAPI microservices for automation, data processing, and API integrations.",
+        "Designed and managed databases in both MSSQL and PostgreSQL, including schema design, stored procedures, query optimization, and data migration planning based on system analysis (SA) documentation.",
+        "Handled deployment and infrastructure tasks involving IIS configuration, CI/CD pipelines, Docker image builds, and server-side troubleshooting to ensure stable production releases.",
+        "Collaborated with cross-functional teams to deliver end-to-end features—from system analysis and architecture planning, to development, testing, documentation, release, and post-deployment maintenance."
       ],
       "duration": "Jul 2025 - Present",
       "location": "eZoom Information, Inc.",
-      "position": "Software Developnment Engineering",
+      "position": "Software Developnment Engineer - RDSS",
       "skills": [
-        "Python",
-        "Web Development",
-        "APIs"
+        "C#",
+        ".NET 6/8",
+        "FastAPI",
+        "Vue",
+        "MSSQL",
+        "PostgreSQL",
+        "Docker",
+        "CI/CD"
       ],
       "logo": "ezoom.png"
     },
     {
       "details": [
-        "Conduct research on machine learning applications in chemical data analysis.",
-        "Developed a predictive model for chemical reactions using Python and TensorFlow."
+        "Worked under the supervision of <a href=\"https://scholar.nycu.edu.tw/zh/persons/henryk-arnold-witek/\" target=\"_blank\">Prof. Henryk A. Witek</a>, a Polish-born theoretical chemist specializing in quantum chemistry, applied linear algebra, and perturbation theory. All research communication and documentation were conducted in English.",
+        "Developed mathematical and computational tools for studying quantum systems, with a focus on electronic structure theory and numerical methods for solving multi-electron problems.",
+        "Designed and implemented numerical routines and simulation workflows that supported my master’s thesis <a href=\"https://thesis.lib.nycu.edu.tw/items/2dd37aaf-818a-430e-a03b-131aa18c33af\" target=\"_blank\">Techniques for computing energy eigenvalues in quantum systems: sextic anharmonic oscillator and electrons on a 4D hypersphere</a> (<a href=\"https://thesisapi.lib.nycu.edu.tw/server/api/core/bitstreams/f55ad7c2-2100-4391-b47b-bad90a68fbe3/content\" target=\"_blank\">PDF</a>), improving both computational accuracy and efficiency.",
+        "Implemented high-performance numerical computations primarily using Julia and Maple to handle symbolic expressions, algebraic manipulation, and large-scale iterative calculations, with Python and Linux tooling used to automate workflows and manage computational tasks.",
+        "Prepared the full thesis manuscript using LaTeX, integrating mathematical derivations, visualization outputs, and numerical results into a coherent scientific document."
       ],
       "duration": "Sep 2021 - Dec 2024",
       "location": "National Yang Ming Chiao Tung University",
       "position": "Department of Applied Chemistry - Master",
       "skills": [
+        "Julia",
         "Python",
-        "Machine Learning",
-        "Data Analysis"
+        "Linux Scripting",
+        "Data Processing",
+        "Technical Writing (LaTeX)",
+        "Algorithm Development",
+        "Numerical Optimization"
       ],
       "logo": "nycu.png",
-      "gpa": "4.1 / 4.3"
+      "gpa": "GPA: 4.1 / 4.3"
     },
     {
       "details": [
