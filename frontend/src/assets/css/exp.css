@@ -42,21 +42,29 @@
 /* Skill tags */
 .exp-skill-tag {
   display: inline-block;
-  background: rgba(150, 120, 255, 0.18);
-  border: 1px solid rgba(180, 150, 255, 0.35);
-  color: #e3d7ff;
   padding: 8px 18px;
-  border-radius: 22px;
-  font-size: 0.85rem;
+  border-radius: 14px;
+
+  font-size: 0.9rem;
+  font-weight: 500;
   letter-spacing: 0.3px;
+
+  background: rgba(150, 120, 255, 0.12);
+  border: 1px solid rgba(180, 150, 255, 0.32);
+  color: #e3d7ff;
+  
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  
   white-space: nowrap; /* 防止換行破版 */
-  transition: 0.2s ease;
+  transition: all 0.25s ease;
 }
 
 .exp-skill-tag:hover {
-  background: rgba(150, 120, 255, 0.28);
-  border-color: rgba(200, 170, 255, 0.55);
-  transform: translateY(-2px);
+  background: rgba(200, 180, 255, 0.22);
+  border-color: rgba(220, 200, 255, 0.55);
+  box-shadow: 0 4px 14px rgba(120, 90, 255, 0.35);
+  transform: translateY(-3px);
 }
 
 /* Logo images */

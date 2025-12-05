@@ -20,7 +20,9 @@
         "MSSQL",
         "PostgreSQL",
         "Docker",
-        "CI/CD"
+        "CI/CD",
+        "Windows Server (IIS)",
+        "System Analysis and Design"
       ],
       "logo": "ezoom.png"
     },
