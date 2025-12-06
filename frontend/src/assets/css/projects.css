@@ -17,6 +17,10 @@
   backdrop-filter: blur(8px);
 }
 
+.project-card:last-child {
+  margin-bottom: -0.5rem;
+}
+
 .project-card:hover {
   background: rgba(255, 255, 255, 0.06);   /* 整張卡片微微亮起 */
   transform: translateY(-4px);            /* 浮起效果 */

@@ -174,3 +174,30 @@ html {
   transition: transform 0.008s linear; /* 緊跟滑鼠 */
   z-index: 9999; /* 永遠在最上層 */
 }
+
+/* ---------------------------
+   Stack Section
+---------------------------- */
+#stack {
+  margin-top: 0.5rem !important;            /* 與最後一個 project card 的距離縮短 */
+  padding-bottom: 0.8rem;
+  color: rgba(230, 230, 255, 0.6);
+  line-height: 1.7;
+  font-size: 0.95rem;
+  max-width: 900px;
+  opacity: 0.9;
+  border-top: 1px solid rgba(255,255,255,0.25);
+  padding-top: 1.6rem;
+}
+
+/* Premium-style <strong> */
+#stack strong {
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600; 
+}
+
+/* 讓整段文字更「官網型介紹」感 */
+#stack p {
+  margin: 0;
+  padding-top: 0.5rem;
+}

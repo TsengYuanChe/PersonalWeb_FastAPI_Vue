@@ -162,6 +162,16 @@
           </div>
         </section>
 
+        <section id="stack" class="mt-3 text-secondary">
+          <p>
+            This website is built with <strong>Vue 3</strong> on the frontend and a lightweight 
+            <strong>FastAPI</strong> backend providing dynamic content via JSON-based APIs. 
+            The project is fully containerized using <strong>Docker</strong>, deployed on 
+            <strong>Google Cloud Run</strong>, and automated through a complete 
+            <strong>GitHub Actions CI/CD pipeline</strong>.
+          </p>
+        </section>
+
       </main>
     </div>
   </div>
