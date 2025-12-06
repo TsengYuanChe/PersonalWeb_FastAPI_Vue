@@ -12,7 +12,7 @@
           <h5 class="text-light">Software Developer</h5>
 
           <p class="mt-3 text-secondary" style="max-width: 250px;">
-            I build intelligent, efficient digital experiences with Python, Flask, and modern tools.
+            I build full-stack systems and cloud-ready applications — from backend APIs to deployment automation.
           </p>
 
           <nav class="nav flex-column mt-4 nav-menu">
@@ -61,13 +61,13 @@
               :key="index"
               class="text-secondary mb-3"
             >
-              {{ p }}
+              <span v-html="p"></span>
             </p>
           </div>
         </section>
 
         <!-- EXPERIENCES -->
-        <section id="exp">
+        <section id="exp" class="exp-section">
           <h2 class="fw-bold">Experiences</h2>
           
           <div
@@ -146,7 +146,9 @@
             </div>
 
             <!-- Description -->
-            <p class="text-secondary mt-2 mb-2">{{ project.description }}</p>
+            <p class="text-secondary mt-2 mb-2 project-description">
+              {{ project.description }}
+            </p>
 
             <!-- Languages -->
             <div class="tag-group mt-2">
@@ -160,8 +162,20 @@
             </div>
 
           </div>
+
+          <!-- ⭐ SEE MORE BUTTON -->
+          <div class="see-more-wrapper mt-4">
+            <a
+              href="https://github.com/TsengYuanChe?tab=repositories"
+              target="_blank"
+              class="see-more-btn"
+            >
+              See more projects →
+            </a>
+          </div>
         </section>
 
+        <!-- Tech Stack -->
         <section id="stack" class="mt-3 text-secondary">
           <p>
             This website is built with <strong>Vue 3</strong> on the frontend and a lightweight 

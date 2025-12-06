@@ -6,6 +6,13 @@
 .projects-section {
   padding-bottom: 3rem;
 }
+
+/* Title */
+.projects-section h2 {
+  font-size: 2rem;          /* 稍微縮小，避免壓過整體比例 */
+  margin-bottom: 8px;
+  margin-top: 10px;
+}
   
 .project-card {
   margin-bottom: 2.2rem;
@@ -26,6 +33,14 @@
   transform: translateY(-4px);            /* 浮起效果 */
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35); /* 柔光陰影 */
   border-color: rgba(80, 180, 255, 0.25); /* 外框帶藍光 */
+}
+
+/* ---------------------------
+   Project Description
+---------------------------- */
+.project-description {
+  max-width: 630px;
+  line-height: 1.55;
 }
 
 /* ---------------------------
@@ -116,4 +131,25 @@
   background: rgba(100, 255, 218, 0.22);
   border-color: rgba(160, 255, 230, 0.55);
   box-shadow: 0 4px 14px rgba(80, 255, 200, 0.4);
+}
+
+/* ---------------------------
+   See More Button
+---------------------------- */
+
+/* Wrapper → align left */
+.see-more-wrapper {
+  text-align: left;
+}
+
+/* Minimal text-style button */
+.see-more-btn {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.see-more-btn:hover {
+  color: rgba(255, 255, 255, 1);
 }

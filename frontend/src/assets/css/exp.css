@@ -2,6 +2,13 @@
    Experiences Page Styles
    ============================ */
 
+/* Title */
+.exp-section h2 {
+  font-size: 2rem;          /* 稍微縮小，避免壓過整體比例 */
+  margin-bottom: 8px;
+  margin-top: 10px;
+}
+
 /* Experience Card Layout */
 .exp-card {
   padding: 20px 25px;

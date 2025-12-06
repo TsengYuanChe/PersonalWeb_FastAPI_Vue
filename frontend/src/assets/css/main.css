@@ -180,14 +180,12 @@ html {
 ---------------------------- */
 #stack {
   margin-top: 0.5rem !important;            /* 與最後一個 project card 的距離縮短 */
-  padding-bottom: 0.8rem;
+  padding-bottom: 0.8rem !important;
   color: rgba(230, 230, 255, 0.6);
   line-height: 1.7;
   font-size: 0.95rem;
   max-width: 900px;
   opacity: 0.9;
-  border-top: 1px solid rgba(255,255,255,0.25);
-  padding-top: 1.6rem;
 }
 
 /* Premium-style <strong> */

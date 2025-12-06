@@ -23,6 +23,11 @@
     font-size: 1.1rem !important;
   }
 
+  /* Description 最大寬度放寬 */
+  .project-description {
+    max-width: 100%;
+  }
+
   /* Code Button 調整大小與間距 */
   .code-btn {
     padding: 5px 12px !important;

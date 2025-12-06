@@ -1,47 +1,24 @@
 {
   "projects": [
     {
-      "description": "Flask-based AI-powered care system with OpenCV and health education integration.",
-      "languages": [
-        "Python",
-        "JavaScript",
-        "HTML",
-        "CSS"
-      ],
       "title": "AI Care Website",
-      "tools": [
-        "Flask",
-        "OpenCV",
-        "Bootstrap",
-        "SQLite"
-      ],
+      "description": "Developed a full-stack web platform for AI-assisted elderly care, featuring real-time image analysis using OpenCV for environment awareness. Implemented a Flask backend with modular APIs and a responsive Bootstrap frontend delivering interactive health-education content.",
+      "languages": ["Python", "JavaScript", "HTML", "CSS"],
+      "tools": ["Flask", "OpenCV", "Bootstrap", "SQLite"],
       "url": "https://github.com/TsengYuanChe/AI_care_website"
     },
     {
-      "description": "Crawler that automates financial report download from TWSE for analysts.",
-      "languages": [
-        "Python"
-      ],
       "title": "Financial Report Crawler",
-      "tools": [
-        "Selenium",
-        "BeautifulSoup",
-        "Webdriver"
-      ],
+      "description": "Automated crawler system for downloading financial statements from TWSE, built to streamline analysts’ data-preparation workflow. Utilizes Selenium for dynamic page interaction and BeautifulSoup for structured data extraction, enabling fully automated retrieval and organization of report files.",
+      "languages": ["Python"],
+      "tools": ["Selenium", "BeautifulSoup", "Webdriver"],
       "url": "https://github.com/TsengYuanChe/Financial_report_crawler"
     },
     {
-      "description": "Integration tool for collecting and summarizing YouTube + Podcast content.",
-      "languages": [
-        "Python"
-      ],
       "title": "yt_pod",
-      "tools": [
-        "YouTube API",
-        "Podcast API",
-        "Whisper",
-        "GPT-3"
-      ],
+      "description": "Content integration tool that automatically retrieves, transcribes, and summarizes updates from YouTube channels and podcast feeds. Built to unify multi-platform media into a structured dataset, enabling faster review and downstream analysis.",
+      "languages": ["Python"],
+      "tools": ["YouTube API", "Podcast API", "Whisper", "GPT-3"],
       "url": "https://github.com/TsengYuanChe/yt_pod_crawler"
     }
   ]
