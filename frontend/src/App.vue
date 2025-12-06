@@ -140,7 +140,7 @@
             <div class="d-flex justify-content-between align-items-center">
               <h4 class="text-info mb-0">{{ project.title }}</h4>
 
-              <a :href="project.url" target="_blank" class="code-btn">
+              <a v-if="project.url" :href="project.url" target="_blank" class="code-btn">
                 <i class="bi bi-code-slash"></i> Code
               </a>
             </div>

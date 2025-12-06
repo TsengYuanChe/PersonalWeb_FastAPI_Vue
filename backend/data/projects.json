@@ -20,6 +20,13 @@
       "languages": ["Python"],
       "tools": ["YouTube API", "Podcast API", "Whisper", "GPT-3"],
       "url": "https://github.com/TsengYuanChe/yt_pod_crawler"
+    },
+    {
+      "title": "Enterprise System Development @ eZoom",
+      "description": "End-to-end development for large-scale enterprise systems, including frontend modules, backend services, and database architecture. Worked across full-stack layers, implementing .NET 8/C# APIs, FastAPI microservices, Vue frontend interfaces, and schema design for MSSQL/PostgreSQL. Built CI/CD pipelines, automated deployments, and managed production environments on Windows Server + IIS.",
+      "languages": ["C#", "Python", "JavaScript", "SQL"],
+      "tools": [".NET 8", "Vue 3", "FastAPI", "MSSQL", "PostgreSQL"],
+      "url": null
     }
   ]
 }
