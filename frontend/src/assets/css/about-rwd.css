@@ -5,24 +5,22 @@
 /* ---------- Mobile : max-width 768px ---------- */
 @media (max-width: 768px) {
 
-  /* 主標題縮小 */
-  .about-section h2 {
-    font-size: 1.6rem !important;
-    margin-top: 10px !important;
-    margin-bottom: 4px !important;
+  #about {
+    margin-bottom: 2rem !important;
   }
 
-  /* 副標縮小並增加透明度 */
-  .about-section h5 {
-    font-size: 0.95rem !important;
-    opacity: 0.85 !important;
+  /* 主標題縮小 */
+  .about-section h2 {
+    font-size: 1.5rem !important;
+    text-align: left;
   }
 
   /* 內文縮小字體 + 增加行距可讀性 */
   .about-text p {
-    font-size: 0.95rem !important;
+    font-size: 0.9rem !important;
     line-height: 1.55 !important;
-    margin-bottom: 10px !important;
+    margin-bottom: 14px !important;
+    text-align: left;
   }
 }
 

@@ -1,75 +1,144 @@
-/* ----- Hide glow on mobile ----- */
+/* ======================================================
+   GLOBAL RWD RULES
+====================================================== */
+
+/* Hide glow on mobile */
 @media (max-width: 768px) {
   .cursor-glow {
-    display: none;
+    display: none !important;
   }
 }
 
-/* ----- Tablet ----- */
+/* Tablet width fix */
 @media (max-width: 1024px) {
   .layout-container {
     width: 100%;
   }
 }
 
-/* ----- Mobile RWD ----- */
+
+/* ======================================================
+   MOBILE LAYOUT  (max-width: 768px)
+====================================================== */
 @media (max-width: 768px) {
 
-  /* Sidebar becomes top bar */
+  /* ---------------------------
+       Layout container
+  --------------------------- */
   .layout-container {
     grid-template-columns: 1fr;
     height: auto;
+    overflow: visible;
   }
 
+
+  /* ---------------------------
+       Sidebar → Fixed Header
+  --------------------------- */
   .sidebar {
-    position: relative;
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: auto;
-    padding: 20px;
+
+    background: rgba(10, 15, 30, 0.15) !important; /* 微透明玻璃風 */
+    backdrop-filter: none !important;
     border-bottom: 1px solid rgba(255,255,255,0.1);
+
+    padding: 18px 22px;
+    z-index: 999;
 
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    align-items: flex-start;
+    text-align: left;
   }
 
+  .sidebar h1 {
+    font-size: 1.45rem;
+    margin-bottom: 6px;
+  }
+
+  .sidebar h5 {
+    font-size: 0.92rem;
+    opacity: 0.85;
+  }
+
+  /* Profile summary */
+  .sidebar p {
+    font-size: 0.85rem;
+    line-height: 1.45;
+    max-width: 300px;
+    margin-top: 6px;
+  }
+
+
+  /* ---------------------------
+       Navigation (水平)
+  --------------------------- */
   .nav-menu {
-    margin-top: 20px;
-    display: flex;
-    gap: 20px;
-    justify-content: center;
+    display: flex !important;
+    flex-direction: row !important;
+    justify-content: flex-start;
+    gap: 18px;
+  }
+
+  .nav-menu .nav-link {
+    font-size: 0.9rem;
+    padding: 4px 0;
   }
 
   .nav-menu .nav-link:hover {
     transform: none;
   }
 
-  /* main content full width */
+
+  /* ---------------------------
+       Social Icons
+  --------------------------- */
+  .social-icons {
+    margin-top: 14px !important;
+    display: flex;
+    gap: 22px !important;
+    justify-content: flex-start;
+  }
+
+  .social-icons a {
+    font-size: 1.5rem !important;
+  }
+
+  .last-updated {
+    margin-top: 10px;
+    font-size: 0.75rem;
+    opacity: 0.8;
+  }
+
+
+  /* ---------------------------
+       Main Content
+  --------------------------- */
+
+  /* ⚠️ Sidebar 高度大約 ~200–230px，可依內容微調 */
   .main-content {
-    margin-left: 0;
+    position: relative;
+    margin-top: var(--header-height);
+    margin-bottom: var(--footer-height);
+
     padding: 20px;
+    overflow-y: auto; /* 只有中間可滾動 */
+
+    height: calc(100vh - var(--header-height) - var(--footer-height));
+    z-index: 1;
+  }
+
+
+  /* ---------------------------
+       Stack Section
+  --------------------------- */
+  #stack p {
+    font-size: 0.85rem !important;
+    line-height: 1.55;
     max-width: 100%;
-    overflow-y: visible;
   }
 
-  /* section spacing */
-  .section {
-    margin-bottom: 40px;
-  }
-
-  .section p {
-    font-size: 0.95rem;
-  }
-
-  /* Project cards */
-  .project-card {
-    padding: 16px 18px;
-  }
-
-  #stack {
-    margin-top: 1.2rem;
-    font-size: 0.92rem;
-    line-height: 1.65;
-  }
 }

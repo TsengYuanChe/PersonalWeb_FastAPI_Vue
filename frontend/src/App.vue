@@ -192,6 +192,7 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
 import { usePageData } from './composables/usePageData'
 import { useScrollProxy } from './composables/useScrollProxy';
 import { useMouseGlow } from './composables/useMouseGlow';
@@ -202,4 +203,20 @@ const { scrollToSection } = useSmoothScroll()
 
 useScrollProxy();
 useMouseGlow();
+
+// ---------------------------
+//  手機版：自動取 sidebar 高度
+// ---------------------------
+onMounted(() => {
+  const header = document.querySelector(".profile-part");
+  const footer = document.querySelector(".bottom-area");
+
+  const updateVars = () => {
+    document.documentElement.style.setProperty("--header-height", header.offsetHeight + "px");
+    document.documentElement.style.setProperty("--footer-height", footer.offsetHeight + "px");
+  };
+
+  updateVars();
+  window.addEventListener("resize", updateVars);
+});
 </script>
