@@ -22,13 +22,19 @@
 ====================================================== */
 @media (max-width: 768px) {
 
+  /* 允許整頁正常捲動 */
+  body, html {
+    height: auto;
+    overflow-y: auto;
+  }
+
   /* ---------------------------
        Layout container
   --------------------------- */
   .layout-container {
-    grid-template-columns: 1fr;
-    height: auto;
-    overflow: visible;
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
 
@@ -113,6 +119,21 @@
     opacity: 0.8;
   }
 
+  /* ---------------------------
+     Footer 固定於底部
+  --------------------------- */
+  .bottom-area {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+
+    padding: 12px 20px 18px;
+    background: rgba(10, 15, 30, 0.25);
+    z-index: 1000;
+    border-top: 1px solid rgba(255,255,255,0.1);
+  }
+
 
   /* ---------------------------
        Main Content
@@ -126,8 +147,9 @@
 
     padding: 20px;
     overflow-y: auto; /* 只有中間可滾動 */
+    -webkit-overflow-scrolling: touch;
 
-    height: calc(100vh - var(--header-height) - var(--footer-height));
+    height: calc(100dvh - var(--header-height) - var(--footer-height));
     z-index: 1;
   }
 

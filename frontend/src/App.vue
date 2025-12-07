@@ -211,12 +211,12 @@ onMounted(() => {
   const header = document.querySelector(".profile-part");
   const footer = document.querySelector(".bottom-area");
 
-  const updateVars = () => {
-    document.documentElement.style.setProperty("--header-height", header.offsetHeight + "px");
-    document.documentElement.style.setProperty("--footer-height", footer.offsetHeight + "px");
+  const updateHeights = () => {
+    document.documentElement.style.setProperty("--header-height", `${header.offsetHeight}px`);
+    document.documentElement.style.setProperty("--footer-height", `${footer.offsetHeight}px`);
   };
 
-  updateVars();
-  window.addEventListener("resize", updateVars);
+  updateHeights();
+  window.addEventListener("resize", updateHeights);
 });
 </script>
