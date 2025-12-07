@@ -197,26 +197,32 @@ import { usePageData } from './composables/usePageData'
 import { useScrollProxy } from './composables/useScrollProxy';
 import { useMouseGlow } from './composables/useMouseGlow';
 import { useSmoothScroll } from './composables/useSmoothScroll'
+import { useMobileFooter } from './composables/useMobileFooter';
 
 const { aboutData, expData, projectList, updatedTime, getLogoUrl} = usePageData()
 const { scrollToSection } = useSmoothScroll()
 
 useScrollProxy();
 useMouseGlow();
+useMobileFooter();
 
 // ---------------------------
 //  手機版：自動取 sidebar 高度
 // ---------------------------
 onMounted(() => {
-  const header = document.querySelector(".profile-part");
-  const footer = document.querySelector(".bottom-area");
+  function updateLayoutVars() {
+    const header = document.querySelector('.profile-part');
+    const footer = document.querySelector('.mobile-footer');
 
-  const updateHeights = () => {
-    document.documentElement.style.setProperty("--header-height", `${header.offsetHeight}px`);
-    document.documentElement.style.setProperty("--footer-height", `${footer.offsetHeight}px`);
-  };
+    const headerH = header?.offsetHeight || 140;
+    const footerH = footer?.offsetHeight || 80;
 
-  updateHeights();
-  window.addEventListener("resize", updateHeights);
+    document.documentElement.style.setProperty('--header-height', `${headerH}px`);
+    document.documentElement.style.setProperty('--footer-height', `${footerH}px`);
+    document.documentElement.style.setProperty('--real-vh', `${window.innerHeight}px`);
+  }
+
+  updateLayoutVars();
+  window.addEventListener('resize', updateLayoutVars);
 });
 </script>

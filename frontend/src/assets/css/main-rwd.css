@@ -2,14 +2,14 @@
    GLOBAL RWD RULES
 ====================================================== */
 
-/* Hide glow on mobile */
+/* Hide mouse glow on mobile */
 @media (max-width: 768px) {
   .cursor-glow {
     display: none !important;
   }
 }
 
-/* Tablet width fix */
+/* Tablet layout width fix */
 @media (max-width: 1024px) {
   .layout-container {
     width: 100%;
@@ -18,19 +18,22 @@
 
 
 /* ======================================================
-   MOBILE LAYOUT  (max-width: 768px)
+   MOBILE LAYOUT (max-width: 768px)
 ====================================================== */
 @media (max-width: 768px) {
 
-  /* 允許整頁正常捲動 */
-  body, html {
-    height: auto;
-    overflow-y: auto;
+  /* ----------------------------------------
+     讓整頁能正常滾動（修正許多手機卡住問題）
+  ---------------------------------------- */
+  html, body {
+    height: auto !important;
+    overflow-y: auto !important;
   }
 
-  /* ---------------------------
-       Layout container
-  --------------------------- */
+
+  /* ----------------------------------------
+     Layout container：不再使用 grid
+  ---------------------------------------- */
   .layout-container {
     display: block !important;
     height: auto !important;
@@ -38,17 +41,16 @@
   }
 
 
-  /* ---------------------------
-       Sidebar → Fixed Header
-  --------------------------- */
+  /* =====================================================
+       SIDEBAR → MOBILE HEADER（固定在最上方）
+  ===================================================== */
   .sidebar {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
 
-    background: rgba(10, 15, 30, 0.15) !important; /* 微透明玻璃風 */
-    backdrop-filter: none !important;
+    background: rgba(10, 15, 30, 0.20);
     border-bottom: 1px solid rgba(255,255,255,0.1);
 
     padding: 18px 22px;
@@ -58,6 +60,8 @@
     flex-direction: column;
     align-items: flex-start;
     text-align: left;
+
+    height: auto !important; /* 避免 bottom-area 撐高 header */
   }
 
   .sidebar h1 {
@@ -70,7 +74,6 @@
     opacity: 0.85;
   }
 
-  /* Profile summary */
   .sidebar p {
     font-size: 0.85rem;
     line-height: 1.45;
@@ -79,49 +82,28 @@
   }
 
 
-  /* ---------------------------
-       Navigation (水平)
-  --------------------------- */
+  /* ----------------------------------------
+     NAV：水平排列（手機格式比較自然）
+  ---------------------------------------- */
   .nav-menu {
     display: flex !important;
     flex-direction: row !important;
-    justify-content: flex-start;
     gap: 18px;
-  }
-
-  .nav-menu .nav-link {
-    font-size: 0.9rem;
-    padding: 4px 0;
-  }
-
-  .nav-menu .nav-link:hover {
-    transform: none;
-  }
-
-
-  /* ---------------------------
-       Social Icons
-  --------------------------- */
-  .social-icons {
-    margin-top: 14px !important;
-    display: flex;
-    gap: 22px !important;
     justify-content: flex-start;
+    margin-top: 12px;
   }
 
-  .social-icons a {
-    font-size: 1.5rem !important;
+
+  /* =====================================================
+       FOOTER → MOBILE FOOTER（固定在最底部）
+  ===================================================== */
+
+  /* 隱藏 sidebar 內的 footer */
+  .sidebar .bottom-area {
+    display: none !important;
   }
 
-  .last-updated {
-    margin-top: 10px;
-    font-size: 0.75rem;
-    opacity: 0.8;
-  }
-
-  /* ---------------------------
-     Footer 固定於底部
-  --------------------------- */
+  /* 由 JS 移出後的新 footer */
   .bottom-area {
     position: fixed;
     bottom: 0;
@@ -129,38 +111,39 @@
     width: 100%;
 
     padding: 12px 20px 18px;
-    background: rgba(10, 15, 30, 0.25);
-    z-index: 1000;
+    background: rgba(10, 15, 30, 0.20);
     border-top: 1px solid rgba(255,255,255,0.1);
+
+    z-index: 999;
   }
 
 
-  /* ---------------------------
-       Main Content
-  --------------------------- */
-
-  /* ⚠️ Sidebar 高度大約 ~200–230px，可依內容微調 */
+  /* =====================================================
+       MAIN CONTENT（置中滑動區）
+  ===================================================== */
   .main-content {
     position: relative;
-    margin-top: var(--header-height);
+
+    /* top: header height + safe margin */
+    margin-top: calc(var(--header-height) + 10px);
+
+    /* bottom: 留 footer 空間 */
     margin-bottom: var(--footer-height);
 
     padding: 20px;
-    overflow-y: auto; /* 只有中間可滾動 */
+
+    /* 核心：只讓中間這塊滑動 */
+    height: calc(var(--real-vh) - var(--header-height) - var(--footer-height));
+    overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
 
-    height: calc(100dvh - var(--header-height) - var(--footer-height));
     z-index: 1;
   }
 
 
-  /* ---------------------------
-       Stack Section
-  --------------------------- */
+  /* Tech stack 字體 */
   #stack p {
     font-size: 0.85rem !important;
     line-height: 1.55;
-    max-width: 100%;
   }
-
 }
