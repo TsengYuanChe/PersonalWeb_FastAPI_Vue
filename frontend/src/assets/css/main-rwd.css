@@ -123,7 +123,7 @@
     position: relative;
 
     /* top: header height + safe margin */
-    margin-top: calc(var(--header-height) + 10px);
+    margin-top: calc(var(--header-height) + 22px);
 
     /* bottom: 留 footer 空間 */
     margin-bottom: var(--footer-height);
@@ -144,7 +144,7 @@
     font-size: 0.85rem !important;
     line-height: 1.55;
   }
-  
+
   /* 防止 sidebar footer 觸控滾動衝突 */
   .sidebar .bottom-area {
     overflow: hidden;

@@ -204,7 +204,7 @@ const { scrollToSection } = useSmoothScroll()
 
 useScrollProxy();
 useMouseGlow();
-useMobileFooter();
+useMobileFooter(updatedTime);
 
 // ---------------------------
 //  手機版：自動取 sidebar 高度
