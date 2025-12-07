@@ -122,17 +122,17 @@
   .main-content {
     position: relative;
 
-    /* 讓內容永遠不會被 header 蓋住 */
-    padding-top: calc(var(--header-height) + 12px);
+    /* top: header height + safe margin */
+    margin-top: calc(var(--header-height) + 10px);
 
-    /* 讓內容永遠不會被 footer 蓋住 */
-    padding-bottom: calc(var(--footer-height) + 20px);
+    /* bottom: 留 footer 空間 */
+    margin-bottom: var(--footer-height);
 
-    margin-top: 0 !important;   /* ← 不用 margin，iOS 不穩定 */
-    margin-bottom: 0 !important;
+    padding: 20px;
 
+    /* 核心：只讓中間這塊滑動 */
     height: calc(var(--real-vh) - var(--header-height) - var(--footer-height));
-    overflow-y: auto;
+    overflow-y: auto !important;
     -webkit-overflow-scrolling: touch;
 
     z-index: 1;
@@ -144,4 +144,5 @@
     font-size: 0.85rem !important;
     line-height: 1.55;
   }
+
 }
