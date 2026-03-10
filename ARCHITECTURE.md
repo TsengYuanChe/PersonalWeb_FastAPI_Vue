@@ -80,6 +80,7 @@ flowchart LR
 
 ## 5. API Layer
 ### Endpoints
+- `GET /health` (health probe)
 - `GET /api/v1/about`
 - `GET /api/v1/experience`
 - `GET /api/v1/projects`

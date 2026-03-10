@@ -55,9 +55,9 @@ payload = content_service.get_about()
   - Lower coupling
   - Cleaner module boundaries
 
-### 1.3 Add `/health` endpoint
+### 1.3 ✅ Add `/health` endpoint
 - Short explanation: provide standard service health probe.
-- Current state: root endpoint exists but no dedicated health endpoint.
+- Current state: ✅ Implemented. Dedicated health endpoint is available at `GET /health` via `backend/routers/health.py` and is registered in `backend/main.py`.
 - Suggested structure or code example:
 ```python
 @app.get("/health")

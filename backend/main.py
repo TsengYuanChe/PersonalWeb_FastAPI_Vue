@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from routers import health
 from routers.main_api import router as main_router
 
 app = FastAPI()
@@ -15,6 +16,7 @@ app.add_middleware(
 
 # 載入 API 路由
 app.include_router(main_router)
+app.include_router(health.router)
 
 @app.get("/")
 def root():
