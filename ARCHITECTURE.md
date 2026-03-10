@@ -22,8 +22,16 @@ This design keeps presentation and content delivery decoupled while preserving a
 
 ### Backend API Service (`backend/`)
 - `main.py`: FastAPI app bootstrap + CORS middleware + router mount.
-- `routers/main_api.py`: content endpoints and shared JSON loader.
+- `routers/main_api.py`: HTTP endpoints only; delegates application logic.
+- `services/content_service.py`: business response shaping for legacy and v1 contracts.
+- `repositories/content_repository.py`: filesystem JSON reads + timestamp extraction.
 - API model: read-only HTTP endpoints returning JSON plus `updated_at`.
+
+### Backend Layer Responsibilities
+- `router` layer: owns HTTP route declarations and request/response entry points.
+- `service` layer: owns business logic and response contract shaping (`legacy` vs `v1` envelope).
+- `repository` layer: owns data access (`backend/data/*.json`) and file metadata reads.
+- Effective flow: `router -> service -> repository -> JSON files`.
 
 ### Data Source Layer (`backend/data/`)
 - `about.json`, `exp.json`, `projects.json`.
@@ -40,7 +48,7 @@ This design keeps presentation and content delivery decoupled while preserving a
 ```mermaid
 flowchart LR
     User[Browser] --> FE[Frontend Service\nVue SPA on Cloud Run]
-    FE -->|GET /api/about\nGET /api/experience\nGET /api/projects| BE[Backend Service\nFastAPI on Cloud Run]
+    FE -->|GET /api/v1/about\nGET /api/v1/experience\nGET /api/v1/projects| BE[Backend Service\nFastAPI on Cloud Run]
     BE --> DATA[(backend/data/*.json)]
     DATA --> BE
     BE -->|JSON + updated_at| FE
@@ -58,10 +66,13 @@ flowchart LR
 ## 4. Data Flow
 1. Browser loads SPA from frontend Cloud Run service.
 2. On mount, frontend calls backend endpoints via `VITE_API_BASE`.
-3. FastAPI resolves endpoint -> reads target JSON file -> adds `updated_at`.
-4. API response is returned to frontend as structured JSON.
-5. Frontend binds response to reactive state and renders sections.
-6. Frontend computes a single displayed update date from all endpoint timestamps.
+3. Router forwards request to service layer.
+4. Service requests content from repository layer.
+5. Repository reads target JSON file and timestamp from filesystem.
+6. Service shapes response (`legacy` or `data` + `meta`) and returns to router.
+7. API response is returned to frontend as structured JSON envelope.
+8. Frontend binds response to reactive state and renders sections.
+9. Frontend computes a single displayed update date from all endpoint timestamps.
 
 ### Error Handling
 
@@ -69,6 +80,9 @@ flowchart LR
 
 ## 5. API Layer
 ### Endpoints
+- `GET /api/v1/about`
+- `GET /api/v1/experience`
+- `GET /api/v1/projects`
 - `GET /api/about`
 - `GET /api/experience`
 - `GET /api/projects`
@@ -76,14 +90,15 @@ flowchart LR
 
 ### Backend Design Characteristics
 - Flat REST-style endpoint surface for content domains.
-- Shared file loader (`load_json`) to keep endpoint logic thin.
+- Shared JSON timestamp loader (`read_json_with_timestamp`) and envelope helpers (`v1_response` / `legacy_response`) keep endpoint logic thin.
 - CORS enabled for cross-origin frontend calls.
-- No auth/versioning/pagination currently (appropriate for public portfolio content).
+- API versioning is introduced via `/api/v1/...`; legacy unversioned endpoints are retained for compatibility.
+- No auth/pagination currently (appropriate for public portfolio content).
 
 ### Frontend Integration
-- `usePageData.js` performs fetch calls on mount.
-- API responses are rendered directly in Vue templates.
-- `updated_at` metadata is aggregated for the sidebar/mobile footer timestamp.
+- `usePageData.js` performs fetch calls on mount using `/api/v1/...`.
+- API responses are consumed via envelope shape: `response.data` and `response.meta`.
+- `meta.updated_at` values are aggregated for the sidebar/mobile footer timestamp.
 
 ## 6. Deployment Architecture
 ### Build and Runtime
@@ -130,7 +145,7 @@ Future improvements could include API caching or CDN integration if traffic incr
 - Add backend response caching for JSON content.
 - Introduce CDN caching for static frontend assets to reduce latency globally.
 - Restrict and harden CORS policy by environment.
-- Add API versioning and schema validation for long-term contract stability.
+- Extend API versioning coverage and add schema validation for long-term contract stability.
 - Move content to managed DB or CMS if write workflows or query complexity increase.
 - Introduce staging, smoke tests, and observability (logs/metrics/traces) in CI/CD.
 - Tune Cloud Run min instances/concurrency to balance latency and cost.
