@@ -24,22 +24,22 @@ export function usePageData() {
   }
 
   onMounted(async () => {
-    const aboutRes = await fetch(`${API_BASE}/api/about`)
+    const aboutRes = await fetch(`${API_BASE}/api/v1/about`)
     const aboutJson = await aboutRes.json()
-    aboutData.value = aboutJson
+    aboutData.value = aboutJson.data
 
-    const expRes = await fetch(`${API_BASE}/api/experience`)
+    const expRes = await fetch(`${API_BASE}/api/v1/experience`)
     const expJson = await expRes.json()
-    expData.value = expJson
+    expData.value = expJson.data
 
-    const projectRes = await fetch(`${API_BASE}/api/projects`)
+    const projectRes = await fetch(`${API_BASE}/api/v1/projects`)
     const projectJson = await projectRes.json()
-    projectList.value = projectJson.projects
+    projectList.value = projectJson.data.projects
 
     updatedTime.value = pickLatestTime(
-      aboutJson.updated_at,
-      expJson.updated_at,
-      projectJson.updated_at
+      aboutJson.meta?.updated_at,
+      expJson.meta?.updated_at,
+      projectJson.meta?.updated_at
     )
   })
 
