@@ -22,9 +22,12 @@ This design keeps presentation and content delivery decoupled while preserving a
 
 ### Backend API Service (`backend/`)
 - `main.py`: FastAPI app bootstrap + CORS middleware + router mount.
-- `routers/main_api.py`: HTTP endpoints only; delegates application logic.
+- `routers/v1/content.py`: content endpoints; delegates application logic.
+- `routers/v1/health.py`: health endpoint (`GET /health`).
 - `services/content_service.py`: business response shaping for legacy and v1 contracts.
 - `repositories/content_repository.py`: filesystem JSON reads + timestamp extraction.
+- `core/config.py`, `core/logging.py`: backend core placeholders for settings/logging.
+- `schemas/content.py`, `schemas/common.py`: schema placeholders for typed contracts.
 - API model: read-only HTTP endpoints returning JSON plus `updated_at`.
 
 ### Backend Layer Responsibilities
@@ -91,7 +94,7 @@ flowchart LR
 
 ### Backend Design Characteristics
 - Flat REST-style endpoint surface for content domains.
-- Shared JSON timestamp loader (`read_json_with_timestamp`) and envelope helpers (`v1_response` / `legacy_response`) keep endpoint logic thin.
+- Shared JSON timestamp loader (`read_json_with_timestamp`) and service response shapers (`get_v1_content` / `get_legacy_content`) keep endpoint logic thin.
 - CORS enabled for cross-origin frontend calls.
 - API versioning is introduced via `/api/v1/...`; legacy unversioned endpoints are retained for compatibility.
 - No auth/pagination currently (appropriate for public portfolio content).

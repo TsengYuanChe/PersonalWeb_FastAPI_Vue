@@ -57,7 +57,7 @@ payload = content_service.get_about()
 
 ### 1.3 ✅ Add `/health` endpoint
 - Short explanation: provide standard service health probe.
-- Current state: ✅ Implemented. Dedicated health endpoint is available at `GET /health` via `backend/routers/health.py` and is registered in `backend/main.py`.
+- Current state: ✅ Implemented. Dedicated health endpoint is available at `GET /health` via `backend/routers/v1/health.py` and is registered in `backend/main.py`.
 - Suggested structure or code example:
 ```python
 @app.get("/health")
@@ -96,9 +96,9 @@ class ApiResponse(BaseModel):
   - Better OpenAPI docs
   - Reduced runtime schema drift
 
-### 2.2 Reorganize backend modules for domain clarity
+### 2.2 ✅ Reorganize backend modules for domain clarity
 - Short explanation: group code by responsibility and version.
-- Current state: minimal module split; router + file loader mixed.
+- Current state: ✅ Implemented. Routes are organized under `backend/routers/v1/` (`content.py`, `health.py`) and placeholders exist for `backend/core/` and `backend/schemas/` modules.
 - Suggested structure or code example:
 ```text
 backend/
@@ -113,7 +113,7 @@ backend/
   services/
     content_service.py
   repositories/
-    json_repository.py
+    content_repository.py
   schemas/
     content.py
     common.py
