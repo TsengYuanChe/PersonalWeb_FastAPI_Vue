@@ -1,10 +1,12 @@
 import logging
 
 from fastapi import FastAPI
+from fastapi import HTTPException
 from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from routers.v1 import content, health
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
 app = FastAPI()
 logger = logging.getLogger(__name__)
@@ -32,6 +34,26 @@ async def file_not_found_handler(request: Request, exc: FileNotFoundError):
             "error": {
                 "code": "CONTENT_NOT_FOUND",
                 "message": str(exc),
+                "details": None,
+            }
+        },
+    )
+
+
+@app.exception_handler(HTTPException)
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: Exception):
+    status_code = getattr(exc, "status_code", 500)
+    detail = getattr(exc, "detail", "HTTP error")
+    code = "NOT_FOUND" if status_code == 404 else f"HTTP_{status_code}"
+
+    logger.warning("http_error", extra={"path": request.url.path, "status_code": status_code})
+    return JSONResponse(
+        status_code=status_code,
+        content={
+            "error": {
+                "code": code,
+                "message": str(detail),
                 "details": None,
             }
         },

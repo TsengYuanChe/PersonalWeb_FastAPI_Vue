@@ -125,7 +125,7 @@ backend/
 
 ### 2.3 ✅ Add centralized exception handling
 - Short explanation: standardize API errors and avoid endpoint-specific ad-hoc handling.
-- Current state: ✅ Implemented. Centralized handlers are registered in `backend/main.py` for `FileNotFoundError` (404) and generic `Exception` (500) with standardized error envelope responses.
+- Current state: ✅ Implemented. Centralized handlers are registered in `backend/main.py` for `HTTPException` (including route-not-found 404), `FileNotFoundError` (404), and generic `Exception` (500), all returning a standardized error envelope response.
 - Suggested structure or code example:
 ```python
 @app.exception_handler(FileNotFoundError)

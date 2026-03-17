@@ -80,6 +80,7 @@ flowchart LR
 ### Error Handling
 
 - Backend uses centralized exception handlers in `main.py` to standardize error responses.
+- `HTTPException` is normalized into a standard error envelope, including route-not-found `404` cases.
 - `FileNotFoundError` returns HTTP `404` with error code `CONTENT_NOT_FOUND`.
 - Unhandled exceptions return HTTP `500` with error code `INTERNAL_ERROR`.
 - Error response envelope:
