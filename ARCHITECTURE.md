@@ -79,7 +79,20 @@ flowchart LR
 
 ### Error Handling
 
-- If the backend cannot load a JSON file or an endpoint fails, the frontend falls back to a safe rendering state and prevents UI crashes. Future improvements may include structured API error responses and frontend fallback messaging.
+- Backend uses centralized exception handlers in `main.py` to standardize error responses.
+- `FileNotFoundError` returns HTTP `404` with error code `CONTENT_NOT_FOUND`.
+- Unhandled exceptions return HTTP `500` with error code `INTERNAL_ERROR`.
+- Error response envelope:
+```json
+{
+  "error": {
+    "code": "CONTENT_NOT_FOUND | INTERNAL_ERROR",
+    "message": "string",
+    "details": null
+  }
+}
+```
+- Frontend fallback rendering still prevents UI crashes when API requests fail.
 
 ## 5. API Layer
 ### Endpoints
@@ -95,6 +108,7 @@ flowchart LR
 ### Backend Design Characteristics
 - Flat REST-style endpoint surface for content domains.
 - Shared JSON timestamp loader (`read_json_with_timestamp`) and service response shapers (`get_v1_content` / `get_legacy_content`) keep endpoint logic thin.
+- Centralized exception handlers provide consistent API error envelopes for `404`/`500` scenarios.
 - CORS enabled for cross-origin frontend calls.
 - API versioning is introduced via `/api/v1/...`; legacy unversioned endpoints are retained for compatibility.
 - No auth/pagination currently (appropriate for public portfolio content).

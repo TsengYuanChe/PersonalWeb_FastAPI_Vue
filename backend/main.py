@@ -1,8 +1,13 @@
+import logging
+
 from fastapi import FastAPI
+from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from routers.v1 import content, health
 
 app = FastAPI()
+logger = logging.getLogger(__name__)
 
 # 允許你的 Vue 前端連線（本機 + 部署）
 app.add_middleware(
@@ -16,6 +21,37 @@ app.add_middleware(
 # 載入 API 路由
 app.include_router(content.router)
 app.include_router(health.router)
+
+
+@app.exception_handler(FileNotFoundError)
+async def file_not_found_handler(request: Request, exc: FileNotFoundError):
+    logger.warning("content_not_found", extra={"path": request.url.path})
+    return JSONResponse(
+        status_code=404,
+        content={
+            "error": {
+                "code": "CONTENT_NOT_FOUND",
+                "message": str(exc),
+                "details": None,
+            }
+        },
+    )
+
+
+@app.exception_handler(Exception)
+async def generic_exception_handler(request: Request, exc: Exception):
+    logger.exception("internal_error", extra={"path": request.url.path})
+    return JSONResponse(
+        status_code=500,
+        content={
+            "error": {
+                "code": "INTERNAL_ERROR",
+                "message": "Internal server error",
+                "details": None,
+            }
+        },
+    )
+
 
 @app.get("/")
 def root():
