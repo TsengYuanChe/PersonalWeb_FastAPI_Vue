@@ -27,7 +27,7 @@ This design keeps presentation and content delivery decoupled while preserving a
 - `services/content_service.py`: business response shaping for legacy and v1 contracts.
 - `repositories/content_repository.py`: filesystem JSON reads + timestamp extraction.
 - `core/config.py`, `core/logging.py`: backend core placeholders for settings/logging.
-- `schemas/content.py`, `schemas/common.py`: schema placeholders for typed contracts.
+- `schemas/content.py`, `schemas/common.py`: Pydantic schemas for v1 response validation.
 - API model: read-only HTTP endpoints returning JSON plus `updated_at`.
 
 ### Backend Layer Responsibilities
@@ -109,6 +109,7 @@ flowchart LR
 ### Backend Design Characteristics
 - Flat REST-style endpoint surface for content domains.
 - Shared JSON timestamp loader (`read_json_with_timestamp`) and service response shapers (`get_v1_content` / `get_legacy_content`) keep endpoint logic thin.
+- `/api/v1/*` endpoints use Pydantic `response_model` schemas for non-breaking response validation.
 - Centralized exception handlers provide consistent API error envelopes for `404`/`500` scenarios.
 - CORS enabled for cross-origin frontend calls.
 - API versioning is introduced via `/api/v1/...`; legacy unversioned endpoints are retained for compatibility.

@@ -73,9 +73,9 @@ def health():
 
 ## 2. Backend Architecture Improvements
 
-### 2.1 Introduce Pydantic response models
+### 2.1 ✅ Introduce Pydantic response models
 - Short explanation: enforce schema consistency and type safety.
-- Current state: raw dict responses from file data.
+- Current state: ✅ Implemented. Pydantic schema models are defined in `backend/schemas/common.py` and `backend/schemas/content.py`, and `/api/v1/*` routes use `response_model` validation without changing response shape.
 - Suggested structure or code example:
 ```python
 from pydantic import BaseModel

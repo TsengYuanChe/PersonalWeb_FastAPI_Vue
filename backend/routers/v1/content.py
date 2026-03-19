@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from schemas.content import AboutResponse, ExperienceResponse, ProjectsResponse
 from services.content_service import (
     get_about_legacy,
     get_about_v1,
@@ -26,17 +27,16 @@ def projects():
     return get_projects_legacy()
 
 
-@router.get("/api/v1/about")
+@router.get("/api/v1/about", response_model=AboutResponse)
 def about_v1():
     return get_about_v1()
 
 
-@router.get("/api/v1/experience")
+@router.get("/api/v1/experience", response_model=ExperienceResponse)
 def experience_v1():
     return get_experience_v1()
 
 
-@router.get("/api/v1/projects")
+@router.get("/api/v1/projects", response_model=ProjectsResponse)
 def projects_v1():
     return get_projects_v1()
-
