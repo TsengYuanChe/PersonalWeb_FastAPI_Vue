@@ -15,6 +15,8 @@ This design keeps presentation and content delivery decoupled while preserving a
 ## 2. System Components
 ### Frontend Application (`frontend/`)
 - `src/App.vue`: primary UI composition (About, Experience, Projects, Stack sections).
+- `src/api/client.js`: shared HTTP client (base URL, fetch wrapper, error handling).
+- `src/api/contentApi.js`: content-domain API access functions.
 - `src/composables/usePageData.js`: API integration and reactive state.
 - `src/composables/*`: scroll behavior, cursor effect, mobile footer handling.
 - `src/assets/css/*`: section-specific and responsive styles.

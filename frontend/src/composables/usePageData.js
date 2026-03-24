@@ -1,12 +1,15 @@
 import { ref, onMounted } from 'vue'
+import {
+  getAboutWithMeta,
+  getExperienceWithMeta,
+  getProjectsWithMeta,
+} from '@/api/contentApi'
 
 export function usePageData() {
   const aboutData = ref({})
   const expData = ref({})
   const projectList = ref([])
   const updatedTime = ref('—')
-
-  const API_BASE = import.meta.env.VITE_API_BASE
 
   function pickLatestTime(...time) {
     const validTimes = time.filter(Boolean)
@@ -24,16 +27,13 @@ export function usePageData() {
   }
 
   onMounted(async () => {
-    const aboutRes = await fetch(`${API_BASE}/api/v1/about`)
-    const aboutJson = await aboutRes.json()
+    const aboutJson = await getAboutWithMeta()
     aboutData.value = aboutJson.data
 
-    const expRes = await fetch(`${API_BASE}/api/v1/experience`)
-    const expJson = await expRes.json()
+    const expJson = await getExperienceWithMeta()
     expData.value = expJson.data
 
-    const projectRes = await fetch(`${API_BASE}/api/v1/projects`)
-    const projectJson = await projectRes.json()
+    const projectJson = await getProjectsWithMeta()
     projectList.value = projectJson.data.projects
 
     updatedTime.value = pickLatestTime(

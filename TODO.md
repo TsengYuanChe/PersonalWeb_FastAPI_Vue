@@ -217,9 +217,9 @@ python backend/scripts/validate_content_schema.py
 
 ## 4. Frontend Architecture Improvements
 
-### 4.1 Introduce `src/api` access layer
+### 4.1 ✅ Introduce `src/api` access layer
 - Short explanation: isolate HTTP concerns from UI/state logic.
-- Current state: composables fetch APIs directly.
+- Current state: ✅ Implemented. `frontend/src/api/client.js` centralizes fetch/base-URL/error handling and `frontend/src/api/contentApi.js` defines content-domain API functions used by composables.
 - Suggested structure or code example:
 ```text
 frontend/src/
