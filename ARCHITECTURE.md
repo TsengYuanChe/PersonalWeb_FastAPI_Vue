@@ -37,7 +37,8 @@ This design keeps presentation and content delivery decoupled while preserving a
 - Effective flow: `router -> service -> repository -> JSON files`.
 
 ### Data Source Layer (`backend/data/`)
-- `about.json`, `exp.json`, `projects.json`.
+- `profile/about.json`, `profile/experience.json`, `portfolio/projects.json`.
+- `content/` directory is reserved for future domains.
 - Files are the source of truth for displayed portfolio content.
 - Backend reads files at request time and injects file mtime as `updated_at`.
 

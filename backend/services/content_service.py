@@ -19,25 +19,24 @@ def get_v1_content(filename):
 
 
 def get_about_legacy():
-    return get_legacy_content("about.json")
+    return get_legacy_content("profile/about.json")
 
 
 def get_experience_legacy():
-    return get_legacy_content("exp.json")
+    return get_legacy_content("profile/experience.json")
 
 
 def get_projects_legacy():
-    return get_legacy_content("projects.json")
+    return get_legacy_content("portfolio/projects.json")
 
 
 def get_about_v1():
-    return get_v1_content("about.json")
+    return get_v1_content("profile/about.json")
 
 
 def get_experience_v1():
-    return get_v1_content("exp.json")
+    return get_v1_content("profile/experience.json")
 
 
 def get_projects_v1():
-    return get_v1_content("projects.json")
-
+    return get_v1_content("portfolio/projects.json")

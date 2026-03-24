@@ -166,9 +166,9 @@ services -> routers
 
 ## 3. Data Layer Improvements
 
-### 3.1 Restructure `backend/data` by domain folders
+### 3.1 ✅ Restructure `backend/data` by domain folders
 - Short explanation: avoid flat-file sprawl and enable growth.
-- Current state: `about.json`, `exp.json`, `projects.json` in one folder.
+- Current state: ✅ Implemented. Data files are organized under domain folders (`profile/`, `portfolio/`) with `content/` reserved for future domains, and service/repository paths were updated without API changes.
 - Suggested structure or code example:
 ```text
 backend/data/
