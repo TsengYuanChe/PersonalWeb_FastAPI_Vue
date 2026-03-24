@@ -252,9 +252,9 @@ import * as contentApi from "@/api/contentApi"
   - Lower refactor cost when API changes
   - More maintainable frontend codebase
 
-### 4.3 Add shared response/error normalization in frontend API client
+### 4.3 ✅ Add shared response/error normalization in frontend API client
 - Short explanation: centralize envelope parsing and error mapping.
-- Current state: no common adapter for responses/errors.
+- Current state: ✅ Implemented. `frontend/src/api/client.js` provides `requestRaw` + `request`, centralizes fetch/JSON parsing, and standardizes error throwing via `json?.error?.message || "Request failed"`.
 - Suggested structure or code example:
 ```js
 // src/api/client.js

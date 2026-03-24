@@ -123,6 +123,7 @@ flowchart LR
 ### Frontend Integration
 - `usePageData.js` orchestrates state/lifecycle only and does not depend on backend envelope fields directly.
 - API layer (`src/api/contentApi.js`) handles response-shape normalization and returns domain-friendly data.
+- Shared API client (`src/api/client.js`) standardizes HTTP response parsing (`requestRaw` / `request`) and error handling (`Error(json?.error?.message || "Request failed")`).
 - `updatedAt` values from API layer are aggregated for the sidebar/mobile footer timestamp.
 
 ## 6. Deployment Architecture
