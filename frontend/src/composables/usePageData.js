@@ -1,8 +1,8 @@
 import { ref, onMounted } from 'vue'
 import {
-  getAboutWithMeta,
-  getExperienceWithMeta,
-  getProjectsWithMeta,
+  getAbout,
+  getExperience,
+  getProjects,
 } from '@/api/contentApi'
 
 export function usePageData() {
@@ -27,19 +27,19 @@ export function usePageData() {
   }
 
   onMounted(async () => {
-    const aboutJson = await getAboutWithMeta()
-    aboutData.value = aboutJson.data
+    const about = await getAbout()
+    aboutData.value = about.content
 
-    const expJson = await getExperienceWithMeta()
-    expData.value = expJson.data
+    const exp = await getExperience()
+    expData.value = exp.content
 
-    const projectJson = await getProjectsWithMeta()
-    projectList.value = projectJson.data.projects
+    const project = await getProjects()
+    projectList.value = project.content.projects
 
     updatedTime.value = pickLatestTime(
-      aboutJson.meta?.updated_at,
-      expJson.meta?.updated_at,
-      projectJson.meta?.updated_at
+      about.updatedAt,
+      exp.updatedAt,
+      project.updatedAt
     )
   })
 

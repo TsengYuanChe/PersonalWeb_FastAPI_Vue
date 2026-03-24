@@ -16,11 +16,12 @@ This design keeps presentation and content delivery decoupled while preserving a
 ### Frontend Application (`frontend/`)
 - `src/App.vue`: primary UI composition (About, Experience, Projects, Stack sections).
 - `src/api/client.js`: shared HTTP client (base URL, fetch wrapper, error handling).
-- `src/api/contentApi.js`: content-domain API access functions.
+- `src/api/contentApi.js`: content-domain API functions that normalize backend response shape into domain data.
 - `src/composables/usePageData.js`: API integration and reactive state.
 - `src/composables/*`: scroll behavior, cursor effect, mobile footer handling.
 - `src/assets/css/*`: section-specific and responsive styles.
 - `src/router/index.js`: route config (`/`).
+- Frontend layering: `UI -> composables -> API layer`.
 
 ### Backend API Service (`backend/`)
 - `main.py`: FastAPI app bootstrap + CORS middleware + router mount.
@@ -120,9 +121,9 @@ flowchart LR
 - No auth/pagination currently (appropriate for public portfolio content).
 
 ### Frontend Integration
-- `usePageData.js` performs fetch calls on mount using `/api/v1/...`.
-- API responses are consumed via envelope shape: `response.data` and `response.meta`.
-- `meta.updated_at` values are aggregated for the sidebar/mobile footer timestamp.
+- `usePageData.js` orchestrates state/lifecycle only and does not depend on backend envelope fields directly.
+- API layer (`src/api/contentApi.js`) handles response-shape normalization and returns domain-friendly data.
+- `updatedAt` values from API layer are aggregated for the sidebar/mobile footer timestamp.
 
 ## 6. Deployment Architecture
 ### Build and Runtime

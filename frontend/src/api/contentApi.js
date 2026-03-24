@@ -1,9 +1,25 @@
-import { request, requestWithMeta } from "./client"
+import { requestRaw } from "./client"
 
-export const getAbout = () => request("/api/v1/about")
-export const getExperience = () => request("/api/v1/experience")
-export const getProjects = () => request("/api/v1/projects")
+export async function getAbout() {
+  const res = await requestRaw("/api/v1/about")
+  return {
+    content: res.data,
+    updatedAt: res.meta?.updated_at ?? null,
+  }
+}
 
-export const getAboutWithMeta = () => requestWithMeta("/api/v1/about")
-export const getExperienceWithMeta = () => requestWithMeta("/api/v1/experience")
-export const getProjectsWithMeta = () => requestWithMeta("/api/v1/projects")
+export async function getExperience() {
+  const res = await requestRaw("/api/v1/experience")
+  return {
+    content: res.data,
+    updatedAt: res.meta?.updated_at ?? null,
+  }
+}
+
+export async function getProjects() {
+  const res = await requestRaw("/api/v1/projects")
+  return {
+    content: res.data,
+    updatedAt: res.meta?.updated_at ?? null,
+  }
+}

@@ -238,9 +238,9 @@ export const getAbout = () => api.get("/api/v1/about")
   - Easier API mocking/tests
   - Reusable API client behavior
 
-### 4.2 Keep composables state-focused
+### 4.2 ✅ Keep composables state-focused
 - Short explanation: composables should orchestrate state and lifecycle, not endpoint details.
-- Current state: network calls and state updates are mixed in one file.
+- Current state: ✅ Implemented. Composables are state/lifecycle-focused; API response shape parsing (`data/meta`) is normalized in `frontend/src/api/contentApi.js`, and composables consume domain-friendly fields.
 - Suggested structure or code example:
 ```js
 // usePageData.js
