@@ -126,9 +126,10 @@
     margin-top: calc(var(--header-height) + 22px);
 
     /* bottom: 留 footer 空間 */
-    margin-bottom: var(--footer-height);
+    margin-bottom: 0;
 
     padding: 20px;
+    padding-bottom: calc(var(--footer-height) + 20px);
 
     /* 核心：只讓中間這塊滑動 */
     height: calc(var(--real-vh) - var(--header-height) - var(--footer-height));
