@@ -200,13 +200,13 @@ backend/data/
   - Clear content taxonomy
   - Better architectural storytelling
 
-### 3.3 Add lightweight JSON schema checks in CI
+### 3.3 ✅ Add lightweight JSON schema checks in CI
 - Short explanation: validate content shape before deployment.
-- Current state: content correctness validated only at runtime.
+- Current state: ✅ Implemented. `backend/scripts/validate_content_schema.py` validates `backend/data/**/*.json` against Pydantic schemas and runs in backend GitHub Actions workflow before build/deploy.
 - Suggested structure or code example:
 ```bash
 # CI step example
-python -m scripts.validate_content_schema
+python backend/scripts/validate_content_schema.py
 ```
 - Benefits of the change:
   - Fewer deployment-time surprises

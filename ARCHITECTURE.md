@@ -41,6 +41,7 @@ This design keeps presentation and content delivery decoupled while preserving a
 - `content/` directory is reserved for future domains.
 - Files are the source of truth for displayed portfolio content.
 - Backend reads files at request time and injects file mtime as `updated_at`.
+- CI validates JSON structure against Pydantic schemas via `backend/scripts/validate_content_schema.py`.
 
 ### Deployment Infrastructure
 - `backend/Dockerfile`: Python/Uvicorn container.
@@ -129,9 +130,10 @@ flowchart LR
 ### CI/CD Flow
 1. Push to `main`.
 2. Path-filtered workflow selects frontend or backend pipeline.
-3. Workflow authenticates to GCP and configures Docker auth.
-4. Docker image is built and pushed to Artifact Registry.
-5. Cloud Run service is updated with new image.
+3. Backend pipeline runs JSON schema validation before container build/deploy.
+4. Workflow authenticates to GCP and configures Docker auth.
+5. Docker image is built and pushed to Artifact Registry.
+6. Cloud Run service is updated with new image.
 
 ### Topology
 - `vue-frontend` Cloud Run service: public web entrypoint.

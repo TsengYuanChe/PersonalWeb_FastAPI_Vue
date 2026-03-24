@@ -20,7 +20,29 @@ jobs:
         uses: actions/checkout@v4
 
       # ---------------------------------------------------
-      # 2. Authenticate to Google Cloud
+      # 2. Setup Python for validation script
+      # ---------------------------------------------------
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      # ---------------------------------------------------
+      # 3. Install backend dependencies
+      # ---------------------------------------------------
+      - name: Install backend dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt
+
+      # ---------------------------------------------------
+      # 4. Validate JSON schema
+      # ---------------------------------------------------
+      - name: Validate JSON schema
+        run: python backend/scripts/validate_content_schema.py
+
+      # ---------------------------------------------------
+      # 5. Authenticate to Google Cloud
       # ---------------------------------------------------
       - name: Google Auth
         uses: google-github-actions/auth@v2
@@ -28,7 +50,7 @@ jobs:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
       # ---------------------------------------------------
-      # 3. Setup gcloud CLI
+      # 6. Setup gcloud CLI
       # ---------------------------------------------------
       - name: Setup gcloud
         uses: google-github-actions/setup-gcloud@v2
@@ -36,7 +58,7 @@ jobs:
           project_id: ${{ secrets.GCP_PROJECT_ID }}
 
       # ---------------------------------------------------
-      # 4. Configure Docker to use gcloud as credential helper
+      # 7. Configure Docker to use gcloud as credential helper
       # ---------------------------------------------------
       - name: Configure Docker Auth
         run: |
@@ -44,7 +66,7 @@ jobs:
 
 
       # ---------------------------------------------------
-      # 5. Build Docker Image for backend
+      # 8. Build Docker Image for backend
       # ---------------------------------------------------
       - name: Build Docker Image (FastAPI Backend)
         run: |
@@ -53,7 +75,7 @@ jobs:
           docker build -t "$IMAGE:latest" ./backend
 
       # ---------------------------------------------------
-      # 6. Push Image to Artifact Registry
+      # 9. Push Image to Artifact Registry
       # ---------------------------------------------------
       - name: Push to Artifact Registry
         run: |
@@ -61,7 +83,7 @@ jobs:
           docker push "$IMAGE:latest"
 
       # ---------------------------------------------------
-      # 7. Deploy to Cloud Run
+      # 10. Deploy to Cloud Run
       # ---------------------------------------------------
       - name: Deploy to Cloud Run
         shell: bash
