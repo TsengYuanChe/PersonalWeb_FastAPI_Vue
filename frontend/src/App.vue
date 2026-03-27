@@ -38,6 +38,11 @@
             <a href="https://www.facebook.com/profile.php?id=100006659471037" target="_blank" class="text-secondary fs-2">
               <i class="bi bi-facebook"></i>
             </a>
+            <a href="/files/Adam_Tseng_Resume.pdf" target="_blank" 
+              class="text-secondary fs-2"
+              title="View Resume">
+              <i class="bi bi-file-earmark-arrow-down"></i>
+            </a>
           </div>
 
           <!-- Last Updated -->
