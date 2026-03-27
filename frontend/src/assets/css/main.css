@@ -124,7 +124,7 @@ html {
 .social-icons {
   display: flex;
   justify-content: flex-start;
-  gap: 35px;
+  gap: 25px;
   align-items: center;
 }
   
@@ -132,6 +132,33 @@ html {
   font-size: 2rem; /* icon 變大 */
   color: #6c757d;
   transition: 0.2s ease;
+  position: relative;
+}
+
+/* tooltip */
+.social-icons a::after {
+  content: attr(data-label);
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.2s ease;
+}
+
+/* hover 顯示 */
+.social-icons a:hover::after {
+  opacity: 0.65;
+  transform: translateX(-50%) translateY(5px);
 }
   
 .social-icons a:hover {

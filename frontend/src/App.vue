@@ -26,21 +26,19 @@
 
           <!-- Social icons -->
           <div class="inner-content social-icons d-flex align-items-center mt-5">
-            <a href="https://github.com/TsengYuanChe" target="_blank" class="text-secondary fs-2">
+            <a href="https://github.com/TsengYuanChe" target="_blank" class="text-secondary fs-2" data-label="GitHub">
               <i class="bi bi-github"></i>
             </a>
-            <a href="https://www.linkedin.com/in/adam-tseng-04838b237/" target="_blank" class="text-secondary fs-2">
+            <a href="https://www.linkedin.com/in/adam-tseng-04838b237/" target="_blank" class="text-secondary fs-2" data-label="LinkedIn">
               <i class="bi bi-linkedin"></i>
             </a>
-            <a href="https://www.instagram.com/adam0614__/" target="_blank" class="text-secondary fs-2">
+            <a href="https://www.instagram.com/adam0614__/" target="_blank" class="text-secondary fs-2" data-label="Instagram">
               <i class="bi bi-instagram"></i>
             </a>
-            <a href="https://www.facebook.com/profile.php?id=100006659471037" target="_blank" class="text-secondary fs-2">
+            <a href="https://www.facebook.com/profile.php?id=100006659471037" target="_blank" class="text-secondary fs-2" data-label="Facebook">
               <i class="bi bi-facebook"></i>
             </a>
-            <a href="/files/Adam_Tseng_Resume.pdf" target="_blank" 
-              class="text-secondary fs-2"
-              title="View Resume">
+            <a href="/files/Adam_Tseng_Resume.pdf" target="_blank" class="text-secondary fs-2" data-label="Resume">
               <i class="bi bi-file-earmark-arrow-down"></i>
             </a>
           </div>
