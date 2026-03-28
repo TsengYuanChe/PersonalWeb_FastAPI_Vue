@@ -116,7 +116,7 @@
 
             <!-- Details -->
             <ul class="text-secondary mt-3 mb-3 exp-detail-list">
-              <li v-for="(d, i) in exp.details" :key="i" class="text-secondry mb-2" v-html="d"></li>
+              <li v-for="(d, i) in exp.details" :key="i" class="text-secondary mb-2" v-html="d"></li>
             </ul>
 
             <!-- Skills -->
@@ -137,30 +137,75 @@
         <section id="projects" class="projects-section">
           <h2 class="fw-bold mb-4">Projects</h2>
 
-          <div v-for="project in projectList" :key="project.title" class="project-card">
+          <div v-for="project in displayProjects" :key="project.title" class="project-card">
 
             <!-- Title & Code Button -->
             <div class="d-flex justify-content-between align-items-center">
               <h4 class="text-info mb-0">{{ project.title }}</h4>
 
-              <a v-if="project.url" :href="project.url" target="_blank" class="code-btn">
-                <i class="bi bi-code-slash"></i> Code
-              </a>
+              <div class="d-flex gap-2">
+                <a v-if="getGithubLink(project)" :href="getGithubLink(project)" target="_blank" class="code-btn">
+                  <i class="bi bi-code-slash"></i> GitHub
+                </a>
+                <a v-if="getDemoLink(project)" :href="getDemoLink(project)" target="_blank" class="code-btn">
+                  <i class="bi bi-box-arrow-up-right"></i> Demo
+                </a>
+              </div>
             </div>
 
-            <!-- Description -->
+            <!-- Overview -->
             <p class="text-secondary mt-2 mb-2 project-description">
-              {{ project.description }}
+              {{ project?.overview || 'No overview provided.' }}
             </p>
 
-            <!-- Languages -->
-            <div class="tag-group mt-2">
-              <span v-for="lang in project.languages" :key="`lang-${lang}`" class="tag tag-lang">
-                {{ lang }}
-              </span>
+            <template v-if="isFeaturedProject(project)">
+              <div v-if="safeArray(project?.features).length" class="mt-3">
+                <p class="text-light mb-1"><strong>Features</strong></p>
+                <ul class="text-secondary mb-2">
+                  <li v-for="(item, index) in safeArray(project?.features)" :key="`feature-${project.title}-${index}`">{{ item }}</li>
+                </ul>
+              </div>
 
-              <span v-for="tool in project.tools" :key="`tool-${tool}`" class="tag tag-tool">
-                {{ tool }}
+              <div v-if="safeArray(project?.engineering).length" class="mt-2">
+                <p class="text-light mb-1"><strong>Engineering</strong></p>
+                <ul class="text-secondary mb-2">
+                  <li v-for="(item, index) in safeArray(project?.engineering)" :key="`eng-${project.title}-${index}`">{{ item }}</li>
+                </ul>
+              </div>
+
+              <div class="mt-2">
+                <p class="text-light mb-1"><strong>Architecture</strong></p>
+                <p class="text-secondary mb-2">{{ project?.architecture || 'N/A' }}</p>
+              </div>
+
+              <div v-if="safeArray(project?.tradeoffs).length" class="mt-2">
+                <p class="text-light mb-1"><strong>Trade-offs</strong></p>
+                <ul class="text-secondary mb-2">
+                  <li v-for="(item, index) in safeArray(project?.tradeoffs)" :key="`tradeoff-${project.title}-${index}`">{{ item }}</li>
+                </ul>
+              </div>
+
+              <div v-if="safeArray(project?.future).length" class="mt-2">
+                <p class="text-light mb-1"><strong>Future</strong></p>
+                <ul class="text-secondary mb-2">
+                  <li v-for="(item, index) in safeArray(project?.future)" :key="`future-${project.title}-${index}`">{{ item }}</li>
+                </ul>
+              </div>
+            </template>
+
+            <template v-else>
+              <div v-if="safeArray(project?.engineering).length" class="mt-2">
+                <p class="text-light mb-1"><strong>Engineering</strong></p>
+                <ul class="text-secondary mb-2">
+                  <li v-for="(item, index) in previewEngineering(project)" :key="`eng-preview-${project.title}-${index}`">{{ item }}</li>
+                </ul>
+              </div>
+            </template>
+
+            <!-- Tech -->
+            <div class="tag-group mt-2">
+              <span v-for="item in safeArray(project?.tech)" :key="`tech-${project.title}-${item}`" class="tag tag-tool">
+                {{ item }}
               </span>
             </div>
 
@@ -201,8 +246,12 @@ import { useScrollProxy } from './composables/useScrollProxy';
 import { useMouseGlow } from './composables/useMouseGlow';
 import { useSmoothScroll } from './composables/useSmoothScroll'
 import { useMobileFooter } from './composables/useMobileFooter';
+import { useProjectHelpers } from './composables/useProjectHelpers';
+import { useProjectView } from './composables/useProjectView';
 
 const { aboutData, expData, projectList, updatedTime, getLogoUrl} = usePageData()
+const { safeArray, isFeaturedProject, getGithubLink, previewEngineering, getDemoLink } = useProjectHelpers()
+const { displayProjects } = useProjectView(projectList)
 const { scrollToSection } = useSmoothScroll()
 
 useScrollProxy();

@@ -1,32 +1,179 @@
 {
   "projects": [
     {
+      "title": "Personal Portfolio Website",
+      "type": "featured",
+      "category": "backend",
+      "overview": "Designed and built a full-stack portfolio platform to showcase projects, experiences, and technical capabilities through a structured, API-driven architecture.",
+
+      "features": [
+        "Dynamic project and experience content rendered from structured JSON APIs",
+        "Responsive UI with smooth navigation and interactive components",
+        "Integrated resume download and external profile links",
+        "Custom UI interactions including hover effects and cursor-based visual feedback"
+      ],
+
+      "engineering": [
+        "Designed a schema-driven content system using FastAPI and Pydantic for structured API responses",
+        "Implemented a data-driven frontend architecture in Vue 3 to render project content dynamically",
+        "Built modular composables for scroll handling, UI state management, and interaction effects",
+        "Integrated CI/CD pipeline with Docker and Google Cloud Run for automated deployment"
+      ],
+
+      "architecture": "Vue 3 frontend → FastAPI backend → JSON content layer → Pydantic schema validation → Cloud Run deployment",
+
+      "tradeoffs": [
+        "JSON-based content simplifies updates but lacks real-time CMS capabilities",
+        "Single backend service reduces complexity but limits independent scaling of features",
+        "Client-side rendering improves flexibility but increases frontend responsibility"
+      ],
+
+      "future": [
+        "Introduce CMS or admin interface for content management",
+        "Add authentication and analytics tracking",
+        "Enhance SEO and performance optimization",
+        "Expand API versioning and content modularization"
+      ],
+
+      "tech": [
+        "Vue 3",
+        "FastAPI",
+        "Python",
+        "JavaScript",
+        "Pydantic",
+        "Docker",
+        "Google Cloud Run",
+        "GitHub Actions"
+      ],
+
+      "links": {
+        "github": "https://github.com/TsengYuanChe",
+        "demo": "https://adamtseng.com"
+      }
+    },
+    {
       "title": "AI Care Website",
-      "description": "Developed a full-stack web platform for AI-assisted elderly care, featuring real-time image analysis using OpenCV for environment awareness. Implemented a Flask backend with modular APIs and a responsive Bootstrap frontend delivering interactive health-education content.",
-      "languages": ["Python", "JavaScript", "HTML", "CSS"],
-      "tools": ["Flask", "OpenCV", "Bootstrap", "SQLite"],
-      "url": "https://github.com/TsengYuanChe/AI_care_website"
+      "type": "normal",
+      "category": "Healthcare Platform",
+      "overview": "Developed a full-stack web platform for AI-assisted elderly care with real-time image analysis for environment awareness, backed by modular Flask APIs and a responsive Bootstrap interface.",
+      "features": [
+        "AI-assisted elderly care workflows delivered through a web interface",
+        "Real-time environment awareness powered by OpenCV image analysis",
+        "Interactive health-education pages with responsive UI design"
+      ],
+      "engineering": [
+        "Implemented modular Flask API boundaries to keep feature logic maintainable",
+        "Integrated image-processing steps into API flows for near real-time feedback",
+        "Designed SQLite-backed persistence for lightweight deployment and iteration"
+      ],
+      "architecture": "Frontend UI -> Flask API modules -> OpenCV analysis pipeline -> SQLite storage -> User-facing recommendations",
+      "tradeoffs": [
+        "Monolithic Flask service simplified delivery but limited independent scaling of compute-heavy analysis",
+        "SQLite minimized ops overhead but is not ideal for concurrent write-heavy traffic"
+      ],
+      "future": [
+        "Move image analysis to asynchronous workers for better throughput",
+        "Add model-quality monitoring and dataset/version tracking",
+        "Migrate to PostgreSQL for higher concurrency and operational resilience"
+      ],
+      "tech": ["Python", "JavaScript", "HTML", "CSS", "Flask", "OpenCV", "Bootstrap", "SQLite"],
+      "links": {
+        "github": "https://github.com/TsengYuanChe/AI_care_website",
+        "demo": ""
+      }
     },
     {
       "title": "Financial Report Crawler",
-      "description": "Automated crawler system for downloading financial statements from TWSE, built to streamline analysts’ data-preparation workflow. Utilizes Selenium for dynamic page interaction and BeautifulSoup for structured data extraction, enabling fully automated retrieval and organization of report files.",
-      "languages": ["Python"],
-      "tools": ["Selenium", "BeautifulSoup", "Webdriver"],
-      "url": "https://github.com/TsengYuanChe/Financial_report_crawler"
+      "type": "normal",
+      "category": "Data Pipeline Automation",
+      "overview": "Built an automated crawler for TWSE financial statements to streamline analysts' data-preparation workflows with end-to-end retrieval and file organization.",
+      "features": [
+        "Automated statement download from TWSE sources",
+        "Dynamic page handling with Selenium-based browser automation",
+        "Structured extraction and output organization for downstream analysis"
+      ],
+      "engineering": [
+        "Combined Selenium interaction with BeautifulSoup parsing to handle mixed dynamic/static content",
+        "Designed deterministic file naming and storage conventions for repeatable batch runs",
+        "Reduced manual analyst effort by converting multi-step retrieval into one automated workflow"
+      ],
+      "architecture": "Scheduler/trigger -> Selenium crawler -> BeautifulSoup parser -> Structured file output -> Analyst data pipeline",
+      "tradeoffs": [
+        "Browser automation improved compatibility but increased runtime and maintenance cost",
+        "Site-structure changes can break selectors and require ongoing scraper updates"
+      ],
+      "future": [
+        "Add incremental crawl checkpoints and retry queues",
+        "Support multi-source report ingestion beyond TWSE",
+        "Publish cleaned outputs through an API interface"
+      ],
+      "tech": ["Python", "Selenium", "BeautifulSoup", "WebDriver"],
+      "links": {
+        "github": "https://github.com/TsengYuanChe/Financial_report_crawler",
+        "demo": ""
+      }
     },
     {
       "title": "yt_pod",
-      "description": "Content integration tool that automatically retrieves, transcribes, and summarizes updates from YouTube channels and podcast feeds. Built to unify multi-platform media into a structured dataset, enabling faster review and downstream analysis.",
-      "languages": ["Python"],
-      "tools": ["YouTube API", "Podcast API", "Whisper", "GPT-3"],
-      "url": "https://github.com/TsengYuanChe/yt_pod_crawler"
+      "type": "normal",
+      "category": "AI Content Processing",
+      "overview": "Built a media integration pipeline that retrieves, transcribes, and summarizes updates from YouTube channels and podcast feeds into structured datasets.",
+      "features": [
+        "Unified ingestion from YouTube and podcast platforms",
+        "Automated speech-to-text transcription for new media items",
+        "Summary generation to accelerate review and downstream analysis"
+      ],
+      "engineering": [
+        "Integrated multiple external APIs into a single normalized ingestion workflow",
+        "Used Whisper-based transcription to convert audio content into machine-readable text",
+        "Applied GPT-powered summarization to produce concise, comparable content snapshots"
+      ],
+      "architecture": "YouTube/Podcast APIs -> Ingestion service -> Whisper transcription -> GPT summarization -> Structured dataset output",
+      "tradeoffs": [
+        "LLM summarization improves speed but introduces variability in summary consistency",
+        "Transcription quality depends on source audio clarity and language characteristics"
+      ],
+      "future": [
+        "Add quality scoring and human-in-the-loop review for summaries",
+        "Introduce vector indexing for semantic search across episodes/videos",
+        "Expose pipeline results through a lightweight dashboard"
+      ],
+      "tech": ["Python", "YouTube API", "Podcast API", "Whisper", "GPT-3"],
+      "links": {
+        "github": "https://github.com/TsengYuanChe/yt_pod_crawler",
+        "demo": ""
+      }
     },
     {
       "title": "Enterprise System Development @ eZoom",
-      "description": "End-to-end development for large-scale enterprise systems, including frontend modules, backend services, and database architecture. Worked across full-stack layers, implementing .NET 8/C# APIs, FastAPI microservices, Vue frontend interfaces, and schema design for MSSQL/PostgreSQL. Built CI/CD pipelines, automated deployments, and managed production environments on Windows Server + IIS.",
-      "languages": ["C#", "Python", "JavaScript", "SQL"],
-      "tools": [".NET 8", "Vue 3", "FastAPI", "MSSQL", "PostgreSQL"],
-      "url": null
+      "type": "normal",
+      "category": "Enterprise Platform Engineering",
+      "overview": "Delivered end-to-end development for large-scale enterprise systems across frontend, backend, databases, deployment automation, and production operations.",
+      "features": [
+        "Implemented full-stack modules spanning Vue interfaces and backend service APIs",
+        "Designed relational schemas and data workflows across MSSQL and PostgreSQL",
+        "Built CI/CD automation and handled production release operations on Windows Server + IIS"
+      ],
+      "engineering": [
+        "Developed .NET 8/C# APIs alongside Python FastAPI microservices for domain-specific workloads",
+        "Planned database schemas and query strategies based on system analysis documentation",
+        "Integrated deployment pipelines to reduce release friction and improve delivery consistency"
+      ],
+      "architecture": "Vue frontend modules -> .NET/FastAPI service layer -> MSSQL/PostgreSQL data layer -> CI/CD pipeline -> Windows Server (IIS) production",
+      "tradeoffs": [
+        "Hybrid stack increased implementation flexibility but raised integration complexity",
+        "On-prem style Windows/IIS deployment improved control but required more operational maintenance"
+      ],
+      "future": [
+        "Increase service decomposition boundaries to improve independent scaling",
+        "Expand automated testing gates in CI/CD before production rollout",
+        "Standardize observability dashboards for API and database performance"
+      ],
+      "tech": ["C#", "Python", "JavaScript", "SQL", ".NET 8", "Vue 3", "FastAPI", "MSSQL", "PostgreSQL", "CI/CD", "Windows Server", "IIS"],
+      "links": {
+        "github": "",
+        "demo": ""
+      }
     }
   ]
 }

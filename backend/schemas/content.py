@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Literal, Optional
 
 from pydantic import BaseModel
 
@@ -23,12 +23,23 @@ class ExperienceData(BaseModel):
     experience: list[ExperienceItem]
 
 
+class ProjectLinks(BaseModel):
+    github: Optional[str] = None
+    demo: Optional[str] = None
+
+
 class ProjectItem(BaseModel):
     title: str
-    description: str
-    languages: list[str]
-    tools: list[str]
-    url: Optional[str] = None
+    type: Literal["featured", "normal"]
+    category: str
+    overview: str
+    features: list[str] = []
+    engineering: list[str] = []
+    architecture: str
+    tradeoffs: list[str] = []
+    future: list[str] = []
+    tech: list[str]
+    links: ProjectLinks
 
 
 class ProjectData(BaseModel):
