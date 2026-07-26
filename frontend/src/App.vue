@@ -1,11 +1,12 @@
 <script setup>
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { RouterLink, RouterView, useRoute } from 'vue-router'
 import { getAbout } from '@/api/contentApi'
 import { useMouseGlow } from '@/composables/useMouseGlow'
 import { useScrollProxy } from '@/composables/useScrollProxy'
 
 const route = useRoute()
+const isHomeLayout = computed(() => route.meta.layout === 'home')
 const updatedTime = ref('—')
 let hasLoadedUpdatedTime = false
 
@@ -71,8 +72,11 @@ watch(
 <template>
   <div class="cursor-glow"></div>
   <div class="app-wrapper">
-    <div class="layout-container text-light min-vh-100">
-      <aside class="sidebar d-flex flex-column justify-content-between">
+    <div
+      class="layout-container text-light min-vh-100"
+      :class="isHomeLayout ? 'layout-container--home' : 'layout-container--detail'"
+    >
+      <aside v-if="isHomeLayout" class="sidebar d-flex flex-column justify-content-between">
         <div class="inner-content profile-part">
           <RouterLink to="/" class="site-title-link">
             <h1 class="display-6 fw-bold">Adam Tseng</h1>
@@ -153,11 +157,11 @@ watch(
         </div>
       </aside>
 
-      <main class="main-content">
+      <main class="main-content" :class="{ 'detail-main': !isHomeLayout }">
         <RouterView />
       </main>
 
-      <footer class="bottom-area mobile-footer">
+      <footer v-if="isHomeLayout" class="bottom-area mobile-footer">
         <div class="inner-content social-icons d-flex align-items-center">
           <a href="https://github.com/TsengYuanChe" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
             <i class="bi bi-github"></i>

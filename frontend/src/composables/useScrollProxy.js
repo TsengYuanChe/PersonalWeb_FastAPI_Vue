@@ -4,7 +4,7 @@ export function useScrollProxy() {
   let contentArea = null;
 
   const handleWheel = (e) => {
-    if (!contentArea) return;
+    if (!contentArea || !document.querySelector('.layout-container--home')) return;
     contentArea.scrollTop += e.deltaY; // 滾動 right content
     e.preventDefault(); // 禁止 body 捲動
   };

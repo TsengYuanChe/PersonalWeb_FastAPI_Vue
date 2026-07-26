@@ -22,6 +22,14 @@
   .main-content {
     padding: 30px 48px;
   }
+
+  .detail-main {
+    padding: 0;
+  }
+
+  .detail-page-container {
+    padding: 44px 36px 60px;
+  }
 }
 
 
@@ -178,6 +186,18 @@
 
   .route-page-header h1 {
     font-size: 1.5rem;
+  }
+
+  .detail-main {
+    min-height: 0;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow: visible !important;
+  }
+
+  .detail-page-container {
+    padding: 28px 20px 48px;
   }
 
 }

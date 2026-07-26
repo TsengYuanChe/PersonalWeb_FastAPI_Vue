@@ -37,6 +37,7 @@
 
 .about-page-sections {
   width: 100%;
+  max-width: 880px;
 }
 
 .about-page-section {

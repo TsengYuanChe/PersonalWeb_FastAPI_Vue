@@ -96,6 +96,31 @@ html {
   padding: 30px var(--main-inline-padding);
 }
 
+/* Full-width shell shared by routed detail pages */
+.layout-container--detail {
+  display: block;
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  height: auto;
+  overflow: visible;
+}
+
+.detail-main {
+  width: 100%;
+  max-width: none;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+}
+
+.detail-page-container {
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  padding: 56px 48px 72px;
+}
+
 /* ---------------------------
    Section Layout
 ---------------------------- */
@@ -267,13 +292,45 @@ html {
   font-size: 2rem;
 }
 
-.route-eyebrow,
 .project-category {
   color: #9bbcff;
   font-size: 0.78rem;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.detail-breadcrumb {
+  margin-bottom: 0.75rem;
+  color: var(--site-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.detail-breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.detail-breadcrumb a {
+  color: #9bbcff;
+  text-decoration: none;
+}
+
+.detail-breadcrumb a:hover {
+  color: #4da4ff;
+}
+
+.detail-breadcrumb a:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid #9bbcff;
+  outline-offset: 4px;
 }
 
 .page-state {

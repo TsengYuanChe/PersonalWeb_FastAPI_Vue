@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { getProjects } from '@/api/contentApi'
 import ProjectCard from '@/components/projects/ProjectCard.vue'
+import DetailPageHeader from '@/components/layout/DetailPageHeader.vue'
 
 const projects = ref([])
 const loading = ref(true)
@@ -20,12 +21,16 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section class="projects-section route-page" aria-labelledby="project-heading">
-    <header class="route-page-header">
-      <p class="route-eyebrow">Selected engineering work</p>
-      <h1 id="project-heading" class="fw-bold">Projects</h1>
-      <p class="text-secondary">Architecture, implementation details, trade-offs, and future work.</p>
-    </header>
+  <section
+    class="projects-section route-page detail-page-container"
+    aria-labelledby="project-heading"
+  >
+    <DetailPageHeader
+      current="PROJECTS"
+      heading-id="project-heading"
+      title="Projects"
+      description="Architecture, implementation details, trade-offs, and future work."
+    />
 
     <div v-if="loading" class="page-state" role="status">
       <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>

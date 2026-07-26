@@ -2,6 +2,7 @@
 import { onMounted, ref } from 'vue'
 import { getExperience } from '@/api/contentApi'
 import ExperienceCard from '@/components/experience/ExperienceCard.vue'
+import DetailPageHeader from '@/components/layout/DetailPageHeader.vue'
 
 const experiences = ref([])
 const loading = ref(true)
@@ -22,12 +23,16 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section class="exp-section route-page" aria-labelledby="experience-heading">
-    <header class="route-page-header">
-      <p class="route-eyebrow">Career & education</p>
-      <h1 id="experience-heading" class="fw-bold">Experiences</h1>
-      <p class="text-secondary">A detailed view of my professional and academic experience.</p>
-    </header>
+  <section
+    class="exp-section route-page detail-page-container"
+    aria-labelledby="experience-heading"
+  >
+    <DetailPageHeader
+      current="JOURNEY"
+      heading-id="experience-heading"
+      title="Journey"
+      description="A detailed view of my professional and academic experience."
+    />
 
     <div v-if="loading" class="page-state" role="status">
       <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>

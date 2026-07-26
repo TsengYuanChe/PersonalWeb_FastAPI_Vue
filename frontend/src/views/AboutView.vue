@@ -1,4 +1,6 @@
 <script setup>
+import DetailPageHeader from '@/components/layout/DetailPageHeader.vue'
+
 const aboutSections = [
   { slug: 'introduction', title: 'Introduction' },
   { slug: 'what-i-do', title: 'What I Do' },
@@ -10,14 +12,16 @@ const aboutSections = [
 </script>
 
 <template>
-  <article class="about-page route-page" aria-labelledby="about-heading">
-    <header class="route-page-header">
-      <p class="route-eyebrow">About</p>
-      <h1 id="about-heading" class="fw-bold">About Me</h1>
-      <p class="text-secondary">
-        A closer look at my background, engineering approach, and the work I care about.
-      </p>
-    </header>
+  <article
+    class="about-page route-page detail-page-container"
+    aria-labelledby="about-heading"
+  >
+    <DetailPageHeader
+      current="ABOUT"
+      heading-id="about-heading"
+      title="About Me"
+      description="A closer look at my background, engineering approach, and the work I care about."
+    />
 
     <div class="about-page-sections">
       <section
