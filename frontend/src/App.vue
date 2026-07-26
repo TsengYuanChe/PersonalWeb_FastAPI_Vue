@@ -1,10 +1,13 @@
 <script setup>
-import { nextTick, onBeforeUnmount, onMounted, watch } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { RouterLink, RouterView, useRoute } from 'vue-router'
+import { getAbout } from '@/api/contentApi'
 import { useMouseGlow } from '@/composables/useMouseGlow'
 import { useScrollProxy } from '@/composables/useScrollProxy'
 
 const route = useRoute()
+const updatedTime = ref('—')
+let hasLoadedUpdatedTime = false
 
 useScrollProxy()
 useMouseGlow()
@@ -18,9 +21,35 @@ function updateLayoutVars() {
   document.documentElement.style.setProperty('--real-vh', `${window.innerHeight}px`)
 }
 
-onMounted(() => {
+async function loadUpdatedTime() {
+  if (hasLoadedUpdatedTime) return
+
+  hasLoadedUpdatedTime = true
+  try {
+    const response = await getAbout()
+    updatedTime.value = response.updatedAt?.split(' ')[0] || '—'
+  } catch {
+    updatedTime.value = '—'
+  }
+}
+
+function scrollMainContent() {
+  const container = document.querySelector('.main-content')
+  if (!container) return
+
+  const target = route.hash ? document.querySelector(route.hash) : null
+  const homeTopSpacing = document.querySelector('#about')?.offsetTop || 0
+  container.scrollTo({
+    top: target ? Math.max(target.offsetTop - homeTopSpacing, 0) : 0,
+    behavior: route.hash ? 'smooth' : 'auto',
+  })
+}
+
+onMounted(async () => {
   updateLayoutVars()
   window.addEventListener('resize', updateLayoutVars)
+  await nextTick()
+  scrollMainContent()
 })
 
 onBeforeUnmount(() => {
@@ -31,9 +60,11 @@ watch(
   () => route.fullPath,
   async () => {
     await nextTick()
-    document.querySelector('.main-content')?.scrollTo({ top: 0, behavior: 'auto' })
+    if (route.name === 'home') await loadUpdatedTime()
+    scrollMainContent()
     updateLayoutVars()
   },
+  { immediate: true },
 )
 </script>
 
@@ -54,9 +85,15 @@ watch(
           </p>
 
           <nav class="nav flex-column mt-4 nav-menu" aria-label="Primary navigation">
-            <RouterLink to="/" class="nav-link px-0 py-1">-- HOME</RouterLink>
-            <RouterLink to="/experience" class="nav-link px-0 py-1">-- EXPERIENCE</RouterLink>
-            <RouterLink to="/project" class="nav-link px-0 py-1">-- PROJECTS</RouterLink>
+            <RouterLink :to="{ path: '/', hash: '#about' }" class="nav-link px-0 py-1">
+              -- HOME
+            </RouterLink>
+            <RouterLink :to="{ path: '/', hash: '#experiences' }" class="nav-link px-0 py-1">
+              -- EXPERIENCE
+            </RouterLink>
+            <RouterLink :to="{ path: '/', hash: '#projects' }" class="nav-link px-0 py-1">
+              -- PROJECTS
+            </RouterLink>
           </nav>
         </div>
 
@@ -113,6 +150,7 @@ watch(
               <i class="bi bi-file-earmark-arrow-down"></i>
             </a>
           </div>
+          <p class="last-updated mt-3 text-secondary small">Last updated: {{ updatedTime }}</p>
         </div>
       </aside>
 
@@ -138,6 +176,9 @@ watch(
             <i class="bi bi-file-earmark-arrow-down"></i>
           </a>
         </div>
+        <p class="last-updated mt-2 mb-0 text-secondary small">
+          Last updated: {{ updatedTime }}
+        </p>
       </footer>
     </div>
   </div>

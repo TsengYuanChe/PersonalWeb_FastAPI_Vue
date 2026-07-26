@@ -109,6 +109,8 @@
   /* 由 JS 移出後的新 footer */
   .mobile-footer {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     position: fixed;
     bottom: 0;
@@ -123,6 +125,10 @@
 
   .mobile-footer .social-icons {
     justify-content: center;
+  }
+
+  .mobile-footer .last-updated {
+    text-align: center;
   }
 
 
