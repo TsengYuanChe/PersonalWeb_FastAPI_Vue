@@ -77,15 +77,31 @@
     box-shadow: none !important;
   }
 
-  .home-project-card {
-    display: block;
+  .home-project-heading {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 6px;
   }
 
-  .home-project-image,
-  .home-project-image-fallback {
-    width: 100%;
-    height: 120px;
-    margin-bottom: 1rem;
+  .home-project-links {
+    gap: 12px;
+  }
+
+  .home-project-name {
+    font-size: 1.05rem;
+  }
+
+  .home-project-media {
+    width: min(100%, 320px);
+  }
+
+  .home-project-description {
+    font-size: 0.88rem;
+    -webkit-line-clamp: 3;
+  }
+
+  .home-project-tags {
+    font-size: 0.78rem;
   }
 }
 
@@ -102,5 +118,20 @@
   .tag {
     font-size: 0.8rem;
     padding: 5px 12px;
+  }
+
+  .home-project-row {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "heading"
+      "media"
+      "description"
+      "tags";
+    row-gap: 12px;
+    padding: 24px 0;
+  }
+
+  .home-project-media {
+    width: min(100%, 360px);
   }
 }

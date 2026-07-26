@@ -172,12 +172,6 @@
   }
 
 
-  /* Tech stack 字體 */
-  #stack p {
-    font-size: 0.85rem !important;
-    line-height: 1.55;
-  }
-
   /* 防止 sidebar footer 觸控滾動衝突 */
   .sidebar .bottom-area {
     overflow: hidden;

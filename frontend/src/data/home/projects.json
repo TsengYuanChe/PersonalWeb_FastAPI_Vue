@@ -2,24 +2,30 @@
   "projects": [
     {
       "name": "Personal Portfolio Website",
-      "image": "",
+      "image": "/images/projects/personal-portfolio-website.webp",
+      "image_alt": "Personal Portfolio Website preview",
+      "image_ready": false,
       "introduction": "Designed and built a full-stack portfolio platform to showcase projects, experiences, and technical capabilities through a structured, API-driven architecture.",
-      "skills": ["Vue 3", "FastAPI", "Pydantic", "Docker"],
-      "link": "/project"
+      "tags": ["Vue 3", "FastAPI", "Pydantic", "Docker"],
+      "website_url": "https://adamtseng.com"
     },
     {
       "name": "AI Care Website",
-      "image": "",
+      "image": "/images/projects/ai-care-website.webp",
+      "image_alt": "AI Care Website preview",
+      "image_ready": false,
       "introduction": "Developed a full-stack web platform for AI-assisted elderly care with real-time image analysis for environment awareness, backed by modular Flask APIs and a responsive Bootstrap interface.",
-      "skills": ["Python", "Flask", "OpenCV", "SQLite"],
-      "link": "/project"
+      "tags": ["Python", "Flask", "OpenCV", "SQLite"],
+      "source_url": "https://github.com/TsengYuanChe/AI_care_website"
     },
     {
       "name": "Financial Report Crawler",
-      "image": "",
+      "image": "/images/projects/financial-report-crawler.webp",
+      "image_alt": "Financial Report Crawler preview",
+      "image_ready": false,
       "introduction": "Built an automated crawler for TWSE financial statements to streamline analysts' data-preparation workflows with end-to-end retrieval and file organization.",
-      "skills": ["Python", "Selenium", "BeautifulSoup", "WebDriver"],
-      "link": "/project"
+      "tags": ["Python", "Selenium", "BeautifulSoup", "WebDriver"],
+      "source_url": "https://github.com/TsengYuanChe/Financial_report_crawler"
     }
   ]
 }
