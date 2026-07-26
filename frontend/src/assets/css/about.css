@@ -29,3 +29,36 @@
   color: #fff;
   border-bottom-color: rgba(255, 255, 255, 0.6);
 }
+
+/* About detail page: low-decoration, section-based content structure */
+.about-page {
+  min-width: 0;
+}
+
+.about-page-sections {
+  width: 100%;
+}
+
+.about-page-section {
+  padding: 24px 0;
+}
+
+.about-page-section + .about-page-section {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.about-page-section h2 {
+  margin: 0;
+  color: var(--site-text);
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.about-page-placeholder {
+  margin: 8px 0 0;
+  color: var(--site-secondary);
+  font-size: 1rem;
+  line-height: 1.45;
+}

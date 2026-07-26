@@ -22,6 +22,19 @@
     margin-bottom: 14px !important;
     text-align: left;
   }
+
+  .about-page-section {
+    padding: 18px 0;
+  }
+
+  .about-page-section h2 {
+    font-size: 1.1rem;
+  }
+
+  .about-page-placeholder {
+    margin-top: 6px;
+    font-size: 0.9rem;
+  }
 }
 
 /* ---------- Tablet : max-width 1024px ---------- */

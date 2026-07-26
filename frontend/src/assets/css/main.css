@@ -2,6 +2,9 @@
   --site-bg: #0c1a2b; /* 深藍色 */
   --site-text: #e4e9f0;
   --site-secondary: #8fa3bd;
+  --layout-max-width: 1300px;
+  --sidebar-min-width: 300px;
+  --main-inline-padding: 90px;
 }
 
 /* ---------------------------
@@ -35,8 +38,10 @@ html {
 .layout-container {
   background-color: var(--site-bg);
   display: grid;
-  grid-template-columns: 280px 1fr;
-  width: 1300px;      /* ⭐ 整個網站置中寬度 */
+  grid-template-columns:
+    minmax(var(--sidebar-min-width), 27fr)
+    minmax(0, 73fr);
+  width: min(100%, var(--layout-max-width));
   height: 100vh;
   overflow: hidden;
 }
@@ -46,7 +51,8 @@ html {
 ---------------------------- */
 
 .sidebar {
-  width: 350px;
+  width: 100%;
+  min-width: 0;
   padding: 40px 30px;
 
   display: flex;
@@ -83,10 +89,11 @@ html {
   background-color: var(--site-bg);
 
   max-width: 1000px;   /* ⭐ 內容寬度 */
+  min-width: 0;
   width: 100%;
   margin: 0 auto;      /* ⭐ 在右側空間內水平置中 */
 
-  padding: 30px 120px;
+  padding: 30px var(--main-inline-padding);
 }
 
 /* ---------------------------

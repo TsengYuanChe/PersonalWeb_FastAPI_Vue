@@ -77,22 +77,21 @@ watch(
           <RouterLink to="/" class="site-title-link">
             <h1 class="display-6 fw-bold">Adam Tseng</h1>
           </RouterLink>
-          <h2 class="h5 text-light">Software Developer</h2>
+          <h2 class="h5 text-light">Software Engineer</h2>
 
           <p class="mt-3 text-secondary sidebar-intro">
-            I build full-stack systems and cloud-ready applications — from backend APIs to
-            deployment automation.
+            Building reliable digital products from concept to deployment.
           </p>
 
           <nav class="nav flex-column mt-4 nav-menu" aria-label="Primary navigation">
             <RouterLink :to="{ path: '/', hash: '#about' }" class="nav-link px-0 py-1">
-              -- HOME
+              -- Home
             </RouterLink>
             <RouterLink :to="{ path: '/', hash: '#experiences' }" class="nav-link px-0 py-1">
-              -- EXPERIENCE
+              -- Journey
             </RouterLink>
             <RouterLink :to="{ path: '/', hash: '#projects' }" class="nav-link px-0 py-1">
-              -- PROJECTS
+              -- Projects
             </RouterLink>
           </nav>
         </div>
