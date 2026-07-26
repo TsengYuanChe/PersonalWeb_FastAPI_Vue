@@ -87,9 +87,13 @@
   .nav-menu {
     display: flex !important;
     flex-direction: row !important;
-    gap: 18px;
+    gap: clamp(8px, 3vw, 18px);
     justify-content: flex-start;
     margin-top: 12px;
+  }
+
+  .nav-menu .nav-link {
+    font-size: 0.78rem;
   }
 
 
@@ -103,7 +107,9 @@
   }
 
   /* 由 JS 移出後的新 footer */
-  .bottom-area {
+  .mobile-footer {
+    display: flex;
+    justify-content: center;
     position: fixed;
     bottom: 0;
     left: 0;
@@ -113,6 +119,10 @@
     background: rgba(10, 15, 30, 0.20);
 
     z-index: 999;
+  }
+
+  .mobile-footer .social-icons {
+    justify-content: center;
   }
 
 
@@ -150,6 +160,10 @@
   .sidebar .bottom-area {
     overflow: hidden;
     touch-action: none;
+  }
+
+  .route-page-header h1 {
+    font-size: 1.5rem;
   }
 
 }

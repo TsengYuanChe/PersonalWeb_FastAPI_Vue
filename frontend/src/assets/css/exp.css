@@ -99,3 +99,25 @@
   width: 85px;
   height: 85px;
 }
+
+/* Compact experience cards on the home route */
+.home-section {
+  margin-bottom: 3rem;
+}
+
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.home-exp-card {
+  margin-bottom: 1.25rem;
+}
+
+.section-footer-link {
+  display: inline-block;
+  margin-top: 0.25rem;
+}

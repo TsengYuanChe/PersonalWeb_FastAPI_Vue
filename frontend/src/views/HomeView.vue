@@ -1,0 +1,101 @@
+<script setup>
+import { RouterLink } from 'vue-router'
+import aboutData from '@/data/home/about.json'
+import homeExperiences from '@/data/home/experiences.json'
+import homeProjects from '@/data/home/projects.json'
+import { getExperienceLogo } from '@/utils/experienceLogos'
+</script>
+
+<template>
+  <div class="home-view">
+    <section id="about" class="mb-5 about-section">
+      <h2 class="fw-bold">Profile</h2>
+      <div class="about-text mt-3">
+        <p
+          v-for="(paragraph, index) in aboutData.paragraphs"
+          :key="index"
+          class="text-secondary mb-3"
+        >
+          <span v-html="paragraph"></span>
+        </p>
+      </div>
+    </section>
+
+    <section id="experiences" class="exp-section home-section">
+      <div class="section-heading">
+        <h2 class="fw-bold">Experiences</h2>
+        <RouterLink to="/experience" class="see-more-btn">View more →</RouterLink>
+      </div>
+
+      <article
+        v-for="experience in homeExperiences.experiences"
+        :key="`${experience.name}-${experience.position}`"
+        class="exp-card home-exp-card"
+      >
+        <div class="d-flex align-items-center gap-3">
+          <div class="exp-logo-wrapper">
+            <img
+              v-if="getExperienceLogo(experience.logo)"
+              class="exp-logo"
+              :src="getExperienceLogo(experience.logo)"
+              :alt="`${experience.name} logo`"
+            />
+          </div>
+          <div>
+            <h3 class="h5 text-info mb-1">{{ experience.position }}</h3>
+            <p class="text-light mb-0">{{ experience.name }}</p>
+          </div>
+        </div>
+        <p class="text-secondary mt-3 mb-0">{{ experience.short_description }}</p>
+      </article>
+
+      <RouterLink to="/experience" class="see-more-btn section-footer-link">
+        View more experiences →
+      </RouterLink>
+    </section>
+
+    <section id="projects" class="projects-section home-section">
+      <div class="section-heading">
+        <h2 class="fw-bold">Projects</h2>
+        <RouterLink to="/project" class="see-more-btn">View more →</RouterLink>
+      </div>
+
+      <article v-for="project in homeProjects.projects" :key="project.name" class="project-card home-project-card">
+        <img
+          v-if="project.image"
+          class="home-project-image"
+          :src="project.image"
+          :alt="`${project.name} preview`"
+        />
+        <div v-else class="home-project-image-fallback" aria-hidden="true">
+          <i class="bi bi-window-stack"></i>
+        </div>
+
+        <div class="home-project-content">
+          <h3 class="h4 text-info mb-2">{{ project.name }}</h3>
+          <p class="text-secondary project-description">{{ project.introduction }}</p>
+          <div class="tag-group mt-3">
+            <span v-for="skill in project.skills" :key="skill" class="tag tag-tool">
+              {{ skill }}
+            </span>
+          </div>
+          <RouterLink :to="project.link" class="home-project-link">View project →</RouterLink>
+        </div>
+      </article>
+
+      <RouterLink to="/project" class="see-more-btn section-footer-link">
+        View more projects →
+      </RouterLink>
+    </section>
+
+    <section id="stack" class="mt-3 text-secondary">
+      <p>
+        This website is built with <strong>Vue 3</strong> on the frontend and a lightweight
+        <strong>FastAPI</strong> backend providing dynamic content via JSON-based APIs. The project
+        is fully containerized using <strong>Docker</strong>, deployed on
+        <strong>Google Cloud Run</strong>, and automated through a complete
+        <strong>GitHub Actions CI/CD pipeline</strong>.
+      </p>
+    </section>
+  </div>
+</template>

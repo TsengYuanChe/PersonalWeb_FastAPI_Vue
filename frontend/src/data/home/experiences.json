@@ -1,0 +1,22 @@
+{
+  "experiences": [
+    {
+      "logo": "ezoom.png",
+      "name": "eZoom Information, Inc.",
+      "position": "Software Developnment Engineer - RDSS",
+      "short_description": "Serving as a research and development substitute service (RDSS) engineer, participating in full-stack development across government-related maritime information platforms."
+    },
+    {
+      "logo": "nycu.png",
+      "name": "National Yang Ming Chiao Tung University",
+      "position": "Department of Applied Chemistry - Master",
+      "short_description": "Developed mathematical and computational tools for studying quantum systems, with a focus on electronic structure theory and numerical methods for solving multi-electron problems."
+    },
+    {
+      "logo": "nchu.png",
+      "name": "National Chung Hsing University",
+      "position": "Department of Chemistry — Undergraduate",
+      "short_description": "Focused on experimental design, organic synthesis, methodology development, and reaction optimization to identify effective catalytic systems."
+    }
+  ]
+}

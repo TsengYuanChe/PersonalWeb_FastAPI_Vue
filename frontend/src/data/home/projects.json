@@ -1,0 +1,25 @@
+{
+  "projects": [
+    {
+      "name": "Personal Portfolio Website",
+      "image": "",
+      "introduction": "Designed and built a full-stack portfolio platform to showcase projects, experiences, and technical capabilities through a structured, API-driven architecture.",
+      "skills": ["Vue 3", "FastAPI", "Pydantic", "Docker"],
+      "link": "/project"
+    },
+    {
+      "name": "AI Care Website",
+      "image": "",
+      "introduction": "Developed a full-stack web platform for AI-assisted elderly care with real-time image analysis for environment awareness, backed by modular Flask APIs and a responsive Bootstrap interface.",
+      "skills": ["Python", "Flask", "OpenCV", "SQLite"],
+      "link": "/project"
+    },
+    {
+      "name": "Financial Report Crawler",
+      "image": "",
+      "introduction": "Built an automated crawler for TWSE financial statements to streamline analysts' data-preparation workflows with end-to-end retrieval and file organization.",
+      "skills": ["Python", "Selenium", "BeautifulSoup", "WebDriver"],
+      "link": "/project"
+    }
+  ]
+}
