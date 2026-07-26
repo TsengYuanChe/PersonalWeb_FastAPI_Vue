@@ -100,7 +100,7 @@
   height: 85px;
 }
 
-/* Compact experience cards on the home route */
+/* Home route sections */
 .home-section {
   margin-bottom: 3rem;
 }
@@ -113,11 +113,122 @@
   margin-bottom: 1.25rem;
 }
 
-.home-exp-card {
-  margin-bottom: 1.25rem;
-}
-
 .section-footer-link {
   display: inline-block;
   margin-top: 0.25rem;
+}
+
+/* Compact Journey rows used only on the home route */
+.home-journey-list {
+  width: 100%;
+}
+
+.home-journey-row {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+  align-items: center;
+  column-gap: 28px;
+  padding: 22px 0;
+}
+
+.home-journey-row + .home-journey-row {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.home-journey-logo-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 92px;
+  height: 76px;
+  flex-shrink: 0;
+}
+
+.home-journey-logo {
+  display: block;
+  max-width: 72px;
+  max-height: 72px;
+  object-fit: contain;
+}
+
+.home-journey-logo[src*="ezoom"] {
+  max-width: 76px;
+}
+
+.home-journey-content {
+  min-width: 0;
+}
+
+.home-journey-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.home-journey-position {
+  min-width: 0;
+  margin: 0;
+  color: #9bbcff;
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.home-journey-duration {
+  flex-shrink: 0;
+  color: var(--site-secondary);
+  font-size: 0.85rem;
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+.home-journey-name {
+  margin: 5px 0 0;
+  color: var(--site-text);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.home-journey-description {
+  display: -webkit-box;
+  margin: 7px 0 0;
+  overflow: hidden;
+  color: var(--site-secondary);
+  font-size: 1rem;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.home-journey-link {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.home-journey-link span {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.home-journey-link:hover {
+  color: rgba(255, 255, 255, 1);
+}
+
+.home-journey-link:hover span {
+  transform: translateX(3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-journey-link span {
+    transition: none;
+  }
+
+  .home-journey-link:hover span {
+    transform: none;
+  }
 }

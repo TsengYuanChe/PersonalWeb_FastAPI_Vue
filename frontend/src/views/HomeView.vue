@@ -3,7 +3,7 @@ import { RouterLink } from 'vue-router'
 import aboutData from '@/data/home/about.json'
 import homeExperiences from '@/data/home/experiences.json'
 import homeProjects from '@/data/home/projects.json'
-import { getExperienceLogo } from '@/utils/experienceLogos'
+import HomeJourneyItem from '@/components/experience/HomeJourneyItem.vue'
 </script>
 
 <template>
@@ -23,35 +23,19 @@ import { getExperienceLogo } from '@/utils/experienceLogos'
 
     <section id="experiences" class="exp-section home-section">
       <div class="section-heading">
-        <h2 class="fw-bold">Experiences</h2>
-        <RouterLink to="/experience" class="see-more-btn">View more →</RouterLink>
+        <h2 class="fw-bold">Journey</h2>
+        <RouterLink to="/experience" class="home-journey-link">
+          View full journey <span aria-hidden="true">→</span>
+        </RouterLink>
       </div>
 
-      <article
-        v-for="experience in homeExperiences.experiences"
-        :key="`${experience.name}-${experience.position}`"
-        class="exp-card home-exp-card"
-      >
-        <div class="d-flex align-items-center gap-3">
-          <div class="exp-logo-wrapper">
-            <img
-              v-if="getExperienceLogo(experience.logo)"
-              class="exp-logo"
-              :src="getExperienceLogo(experience.logo)"
-              :alt="`${experience.name} logo`"
-            />
-          </div>
-          <div>
-            <h3 class="h5 text-info mb-1">{{ experience.position }}</h3>
-            <p class="text-light mb-0">{{ experience.name }}</p>
-          </div>
-        </div>
-        <p class="text-secondary mt-3 mb-0">{{ experience.short_description }}</p>
-      </article>
-
-      <RouterLink to="/experience" class="see-more-btn section-footer-link">
-        View more experiences →
-      </RouterLink>
+      <div class="home-journey-list">
+        <HomeJourneyItem
+          v-for="experience in homeExperiences.experiences"
+          :key="`${experience.name}-${experience.position}`"
+          :experience="experience"
+        />
+      </div>
     </section>
 
     <section id="projects" class="projects-section home-section">
