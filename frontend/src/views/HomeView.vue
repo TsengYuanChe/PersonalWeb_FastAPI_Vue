@@ -9,8 +9,13 @@ import HomeJourneyItem from '@/components/experience/HomeJourneyItem.vue'
 <template>
   <div class="home-view">
     <section id="about" class="mb-5 about-section">
-      <h2 class="fw-bold">Profile</h2>
-      <div class="about-text mt-3">
+      <div class="section-heading">
+        <h2 class="fw-bold">Profile</h2>
+        <RouterLink to="/about" class="home-journey-link">
+          View more about me <span aria-hidden="true">→</span>
+        </RouterLink>
+      </div>
+      <div class="about-text">
         <p
           v-for="(paragraph, index) in aboutData.paragraphs"
           :key="index"
