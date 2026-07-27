@@ -1,5 +1,6 @@
 <script setup>
 import ProjectCover from '@/components/projects/ProjectCover.vue'
+import ProjectAction from '@/components/projects/ProjectAction.vue'
 
 defineProps({
   project: {
@@ -20,29 +21,7 @@ defineProps({
 
     <div class="home-project-heading">
       <h3 class="home-project-name">{{ project.name }}</h3>
-      <div class="home-project-links">
-        <a
-          v-if="project.website_url"
-          class="home-project-action"
-          :href="project.website_url"
-          target="_blank"
-          rel="noopener noreferrer"
-          :aria-label="`Open ${project.name} live website in a new tab`"
-        >
-          Live <span aria-hidden="true">↗</span>
-        </a>
-        <a
-          v-else-if="project.source_url"
-          class="home-project-action"
-          :href="project.source_url"
-          target="_blank"
-          rel="noopener noreferrer"
-          :aria-label="`Open ${project.name} source code in a new tab`"
-        >
-          Source <span aria-hidden="true">↗</span>
-        </a>
-        <span v-else class="home-project-action">🔒 Internal</span>
-      </div>
+      <ProjectAction :project="project" :name="project.name" />
     </div>
 
     <p class="home-project-description">{{ project.introduction }}</p>

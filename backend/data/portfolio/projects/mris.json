@@ -1,0 +1,83 @@
+{
+  "slug": "mris",
+  "title": "MRIS",
+  "subtitle": "Mountain Rescue Information System",
+  "category": "Enterprise System",
+  "summary": "Enterprise mountain rescue information system for backend development and production maintenance.",
+  "cover": "/images/projects/covers/mris.webp",
+  "cover_alt": "MRIS project cover",
+  "cover_ready": false,
+  "period": "2025 — Present",
+  "role": "Software Engineer",
+  "status": "internal",
+  "website_url": null,
+  "source_url": null,
+  "technologies": [".NET", "Vue.js", "PostgreSQL", "REST API"],
+  "overview": {
+    "title": "Overview",
+    "paragraphs": [
+      "MRIS is an enterprise mountain rescue information system that supports operational information workflows through an integrated web application.",
+      "The work focuses on maintaining and extending an established production system while protecting reliability, compatibility, and maintainability. Public portfolio material intentionally excludes client-sensitive screens, routes, infrastructure identifiers, and private API details."
+    ]
+  },
+  "responsibilities": {
+    "title": "Responsibilities",
+    "items": [
+      "Develop and maintain Vue-based user interfaces within an existing enterprise application.",
+      "Implement and integrate .NET REST APIs across multiple application services.",
+      "Build PostgreSQL-backed CRUD, search, filtering, and pagination workflows.",
+      "Maintain authentication and authorization behavior across protected features.",
+      "Investigate issues across frontend, API, database, routing, and deployment layers.",
+      "Deliver incremental changes that improve system stability and maintainability without disrupting existing workflows."
+    ]
+  },
+  "architecture": {
+    "title": "Architecture",
+    "paragraphs": [
+      "The system uses a Vue client backed by .NET REST services and PostgreSQL persistence, with application routing and integration boundaries connecting multiple services."
+    ],
+    "highlights": [
+      "Vue interfaces communicate with domain APIs through defined REST contracts.",
+      ".NET services coordinate business workflows and PostgreSQL data access.",
+      "Authentication and permission checks protect role-specific operations.",
+      "Reverse-proxy and application routing connect independently deployed services."
+    ]
+  },
+  "challenges": {
+    "title": "Challenges",
+    "items": [
+      {
+        "title": "Evolving a large existing system",
+        "description": "Changes must fit established contracts and user workflows, so implementation favors small, reviewable improvements over disruptive rewrites."
+      },
+      {
+        "title": "Cross-service integration",
+        "description": "Features can cross frontend, API, data, and routing boundaries, requiring careful interface coordination and end-to-end verification."
+      },
+      {
+        "title": "Production diagnosis",
+        "description": "Failures may originate in application logic, database access, reverse-proxy routing, or environment configuration, so troubleshooting follows the complete request path."
+      }
+    ]
+  },
+  "deployment": {
+    "title": "Deployment and Operations",
+    "paragraphs": [
+      "The application is maintained in a production Windows Server and IIS environment, with reverse-proxy and application-routing configuration supporting its services."
+    ],
+    "highlights": [
+      "Coordinate controlled releases for frontend and backend changes.",
+      "Verify application routing, API availability, and database connectivity after deployment.",
+      "Use production observations to isolate faults and guide maintainability improvements."
+    ]
+  },
+  "lessons_learned": {
+    "title": "Lessons Learned",
+    "items": [
+      "Reliability work requires understanding the entire request path, not only application code.",
+      "Stable contracts and incremental delivery reduce risk in a mature enterprise system.",
+      "Clear documentation and repeatable diagnosis make cross-service maintenance more effective."
+    ]
+  },
+  "showcase": []
+}

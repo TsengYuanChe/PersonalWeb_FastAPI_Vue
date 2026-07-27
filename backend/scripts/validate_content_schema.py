@@ -8,15 +8,17 @@ BACKEND_ROOT = Path(__file__).resolve().parents[1]
 if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
-from schemas.content import AboutResponse, ExperienceResponse, ProjectsResponse
+from schemas.content import AboutResponse, ExperienceResponse, ProjectItem
 
 
 def main():
     data_root = BACKEND_ROOT / "data"
     file_to_schema = {
-        "profile/about.json": AboutResponse,
-        "profile/experience.json": ExperienceResponse,
-        "portfolio/projects.json": ProjectsResponse,
+        "profile/about.json": (AboutResponse, True),
+        "profile/experience.json": (ExperienceResponse, True),
+        "portfolio/projects/mris.json": (ProjectItem, False),
+        "portfolio/projects/personal-portfolio.json": (ProjectItem, False),
+        "portfolio/projects/mamatoya.json": (ProjectItem, False),
     }
 
     errors = []
@@ -37,7 +39,7 @@ def main():
         if rel_path not in json_files:
             errors.append(f"Missing expected JSON file: {rel_path}")
 
-    for rel_path, schema in file_to_schema.items():
+    for rel_path, (schema, uses_api_envelope) in file_to_schema.items():
         if rel_path not in json_files:
             continue
 
@@ -46,13 +48,15 @@ def main():
             with file_path.open("r", encoding="utf-8") as f:
                 raw_data = json.load(f)
 
-            payload = {
-                "data": raw_data,
-                "meta": {
-                    "updated_at": "test",
-                    "version": "v1",
-                },
-            }
+            payload = raw_data
+            if uses_api_envelope:
+                payload = {
+                    "data": raw_data,
+                    "meta": {
+                        "updated_at": "test",
+                        "version": "v1",
+                    },
+                }
             schema.model_validate(payload)
             print(f"[PASS] {rel_path}")
         except Exception as exc:

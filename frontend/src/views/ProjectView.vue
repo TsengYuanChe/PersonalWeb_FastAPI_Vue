@@ -50,7 +50,7 @@ onMounted(async () => {
     </div>
 
     <div v-else>
-      <ProjectCard v-for="project in projects" :key="project.title" :project="project" />
+      <ProjectCard v-for="project in projects" :key="project.slug" :project="project" />
     </div>
   </section>
 </template>

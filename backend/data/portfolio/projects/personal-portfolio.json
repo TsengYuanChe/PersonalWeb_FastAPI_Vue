@@ -1,0 +1,83 @@
+{
+  "slug": "personal-portfolio",
+  "title": "Personal Portfolio Website",
+  "subtitle": "Full-stack Engineering Portfolio",
+  "category": "Full-stack Application",
+  "summary": "Full-stack portfolio platform showcasing projects and engineering experience.",
+  "cover": "/images/projects/covers/personal-website.webp",
+  "cover_alt": "Personal Portfolio Website project cover",
+  "cover_ready": false,
+  "period": "",
+  "role": "Designer & Full-stack Developer",
+  "status": "live",
+  "website_url": "https://adamtseng.com",
+  "source_url": null,
+  "technologies": ["Vue 3", "FastAPI", "Docker", "Cloud Run"],
+  "overview": {
+    "title": "Overview",
+    "paragraphs": [
+      "This portfolio is a full-stack, data-driven website designed to communicate software engineering experience and representative project work to recruiters, engineering managers, and technical interviewers.",
+      "The information architecture separates concise homepage previews from full About, Journey, and Projects pages so content remains quick to scan and straightforward to maintain."
+    ]
+  },
+  "responsibilities": {
+    "title": "Responsibilities",
+    "items": [
+      "Design and implement the Vue 3 and Vite frontend architecture and responsive page layouts.",
+      "Build FastAPI endpoints backed by validated JSON content.",
+      "Create reusable UI components, including the shared ProjectCover implementation.",
+      "Integrate API loading, error, and empty states into detail pages.",
+      "Maintain static image paths and WebP-oriented asset conventions.",
+      "Containerize and deploy the frontend and backend through the existing automated workflow."
+    ]
+  },
+  "architecture": {
+    "title": "Architecture",
+    "paragraphs": [
+      "The application separates a Vue single-page frontend from a lightweight FastAPI content service. Structured JSON files are validated with Pydantic before their data is returned to the frontend."
+    ],
+    "highlights": [
+      "Vue Router provides Home, About, Experience, and Project routes.",
+      "Homepage previews use small local datasets to avoid backend cold-start delays.",
+      "Detail pages consume versioned FastAPI responses through a shared API client.",
+      "Docker images package the services for deployment to Google Cloud Run."
+    ]
+  },
+  "challenges": {
+    "title": "Challenges",
+    "items": [
+      {
+        "title": "Fast first-page content",
+        "description": "The homepage uses focused local preview data while full detail remains backend-driven, balancing startup performance with maintainable structured content."
+      },
+      {
+        "title": "Consistent responsive design",
+        "description": "Shared layout, spacing, typography, and cover specifications must remain consistent across two-column home and full-width detail layouts."
+      },
+      {
+        "title": "Scalable content updates",
+        "description": "Data schemas and reusable components reduce the amount of template code required when projects or experience entries change."
+      }
+    ]
+  },
+  "deployment": {
+    "title": "Deployment and Operations",
+    "paragraphs": [
+      "The frontend and backend are containerized separately and deployed to Google Cloud Run through the repository's GitHub Actions workflow."
+    ],
+    "highlights": [
+      "Nginx serves the built frontend and applies the existing SPA fallback behavior.",
+      "Uvicorn serves the FastAPI application inside the backend container.",
+      "Environment-specific API configuration keeps local development and deployed requests aligned."
+    ]
+  },
+  "lessons_learned": {
+    "title": "Lessons Learned",
+    "items": [
+      "A clear boundary between preview and detail data improves both perceived performance and information density.",
+      "Shared components and validated schemas make visual and content changes safer.",
+      "Documentation must be updated alongside architecture changes to remain useful for future redesign work."
+    ]
+  },
+  "showcase": []
+}

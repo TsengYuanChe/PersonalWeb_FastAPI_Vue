@@ -114,7 +114,10 @@ PersonalWeb_Flask_Vue/
 │   ├── data/
 │   │   ├── profile/about.json
 │   │   ├── profile/experience.json
-│   │   └── portfolio/projects.json
+│   │   └── portfolio/projects/     # 每個完整 Project 各一份 slug JSON
+│   │       ├── mris.json
+│   │       ├── personal-portfolio.json
+│   │       └── mamatoya.json
 │   ├── scripts/validate_content_schema.py
 │   ├── core/config.py             # placeholder
 │   ├── core/logging.py            # placeholder
@@ -133,7 +136,7 @@ PersonalWeb_Flask_Vue/
 │   │   ├── components/
 │   │   │   ├── layout/DetailPageHeader.vue
 │   │   │   ├── experience/{HomeJourneyItem,ExperienceCard}.vue
-│   │   │   └── projects/{ProjectCover,HomeProjectPreview,ProjectCard}.vue
+│   │   │   └── projects/{ProjectCover,ProjectAction,HomeProjectPreview,ProjectCard}.vue
 │   │   ├── data/home/             # 首頁三份 local Preview JSON
 │   │   ├── api/
 │   │   │   ├── client.js          # fetch wrapper / error normalization
@@ -231,7 +234,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 
 - 三筆本地資料，首頁專用 component，不共用詳細頁 card。
 - Schema：`name`、`image`、`image_alt`、`image_ready`、`introduction`、`tags`；`website_url`、`source_url` 為選填。
-- `image_ready: false` 時不建立 `<img>` request，顯示 `Coming soon`；true 時載入 `/images/projects/*.webp`，error 時回退 placeholder。
+- `image_ready: false` 時不建立 `<img>` request，顯示 `Coming soon`；true 時載入 `/images/projects/covers/*.webp`，error 時回退 placeholder。
 - Desktop 為 160px 16:10 media + content row；≤1024px 改單欄。
 - `View all projects →` 前往 `/project`。
 
@@ -266,9 +269,11 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - mount 後呼叫 `GET /api/v1/projects`。
 - 提供 loading、error、empty、success 四種狀態。
 - 顯示 API 回傳的所有 projects，沒有首頁三筆限制。
-- `ProjectCard.vue` 顯示 category、title、GitHub/demo、overview、features、engineering、architecture、trade-offs、future、tech。
+- `ProjectCard.vue` 完全由 backend Project object 建立，摘要使用 cover、title、subtitle、category、summary、role、period、technologies 與 action/status；詳細內容使用同一物件的 overview、responsibilities、architecture、challenges、deployment 與 lessons learned。
+- Action 依序判斷 `website_url`、`source_url`；兩者皆無時顯示不可點擊的 `🔒 Internal`。這個判斷與首頁共用 `ProjectAction.vue`，不依賴 `status` 決定連結文字。
+- `showcase` 目前保留在資料 contract 中但三個專案皆為空陣列，因此頁面不 render Showcase 標題或空容器。
 - 詳細頁仍使用既有大型 card 視覺；首頁 Preview styles 使用 `.home-project-*` namespace，不會覆蓋它。
-- 目前是詳細頁初版：已顯示完整 API 欄位與基本狀態，但 project narrative、資料挑選、圖片／架構圖與 card layout 仍待後續整理。
+- 目前是詳細頁初版：完整 backend narrative 與基本狀態已接通，但尚未實作 card 收合／展開互動、Showcase、圖片／架構圖與進一步 layout 整理。
 
 ## 7. 共用 UI、Navigation、Footer
 
@@ -277,6 +282,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - `DetailPageHeader.vue`：三個詳細頁共用 Breadcrumb、唯一 `h1` 與 description。
 - `HomeJourneyItem.vue` / `ExperienceCard.vue`：首頁與詳細 Journey 分離。
 - `ProjectCover.vue`：首頁與詳細 Projects 共用的 160×100、16:10 cover／placeholder。
+- `ProjectAction.vue`：首頁與詳細 Projects 共用 Live／Source／Internal 判斷與外部連結語意。
 - `HomeProjectPreview.vue` / `ProjectCard.vue`：首頁與詳細 Projects 分離，並共用 `ProjectCover.vue`。
 - Sidebar：不是獨立 component，markup 位於 `App.vue`，並由 `v-if="isHomeLayout"` 控制。
 - Home/Detail Layout：沒有獨立 `HomeLayout.vue` 或 `DetailLayout.vue`；`App.vue` 依 route meta 條件渲染，搭配 `.layout-container--home`、`.layout-container--detail`、`.detail-main` 與 `.detail-page-container`。
@@ -366,19 +372,46 @@ Desktop social links 位於 Sidebar 底部；Mobile 則以 App template 中的 f
 | 首頁 Projects Preview | `frontend/src/data/home/projects.json` | HomeProjectPreview |
 | 完整 About JSON | `backend/data/profile/about.json` | About API；目前頁面內容未使用 |
 | 完整 Experience JSON | `backend/data/profile/experience.json` | Experience API/detail page |
-| 完整 Projects JSON | `backend/data/portfolio/projects.json` | Projects API/detail page |
+| 完整 Projects JSON | `backend/data/portfolio/projects/{mris,personal-portfolio,mamatoya}.json` | Projects API/detail page |
 | Experience logos | `frontend/src/assets/images/exp/*.png` | Vite asset imports |
 | Future project screenshots | 預定 `frontend/public/images/projects/covers/*.webp` | 目前檔案尚不存在 |
 | Resume | `frontend/public/files/Adam_Tseng_Resume.pdf` | 首頁 social area |
 | Favicons | `frontend/public/favicon*` | `index.html` |
 
+### 9.1 Project Cover Specification
+
+#### Aspect Ratio
+
+- `16:10`（`8:5`）。
+
+#### Display Size
+
+- 由共用 CSS variables 控制；不要將 pixel 顯示尺寸 hardcode 到 image assets 或個別 components。
+
+#### Recommended Export Resolution
+
+- `1280 × 800 px`，格式使用 `.webp`。
+
+#### Rendering
+
+- Real images 使用 `object-fit: cover`。
+- Home 與 Project pages 統一使用共用 `ProjectCover.vue`，不得建立不同的 cover 規格。
+
 **【程式碼事實】** Backend JSON 會隨 container image 部署，每次 request 都重新讀檔；沒有 cache 或 database。
+
+### 9.2 Project 資料責任
+
+- 每個完整 Project 使用一份穩定 slug JSON；同一物件同時包含 card summary metadata 與 detail sections。
+- Backend Project JSON 是 `/project` 的完整內容來源；frontend 不保存另一份 Project Detail JSON。
+- 首頁仍只讀取 `frontend/src/data/home/projects.json` 的三筆小型 summary，避免為 Preview 載入不需要的 detail 與 Cloud Run cold start。首頁不顯示 architecture、challenges、deployment 或 showcase。
+- Cover 檔案仍由 frontend 靜態資產路徑 `frontend/public/images/projects/covers/` 負責；backend JSON 只保存公開 path 與 ready flag。
+- Project repository 以固定 slug/file mapping 維持 MRIS、Personal Portfolio Website、Mamatoya 的目前顯示順序。尚未實作 visibility、hide、featured、public、archived 等欄位或篩選邏輯。
 
 ## 10. Backend API 與 schemas
 
 ### 10.1 Endpoints
 
-所有 endpoints 都是無認證 `GET`，沒有 request body、query parameter 或 path parameter。
+所有 endpoints 都是無認證 `GET`，沒有 request body 或 query parameter；單筆 Project endpoint 使用 `slug` path parameter。
 
 | Method | Path | Response |
 |---|---|---|
@@ -386,7 +419,8 @@ Desktop social links 位於 Sidebar 底部；Mobile 則以 App template 中的 f
 | GET | `/health` | `{ "status": "ok" }` |
 | GET | `/api/about` | About object + top-level `updated_at`（legacy） |
 | GET | `/api/experience` | Experience object + `updated_at`（legacy） |
-| GET | `/api/projects` | Projects object + `updated_at`（legacy） |
+| GET | `/api/projects` | 三個完整 Project objects + 最新檔案 `updated_at`（legacy shape） |
+| GET | `/api/projects/{slug}` | 指定 slug 的完整 `ProjectItem`；不存在時回傳標準 404 error envelope |
 | GET | `/api/v1/about` | `AboutResponse` |
 | GET | `/api/v1/experience` | `ExperienceResponse` |
 | GET | `/api/v1/projects` | `ProjectsResponse` |
@@ -424,18 +458,27 @@ ExperienceData
 
 ProjectData
 └── projects: ProjectItem[]
+    ├── slug: string
     ├── title: string
-    ├── type: "featured" | "normal"
+    ├── subtitle: string
     ├── category: string
-    ├── overview: string
-    ├── features: string[]
-    ├── engineering: string[]
-    ├── architecture: string
-    ├── tradeoffs: string[]
-    ├── future: string[]
-    ├── tech: string[]
-    └── links: { github?: string | null, demo?: string | null }
+    ├── summary: string
+    ├── cover / cover_alt: string
+    ├── cover_ready: boolean
+    ├── period / role: string
+    ├── status: "internal" | "live"
+    ├── website_url / source_url: string | null
+    ├── technologies: string[]
+    ├── overview: { title, paragraphs[] }
+    ├── responsibilities: { title, items[] }
+    ├── architecture: { title, paragraphs[], highlights[] }
+    ├── challenges: { title, items[{ title, description }] }
+    ├── deployment: { title, paragraphs[], highlights[] }
+    ├── lessons_learned: { title, items[] }
+    └── showcase: ShowcaseItem[]
 ```
+
+`GET /api/projects` 與 `GET /api/v1/projects` 會依 repository 的固定順序讀取並逐筆以 `ProjectItem` 驗證；`GET /api/projects/{slug}` 使用相同 repository 與 schema，不建立第二套 loader。三個 Project 的 `showcase` 目前都是空陣列，但 `ShowcaseItem` 已定義 image、image_alt 與選填 caption，供後續加入公開素材。
 
 首頁 Projects Preview schema 是獨立的前端 schema，不應與 backend `ProjectItem` 混用。
 
@@ -453,7 +496,7 @@ HomeProjectPreview
 └── source_url?: string
 ```
 
-`website_url` 與 `source_url` 不要求同時存在；不存在時直接省略欄位，component 也不 render 對應 anchor。`image_ready: false` 時顯示 placeholder 且不發出圖片 request；未來把圖片放到 `frontend/public/images/projects/` 的 JSON 指定路徑，再把 flag 改為 true 即可啟用。
+`website_url` 與 `source_url` 不要求同時存在；目前 local JSON 可能省略欄位或使用空字串，component 以 truthy URL 依 Live → Source → Internal 順序顯示 action。`image_ready: false` 時顯示 placeholder 且不發出圖片 request；未來把圖片放到 `frontend/public/images/projects/covers/` 的 JSON 指定路徑，再把 flag 改為 true 即可啟用。
 
 ### 10.4 Error envelope
 
@@ -565,7 +608,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 ### 14.1 已知未完成內容
 
 - `/about` 六個 sections 全部是 `Coming soon.`。
-- 三張首頁 Project screenshots 尚未存在，`image_ready` 全為 false。
+- 三張 Project screenshots 尚未存在；首頁 `image_ready` 與 backend `cover_ready` 全為 false，三份 backend `showcase` 亦為空陣列。
 - Backend About API 仍只有 `paragraphs`，無法直接表達六個 section 的 slug/title/order。
 - Backend experience 第一筆 position 有 `Developnment` 拼字錯誤。
 
@@ -589,6 +632,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - JSON rich text 含外部 `<a target="_blank">`，部分內容未包含 `rel="noopener noreferrer"`，並由 `v-html` render。
 - 每個 request 都同步開檔與解析 JSON，沒有 cache。
 - Legacy `/api/*` endpoints仍保留，是否有外部 consumer 未知。
+- Project visibility、hide、featured、public、archived 與分類篩選尚未設計或實作；目前固定依 repository mapping 顯示三筆。
 - `core/config.py` 與 `core/logging.py` 只是 placeholder。
 - `python-multipart` 已安裝但未使用。
 - 沒有 authentication、rate limiting、explicit cache headers 或 security headers。
@@ -607,7 +651,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 | `App.vue` + `main-rwd.css` | DOM selectors、route meta、mobile measurements、Sidebar/footer | 首頁 scrolling、detail layout、mobile viewport |
 | `.main-content` | 首頁是內層 scroll；詳細頁是 document flow | wheel proxy、route scroll、anchor spacing |
 | Global CSS | Home/detail selectors共存在同一 cascade | 修改 `.project-card`、`.exp-card` 或 Bootstrap class可能跨頁影響 |
-| Home/Detail duplicated content | Preview JSON 與 backend JSON需人工同步 | 日期、文案、tags、links 漂移 |
+| Home/Detail summary duplication | 首頁小型 Preview JSON 與 backend Project summary 需人工同步；完整 detail 僅存在 backend | 文案、tags、links 漂移 |
 | JSON → Pydantic → Vue | 詳細頁 contract跨三層 | 欄位 rename、optional semantics、HTML rendering |
 | Experience logo mapping | Backend只給 filename，frontend hard-code imports | 新增 logo需同時改 JSON、檔案與 mapping |
 | Project images | JSON path + `image_ready` + public asset | 檔名或 flag錯誤會顯示 placeholder |
@@ -620,7 +664,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - **About 正式內容**：將六個 `Coming soon.` sections 補成正式個人與工程介紹。
 - **About API 整合**：現有 `/api/v1/about` 已完成，但只回傳 `paragraphs`；需先決定 section-based contract，再把 `/about` 接回 API。這不是缺少 endpoint，而是 schema 與頁面結構尚未對齊。
 - **Experience 詳細內容**：API 與完整資料已存在；仍需校稿、修正拼字、確認公開資訊與優化初版詳細頁呈現。
-- **Project 詳細內容**：API 與完整欄位已存在；仍需整理 project narrative、個人貢獻、架構說明、資料一致性與初版詳細頁視覺。
+- **Project 詳細內容**：三份 slug JSON、API 與完整欄位已存在；仍需內容校稿、公開資訊確認、card 收合／展開互動、Showcase、架構圖與詳細頁視覺整理。
 - **Homepage Project screenshots**：三張 future paths 已設定，但實體 `.webp` 尚未加入，`image_ready` 仍為 false。
 - **Homepage Project 資料挑選**：目前固定維護三筆 local JSON，尚無自動排序／選取規則；需人工確認哪些作品最適合 recruiter-first 首頁。
 - **Mobile 細節優化**：持續檢查 fixed header/footer、內層 scrolling、orientation、safe area、長標題、links 與 200% zoom。
