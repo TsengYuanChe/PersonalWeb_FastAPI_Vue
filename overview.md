@@ -272,8 +272,12 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - `ProjectCard.vue` 完全由 backend Project object 建立，摘要使用 cover、title、subtitle、category、summary、role、period、technologies 與 action/status；詳細內容使用同一物件的 overview、responsibilities、architecture、challenges、deployment 與 lessons learned。
 - Action 依序判斷 `website_url`、`source_url`；兩者皆無時顯示不可點擊的 `🔒 Internal`。這個判斷與首頁共用 `ProjectAction.vue`，不依賴 `status` 決定連結文字。
 - `showcase` 目前保留在資料 contract 中但三個專案皆為空陣列，因此頁面不 render Showcase 標題或空容器。
+- Project Card 預設全部收合並永遠顯示 Summary Header；Overview 起的 detail sections 只有展開時才 render。
+- Summary Header 可用滑鼠點擊切換，Meta 中的語意化 More/Less Detail button 提供鍵盤操作、`aria-expanded` 與 `aria-controls`。Live／Source links 不觸發 toggle。
+- 展開狀態由 `ProjectView.vue` 以單一 `expandedProjectSlug` 管理，因此同一時間最多只有一個 Project 展開；狀態不寫入 URL 或 localStorage。
+- Detail 使用 Vue `Transition` hooks 依實際 `scrollHeight` 執行 320ms 高度、透明度與輕微位移動畫，完成後恢復 `height: auto`，並支援 `prefers-reduced-motion`。
 - 詳細頁仍使用既有大型 card 視覺；首頁 Preview styles 使用 `.home-project-*` namespace，不會覆蓋它。
-- 目前是詳細頁初版：完整 backend narrative 與基本狀態已接通，但尚未實作 card 收合／展開互動、Showcase、圖片／架構圖與進一步 layout 整理。
+- 目前是詳細頁初版：完整 backend narrative、基本狀態與單卡收合／展開已接通，但 Showcase、圖片／架構圖與進一步 layout 整理仍待完成。
 
 ## 7. 共用 UI、Navigation、Footer
 
@@ -664,7 +668,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - **About 正式內容**：將六個 `Coming soon.` sections 補成正式個人與工程介紹。
 - **About API 整合**：現有 `/api/v1/about` 已完成，但只回傳 `paragraphs`；需先決定 section-based contract，再把 `/about` 接回 API。這不是缺少 endpoint，而是 schema 與頁面結構尚未對齊。
 - **Experience 詳細內容**：API 與完整資料已存在；仍需校稿、修正拼字、確認公開資訊與優化初版詳細頁呈現。
-- **Project 詳細內容**：三份 slug JSON、API 與完整欄位已存在；仍需內容校稿、公開資訊確認、card 收合／展開互動、Showcase、架構圖與詳細頁視覺整理。
+- **Project 詳細內容**：三份 slug JSON、API、完整欄位與單卡收合／展開互動已存在；仍需內容校稿、公開資訊確認、Showcase、架構圖與詳細頁視覺整理。
 - **Homepage Project screenshots**：三張 future paths 已設定，但實體 `.webp` 尚未加入，`image_ready` 仍為 false。
 - **Homepage Project 資料挑選**：目前固定維護三筆 local JSON，尚無自動排序／選取規則；需人工確認哪些作品最適合 recruiter-first 首頁。
 - **Mobile 細節優化**：持續檢查 fixed header/footer、內層 scrolling、orientation、safe area、長標題、links 與 200% zoom。

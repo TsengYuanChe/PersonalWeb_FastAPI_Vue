@@ -7,6 +7,11 @@ import DetailPageHeader from '@/components/layout/DetailPageHeader.vue'
 const projects = ref([])
 const loading = ref(true)
 const error = ref('')
+const expandedProjectSlug = ref(null)
+
+function toggleProject(slug) {
+  expandedProjectSlug.value = expandedProjectSlug.value === slug ? null : slug
+}
 
 onMounted(async () => {
   try {
@@ -50,7 +55,13 @@ onMounted(async () => {
     </div>
 
     <div v-else>
-      <ProjectCard v-for="project in projects" :key="project.slug" :project="project" />
+      <ProjectCard
+        v-for="project in projects"
+        :key="project.slug"
+        :project="project"
+        :expanded="expandedProjectSlug === project.slug"
+        @toggle="toggleProject"
+      />
     </div>
   </section>
 </template>
