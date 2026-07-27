@@ -42,15 +42,63 @@
   border-color: rgba(80, 180, 255, 0.25); /* 外框帶藍光 */
 }
 
-.project-card-summary {
+.project-card__header {
   display: grid;
-  grid-template-columns: var(--project-cover-width) minmax(0, 1fr);
+  grid-template-areas: "media main meta";
+  grid-template-columns: var(--project-cover-width) minmax(0, 1fr) max-content;
   align-items: start;
   column-gap: var(--project-cover-gap);
 }
 
-.project-card-summary-content {
+.project-card__media {
+  grid-area: media;
+  width: var(--project-cover-width);
   min-width: 0;
+}
+
+.project-card__category {
+  margin: 0 0 0.5rem;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.project-card__main {
+  grid-area: main;
+  min-width: 0;
+}
+
+.project-card__meta {
+  grid-area: meta;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 0;
+  color: var(--site-secondary);
+  text-align: right;
+}
+
+.project-card__meta .home-project-links {
+  justify-content: flex-end;
+}
+
+.project-card__meta-item {
+  max-width: 14rem;
+  margin: 0;
+  font-size: 0.82rem;
+  font-weight: 400;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.project-card__details {
+  width: 100%;
+  min-width: 0;
+  margin-top: 1.5rem;
+}
+
+.project-detail-section + .project-detail-section {
+  margin-top: 1rem;
 }
 
 /* Shared cover specification for home and detail project cards */

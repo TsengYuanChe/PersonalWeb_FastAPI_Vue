@@ -107,6 +107,23 @@
     padding: 1.5rem 1.3rem;
   }
 
+  .project-card__header {
+    grid-template-areas:
+      "media main"
+      "media meta";
+    grid-template-columns: var(--project-cover-width) minmax(0, 1fr);
+    row-gap: 12px;
+  }
+
+  .project-card__meta {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .project-card__meta .home-project-links {
+    justify-content: flex-start;
+  }
+
   .project-card h4 {
     font-size: 1.25rem;
   }
@@ -133,7 +150,11 @@
 }
 
 @media (max-width: 768px) {
-  .project-card-summary {
+  .project-card__header {
+    grid-template-areas:
+      "media"
+      "main"
+      "meta";
     grid-template-columns: minmax(0, 1fr);
     row-gap: 12px;
   }
