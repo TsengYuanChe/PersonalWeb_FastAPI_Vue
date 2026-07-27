@@ -2,6 +2,13 @@
    Projects Page Styles
    ============================ */
 
+:root {
+  --project-cover-width: 160px;
+  --project-cover-aspect-ratio: 16 / 10;
+  --project-cover-radius: 6px;
+  --project-cover-gap: 32px;
+}
+
 /* Project Card Layout */
 .projects-section {
   padding-bottom: 3rem;
@@ -33,6 +40,45 @@
   transform: translateY(-4px);            /* 浮起效果 */
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35); /* 柔光陰影 */
   border-color: rgba(80, 180, 255, 0.25); /* 外框帶藍光 */
+}
+
+.project-card-summary {
+  display: grid;
+  grid-template-columns: var(--project-cover-width) minmax(0, 1fr);
+  align-items: start;
+  column-gap: var(--project-cover-gap);
+}
+
+.project-card-summary-content {
+  min-width: 0;
+}
+
+/* Shared cover specification for home and detail project cards */
+.project-cover {
+  width: min(100%, var(--project-cover-width));
+  max-width: var(--project-cover-width);
+  aspect-ratio: var(--project-cover-aspect-ratio);
+  flex: 0 0 var(--project-cover-width);
+  overflow: hidden;
+  border-radius: var(--project-cover-radius);
+}
+
+.project-cover-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-cover-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--site-secondary);
+  font-size: 0.82rem;
+  background: rgba(255, 255, 255, 0.035);
 }
 
 /* ---------------------------
@@ -160,13 +206,13 @@
 
 .home-project-row {
   display: grid;
-  grid-template-columns: 160px minmax(0, 1fr);
+  grid-template-columns: var(--project-cover-width) minmax(0, 1fr);
   grid-template-areas:
     "media heading"
     "media description"
     "media tags";
   align-items: start;
-  column-gap: 32px;
+  column-gap: var(--project-cover-gap);
   row-gap: 8px;
   min-width: 0;
   padding: 26px 0;
@@ -178,28 +224,6 @@
 
 .home-project-media {
   grid-area: media;
-  width: 160px;
-  aspect-ratio: 16 / 10;
-  overflow: hidden;
-  border-radius: 6px;
-}
-
-.home-project-image {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.home-project-placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  color: var(--site-secondary);
-  font-size: 0.82rem;
-  background: rgba(255, 255, 255, 0.035);
 }
 
 .home-project-heading {
@@ -228,9 +252,10 @@
   gap: 14px;
 }
 
-.home-project-links a {
+.home-project-action {
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.85rem;
+  font-weight: 400;
   text-decoration: none;
 }
 

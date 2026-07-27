@@ -1,31 +1,31 @@
 {
   "projects": [
     {
-      "name": "Personal Portfolio Website",
-      "image": "/images/projects/personal-portfolio-website.webp",
-      "image_alt": "Personal Portfolio Website preview",
+      "name": "MRIS",
+      "image": "/images/projects/covers/mris.webp",
+      "image_alt": "MRIS project cover",
       "image_ready": false,
-      "introduction": "Designed and built a full-stack portfolio platform to showcase projects, experiences, and technical capabilities through a structured, API-driven architecture.",
-      "tags": ["Vue 3", "FastAPI", "Pydantic", "Docker"],
+      "introduction": "Enterprise mountain rescue information system for backend development and production maintenance.",
+      "tags": [".NET", "Vue.js", "PostgreSQL", "REST API"],
+      "website_url": ""
+    },
+    {
+      "name": "Personal Portfolio Website",
+      "image": "/images/projects/covers/personal-website.webp",
+      "image_alt": "Personal Portfolio Website cover",
+      "image_ready": false,
+      "introduction": "Full-stack portfolio platform showcasing projects and engineering experience.",
+      "tags": ["Vue 3", "FastAPI", "Docker", "Cloud Run"],
       "website_url": "https://adamtseng.com"
     },
     {
-      "name": "AI Care Website",
-      "image": "/images/projects/ai-care-website.webp",
-      "image_alt": "AI Care Website preview",
+      "name": "Mamatoya Website",
+      "image": "/images/projects/covers/mamatoya.webp",
+      "image_alt": "Mamatoya Website cover",
       "image_ready": false,
-      "introduction": "Developed a full-stack web platform for AI-assisted elderly care with real-time image analysis for environment awareness, backed by modular Flask APIs and a responsive Bootstrap interface.",
-      "tags": ["Python", "Flask", "OpenCV", "SQLite"],
-      "source_url": "https://github.com/TsengYuanChe/AI_care_website"
-    },
-    {
-      "name": "Financial Report Crawler",
-      "image": "/images/projects/financial-report-crawler.webp",
-      "image_alt": "Financial Report Crawler preview",
-      "image_ready": false,
-      "introduction": "Built an automated crawler for TWSE financial statements to streamline analysts' data-preparation workflows with end-to-end retrieval and file organization.",
-      "tags": ["Python", "Selenium", "BeautifulSoup", "WebDriver"],
-      "source_url": "https://github.com/TsengYuanChe/Financial_report_crawler"
+      "introduction": "Commercial restaurant website focused on branding, SEO, and responsive design.",
+      "tags": ["Vue 3", "Firebase", "SEO", "Responsive Design"],
+      "website_url": "https://mamatoya-b2afb.web.app/"
     }
   ]
 }

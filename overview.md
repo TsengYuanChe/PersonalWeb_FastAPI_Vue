@@ -1,6 +1,6 @@
 # adamtseng.com 專案現況總覽
 
-> 更新日期：2026-07-26
+> 更新日期：2026-07-27
 > 盤點基準：repository 當前實際程式碼，而非 README、舊架構文件或先前版本。
 > 目的：讓未讀過程式碼的工程師快速理解網站定位、資訊架構、資料流、部署方式與大改版風險。
 
@@ -133,7 +133,7 @@ PersonalWeb_Flask_Vue/
 │   │   ├── components/
 │   │   │   ├── layout/DetailPageHeader.vue
 │   │   │   ├── experience/{HomeJourneyItem,ExperienceCard}.vue
-│   │   │   └── projects/{HomeProjectPreview,ProjectCard}.vue
+│   │   │   └── projects/{ProjectCover,HomeProjectPreview,ProjectCard}.vue
 │   │   ├── data/home/             # 首頁三份 local Preview JSON
 │   │   ├── api/
 │   │   │   ├── client.js          # fetch wrapper / error normalization
@@ -276,7 +276,8 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 
 - `DetailPageHeader.vue`：三個詳細頁共用 Breadcrumb、唯一 `h1` 與 description。
 - `HomeJourneyItem.vue` / `ExperienceCard.vue`：首頁與詳細 Journey 分離。
-- `HomeProjectPreview.vue` / `ProjectCard.vue`：首頁與詳細 Projects 分離。
+- `ProjectCover.vue`：首頁與詳細 Projects 共用的 160×100、16:10 cover／placeholder。
+- `HomeProjectPreview.vue` / `ProjectCard.vue`：首頁與詳細 Projects 分離，並共用 `ProjectCover.vue`。
 - Sidebar：不是獨立 component，markup 位於 `App.vue`，並由 `v-if="isHomeLayout"` 控制。
 - Home/Detail Layout：沒有獨立 `HomeLayout.vue` 或 `DetailLayout.vue`；`App.vue` 依 route meta 條件渲染，搭配 `.layout-container--home`、`.layout-container--detail`、`.detail-main` 與 `.detail-page-container`。
 - Breadcrumb：不是單獨的 `Breadcrumb.vue`，而是 `DetailPageHeader.vue` 的一部分。
@@ -367,7 +368,7 @@ Desktop social links 位於 Sidebar 底部；Mobile 則以 App template 中的 f
 | 完整 Experience JSON | `backend/data/profile/experience.json` | Experience API/detail page |
 | 完整 Projects JSON | `backend/data/portfolio/projects.json` | Projects API/detail page |
 | Experience logos | `frontend/src/assets/images/exp/*.png` | Vite asset imports |
-| Future project screenshots | 預定 `frontend/public/images/projects/*.webp` | 目前檔案尚不存在 |
+| Future project screenshots | 預定 `frontend/public/images/projects/covers/*.webp` | 目前檔案尚不存在 |
 | Resume | `frontend/public/files/Adam_Tseng_Resume.pdf` | 首頁 social area |
 | Favicons | `frontend/public/favicon*` | `index.html` |
 

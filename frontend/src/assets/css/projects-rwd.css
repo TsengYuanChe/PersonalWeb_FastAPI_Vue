@@ -91,10 +91,6 @@
     font-size: 1.05rem;
   }
 
-  .home-project-media {
-    width: min(100%, 320px);
-  }
-
   .home-project-description {
     font-size: 0.88rem;
     -webkit-line-clamp: 3;
@@ -132,6 +128,13 @@
   }
 
   .home-project-media {
-    width: min(100%, 360px);
+    width: min(100%, var(--project-cover-width));
+  }
+}
+
+@media (max-width: 768px) {
+  .project-card-summary {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 12px;
   }
 }

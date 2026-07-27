@@ -1,37 +1,29 @@
 <script setup>
-import { computed, ref } from 'vue'
+import ProjectCover from '@/components/projects/ProjectCover.vue'
 
-const props = defineProps({
+defineProps({
   project: {
     type: Object,
     required: true,
   },
 })
-
-const imageFailed = ref(false)
-const showImage = computed(
-  () => props.project.image_ready && props.project.image && !imageFailed.value,
-)
 </script>
 
 <template>
   <article class="home-project-row">
-    <div class="home-project-media">
-      <img
-        v-if="showImage"
-        class="home-project-image"
-        :src="project.image"
-        :alt="project.image_alt"
-        @error="imageFailed = true"
-      />
-      <div v-else class="home-project-placeholder">Coming soon</div>
-    </div>
+    <ProjectCover
+      class="home-project-media"
+      :image="project.image"
+      :image-alt="project.image_alt"
+      :image-ready="project.image_ready"
+    />
 
     <div class="home-project-heading">
       <h3 class="home-project-name">{{ project.name }}</h3>
-      <div v-if="project.website_url || project.source_url" class="home-project-links">
+      <div class="home-project-links">
         <a
           v-if="project.website_url"
+          class="home-project-action"
           :href="project.website_url"
           target="_blank"
           rel="noopener noreferrer"
@@ -40,7 +32,8 @@ const showImage = computed(
           Live <span aria-hidden="true">↗</span>
         </a>
         <a
-          v-if="project.source_url"
+          v-else-if="project.source_url"
+          class="home-project-action"
           :href="project.source_url"
           target="_blank"
           rel="noopener noreferrer"
@@ -48,6 +41,7 @@ const showImage = computed(
         >
           Source <span aria-hidden="true">↗</span>
         </a>
+        <span v-else class="home-project-action">🔒 Internal</span>
       </div>
     </div>
 
