@@ -14,6 +14,127 @@
   padding-bottom: 3rem;
 }
 
+.project-tools {
+  display: grid;
+  grid-template-areas: "category technology . clear search";
+  grid-template-columns:
+    minmax(160px, 190px)
+    minmax(180px, 220px)
+    minmax(0, 1fr)
+    auto
+    clamp(220px, 24vw, 300px);
+  align-items: center;
+  gap: 0.85rem;
+  margin-bottom: 1.75rem;
+}
+
+.project-tools__field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.project-tools__field--category {
+  grid-area: category;
+}
+
+.project-tools__field--technology {
+  grid-area: technology;
+}
+
+.project-tools__field--search {
+  grid-area: search;
+}
+
+.project-tools__label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.project-tools__field input,
+.project-tools__field select {
+  width: 100%;
+  min-width: 0;
+  min-height: 42px;
+  padding: 0.6rem 0.75rem;
+  color: var(--site-text);
+  background-color: rgba(5, 14, 27, 0.72);
+  border: 1px solid rgba(143, 163, 189, 0.28);
+  border-radius: 12px;
+  font: inherit;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color-scheme: dark;
+}
+
+.project-tools__field input::placeholder {
+  color: rgba(143, 163, 189, 0.7);
+}
+
+.project-tools__field input:hover,
+.project-tools__field select:hover {
+  border-color: rgba(155, 188, 255, 0.5);
+}
+
+.project-tools__field input:focus-visible,
+.project-tools__field select:focus-visible,
+.project-tools__clear button:focus-visible,
+.project-filter-empty button:focus-visible {
+  outline: 2px solid #9bbcff;
+  outline-offset: 2px;
+}
+
+.project-tools__clear {
+  grid-area: clear;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-height: 42px;
+}
+
+.project-tools__clear button,
+.project-filter-empty button {
+  padding: 0.35rem 0;
+  border: 0;
+  color: var(--site-secondary);
+  background: transparent;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+}
+
+.project-tools__clear button:hover,
+.project-filter-empty button:hover {
+  color: #9bbcff;
+}
+
+.project-filter-empty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 130px;
+  margin-bottom: 2.2rem;
+  padding: 1.5rem;
+  color: var(--site-secondary);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+}
+
+.project-filter-empty p {
+  margin: 0;
+}
+
 /* Title */
 .projects-section h2 {
   font-size: 2rem;          /* 稍微縮小，避免壓過整體比例 */

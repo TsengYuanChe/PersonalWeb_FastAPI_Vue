@@ -276,6 +276,11 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - Summary Header 可用滑鼠點擊切換，Meta 中的語意化 More/Less Detail button 提供鍵盤操作、`aria-expanded` 與 `aria-controls`。Live／Source links 不觸發 toggle。
 - 展開狀態由 `ProjectView.vue` 以單一 `expandedProjectSlug` 管理，因此同一時間最多只有一個 Project 展開；狀態不寫入 URL 或 localStorage。
 - Detail 使用 Vue `Transition` hooks 依實際 `scrollHeight` 執行 320ms 高度、透明度與輕微位移動畫，完成後恢復 `height: auto`，並支援 `prefers-reduced-motion`。
+- `/project` 的 Search、Category 與 Technology filters 都是純前端 computed 行為，只處理首次 API response，不會因條件變更重新呼叫 backend。Search 對 summary 與 detail 的公開文字做不分大小寫的完整 token 比對，不使用任意 substring；多個搜尋詞採 AND 邏輯。
+- Category 與 Technology options 分別由 API projects 的 `category` 與 `technologies` 動態去重、排序產生，並以完整值比對；Search、Category、Technology 三者亦採 AND 邏輯且保留 backend 原始排序。
+- 若已展開 Project 被條件排除，`expandedProjectSlug` 會清除。搜尋／篩選沒有使用 server-side parameters、URL query、localStorage 或 visibility fields。
+- Search／Filter 使用直接置於頁面背景的輕量工具列，不使用外層 Card 容器。Desktop 依序排列 Category、Technology、彈性空間／Clear filters 與右側克制寬度的 Search；Tablet、Mobile 依既有 `1024px`、`768px` breakpoint 重排。
+- Field 的可見標題已移除，但原生 label 仍以 visually hidden 方式保留。欄位視覺目前由 Projects feature 的 `projects.css` 與 `projects-rwd.css` 管理，尚未抽成全域表單系統。
 - 詳細頁仍使用既有大型 card 視覺；首頁 Preview styles 使用 `.home-project-*` namespace，不會覆蓋它。
 - 目前是詳細頁初版：完整 backend narrative、基本狀態與單卡收合／展開已接通，但 Showcase、圖片／架構圖與進一步 layout 整理仍待完成。
 

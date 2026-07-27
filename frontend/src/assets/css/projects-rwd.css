@@ -103,6 +103,13 @@
 
 /* ---------- Tablet (max-width: 1024px) ---------- */
 @media (max-width: 1024px) {
+  .project-tools {
+    grid-template-areas:
+      "category technology . clear"
+      "search search search search";
+    grid-template-columns: minmax(150px, 190px) minmax(170px, 220px) minmax(0, 1fr) auto;
+  }
+
   .project-card {
     padding: 1.5rem 1.3rem;
   }
@@ -173,6 +180,26 @@
 }
 
 @media (max-width: 768px) {
+  .project-tools {
+    grid-template-areas:
+      "category"
+      "technology"
+      "search"
+      "clear";
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+
+  .project-tools__clear {
+    justify-content: flex-end;
+    min-height: auto;
+  }
+
+  .project-filter-empty {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .project-card__header {
     grid-template-areas:
       "media meta"
