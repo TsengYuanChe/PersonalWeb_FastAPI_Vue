@@ -87,10 +87,12 @@ function leave(element) {
       </div>
 
       <div class="project-card__main">
-        <h2 class="h4 text-info mb-0">{{ project.title }}</h2>
-        <p v-if="project.subtitle" class="project-card-subtitle text-secondary mb-0 mt-1">
-          {{ project.subtitle }}
-        </p>
+        <div class="project-card__heading">
+          <h2 class="h4 text-info mb-0">{{ project.title }}</h2>
+          <p v-if="project.subtitle" class="project-card-subtitle text-secondary mb-0 mt-1">
+            {{ project.subtitle }}
+          </p>
+        </div>
 
         <p class="text-secondary mt-2 mb-0 project-description">
           {{ project.summary || 'No summary provided.' }}
@@ -98,19 +100,24 @@ function leave(element) {
       </div>
 
       <aside class="project-card__meta" aria-label="Project metadata">
-        <ProjectAction :project="project" :name="project.title" />
-        <p v-if="project.role" class="project-card__meta-item">{{ project.role }}</p>
-        <p v-if="project.period" class="project-card__meta-item">{{ project.period }}</p>
-        <button
-          type="button"
-          class="project-card__toggle"
-          :aria-expanded="expanded"
-          :aria-controls="detailsId"
-          @click="toggleDetails"
-        >
-          {{ expanded ? 'Less detail' : 'More detail' }}
-          <span aria-hidden="true">{{ expanded ? '↑' : '↓' }}</span>
-        </button>
+        <div class="project-card__meta-group">
+          <ProjectAction :project="project" :name="project.title" />
+          <p v-if="project.role" class="project-card__meta-item">{{ project.role }}</p>
+          <p v-if="project.period" class="project-card__meta-item">{{ project.period }}</p>
+        </div>
+
+        <div class="project-card__toggle-group">
+          <button
+            type="button"
+            class="project-card__toggle"
+            :aria-expanded="expanded"
+            :aria-controls="detailsId"
+            @click="toggleDetails"
+          >
+            {{ expanded ? 'Less detail' : 'More detail' }}
+            <span aria-hidden="true">{{ expanded ? '↑' : '↓' }}</span>
+          </button>
+        </div>
       </aside>
     </header>
 
