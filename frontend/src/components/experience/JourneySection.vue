@@ -76,42 +76,42 @@ function leave(element) {
 </script>
 
 <template>
-  <article class="journey-card">
-    <header class="journey-card__header" @click="handleHeaderClick">
-      <div class="journey-card__media">
-        <div class="journey-card__logo-wrapper">
+  <article class="journey-section">
+    <header class="journey-section__header" @click="handleHeaderClick">
+      <div class="journey-section__media">
+        <div class="journey-section__logo-wrapper">
           <img
             v-if="logoUrl"
-            class="journey-card__logo"
+            class="journey-section__logo"
             :src="logoUrl"
             :alt="`${experience.organization} logo`"
           />
         </div>
       </div>
 
-      <div class="journey-card__main">
-        <div class="journey-card__heading">
+      <div class="journey-section__main">
+        <div class="journey-section__heading">
           <h2 class="h4 text-info mb-0">{{ experience.title }}</h2>
-          <p class="journey-card__organization text-light mb-0 mt-1">
+          <p class="journey-section__organization text-light mb-0 mt-1">
             {{ experience.organization }}
           </p>
         </div>
 
-        <p class="journey-card__summary text-secondary mt-2 mb-0">
+        <p class="journey-section__summary text-secondary mt-2 mb-0">
           {{ experience.summary }}
         </p>
       </div>
 
-      <aside class="journey-card__meta" aria-label="Journey metadata">
-        <div class="journey-card__meta-group">
-          <p v-if="experience.role" class="journey-card__meta-item">{{ experience.role }}</p>
-          <p v-if="experience.period" class="journey-card__meta-item">{{ experience.period }}</p>
+      <aside class="journey-section__meta" aria-label="Journey metadata">
+        <div class="journey-section__meta-group">
+          <p v-if="experience.role" class="journey-section__meta-item">{{ experience.role }}</p>
+          <p v-if="experience.period" class="journey-section__meta-item">{{ experience.period }}</p>
         </div>
 
-        <div class="journey-card__toggle-group">
+        <div class="journey-section__toggle-group">
           <button
             type="button"
-            class="journey-card__toggle"
+            class="journey-section__toggle"
             :aria-expanded="expanded"
             :aria-controls="detailsId"
             @click="toggleDetails"
@@ -131,7 +131,7 @@ function leave(element) {
       @before-leave="beforeLeave"
       @leave="leave"
     >
-      <div v-if="expanded" :id="detailsId" class="journey-card__details">
+      <div v-if="expanded" :id="detailsId" class="journey-section__details">
         <section v-if="experience.description?.length" class="journey-detail-section">
           <h3 class="text-light h6 mb-2">Description</h3>
           <p
@@ -165,7 +165,7 @@ function leave(element) {
 
         <section v-if="skillsAndTechnologies.length" class="journey-detail-section">
           <h3 class="text-light h6 mb-2">Skills &amp; Technologies</h3>
-          <div class="journey-card__skills" aria-label="Skills and technologies">
+          <div class="journey-section__skills" aria-label="Skills and technologies">
             <span v-for="item in skillsAndTechnologies" :key="item" class="tag tag-tool">
               {{ item }}
             </span>

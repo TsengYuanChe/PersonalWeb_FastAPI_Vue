@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { getExperience } from '@/api/contentApi'
-import JourneyCard from '@/components/experience/JourneyCard.vue'
+import JourneySection from '@/components/experience/JourneySection.vue'
 import Timeline from '@/components/experience/Timeline.vue'
 import DetailPageHeader from '@/components/layout/DetailPageHeader.vue'
 
@@ -76,17 +76,17 @@ onMounted(async () => {
         @deactivate="deactivateExperience"
       />
 
-      <div class="journey-card-list">
+      <div class="journey-section-list">
         <div
           v-for="(experience, index) in experiences"
           :key="experience.slug"
-          class="journey-card-list__item"
+          class="journey-section-list__item"
           :class="{ 'is-active': activeExperienceSlug === experience.slug }"
           :style="{ gridRow: index + 1 }"
           @mouseenter="activateExperience(experience.slug)"
           @mouseleave="deactivateExperience(experience.slug)"
         >
-          <JourneyCard
+          <JourneySection
             :experience="experience"
             :expanded="expandedExperienceSlug === experience.slug"
             @toggle="toggleExperience"

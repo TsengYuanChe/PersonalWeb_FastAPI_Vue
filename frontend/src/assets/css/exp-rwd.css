@@ -15,16 +15,16 @@
     height: 9px;
   }
 
-  .journey-card {
+  .journey-section {
     padding: 1.5rem 1.3rem;
   }
 
-  .journey-card__header {
+  .journey-section__header {
     grid-template-columns: 96px minmax(0, 1fr) max-content;
     column-gap: 24px;
   }
 
-  .journey-card__logo-wrapper {
+  .journey-section__logo-wrapper {
     width: 96px;
   }
 }
@@ -40,12 +40,16 @@
     display: none;
   }
 
-  .journey-card-list {
+  .journey-section-list {
     display: block;
   }
 
-  .journey-card-list__item > .journey-card {
+  .journey-section-list__item > .journey-section {
     margin-bottom: 1.6rem;
+  }
+
+  .journey-section-list__item:not(:first-child)::before {
+    top: -0.8rem;
   }
 
   /* Exp card spacing */
@@ -53,18 +57,13 @@
     margin-bottom: 2rem !important;
   }
 
-  .journey-card {
+  .journey-section {
     padding: 1.2rem 1.1rem;
-    border-radius: 14px;
+    border-radius: 4px;
     margin-bottom: 1.6rem;
   }
 
-  .journey-card:hover {
-    box-shadow: none;
-    transform: none;
-  }
-
-  .journey-card__header {
+  .journey-section__header {
     grid-template-areas:
       "media"
       "heading"
@@ -75,47 +74,47 @@
     row-gap: 14px;
   }
 
-  .journey-card__main,
-  .journey-card__meta {
+  .journey-section__main,
+  .journey-section__meta {
     display: contents;
   }
 
-  .journey-card__media {
+  .journey-section__media {
     grid-area: media;
   }
 
-  .journey-card__logo-wrapper {
+  .journey-section__logo-wrapper {
     justify-content: flex-start;
     width: 72px;
     height: 64px;
   }
 
-  .journey-card__logo,
-  .journey-card__logo[src*="ezoom"] {
+  .journey-section__logo,
+  .journey-section__logo[src*="ezoom"] {
     max-width: 64px;
     max-height: 64px;
   }
 
-  .journey-card__heading {
+  .journey-section__heading {
     grid-area: heading;
   }
 
-  .journey-card__heading h2 {
+  .journey-section__heading h2 {
     font-size: 1.1rem;
   }
 
-  .journey-card__meta-group {
+  .journey-section__meta-group {
     grid-area: meta;
     align-items: flex-start;
     text-align: left;
   }
 
-  .journey-card__summary {
+  .journey-section__summary {
     grid-area: summary;
     margin-top: 0 !important;
   }
 
-  .journey-card__toggle-group {
+  .journey-section__toggle-group {
     grid-area: toggle;
     margin-top: 0;
     padding-top: 0.75rem;
