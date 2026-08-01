@@ -97,7 +97,10 @@ onMounted(async () => {
           v-for="(experience, index) in experiences"
           :key="experience.slug"
           class="journey-section-list__item"
-          :class="{ 'is-active': activeExperienceSlug === experience.slug }"
+          :class="{
+            'is-active': activeExperienceSlug === experience.slug,
+            'is-expanded': expandedExperienceSlug === experience.slug,
+          }"
           :style="{ gridRow: index + 1 }"
           @mouseenter="activateExperience(experience.slug)"
           @mouseleave="handleExperienceMouseLeave($event, experience.slug)"

@@ -42,10 +42,6 @@
   content: "";
 }
 
-.journey-section-list__item.is-active > .journey-section {
-  background: rgba(255, 255, 255, 0.026);
-}
-
 .journey-timeline {
   display: contents;
 }
@@ -129,15 +125,37 @@
 
 /* Journey Section Layout */
 .journey-section {
+  position: relative;
+  isolation: isolate;
   margin: 0;
   padding: 1.8rem 1.6rem;
-  background: rgba(255, 255, 255, 0.012);
+  background: rgba(255, 255, 255, 0.008);
   border-radius: 4px;
-  transition: background-color 0.2s ease;
 }
 
-.journey-section:hover {
-  background: rgba(255, 255, 255, 0.026);
+.journey-section::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 18% 0%, rgba(155, 188, 255, 0.052), transparent 58%),
+    rgba(255, 255, 255, 0.026);
+  opacity: 0;
+  pointer-events: none;
+  content: "";
+  transition: opacity 240ms ease;
+}
+
+.journey-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+.journey-section:hover::before,
+.journey-section-list__item.is-active > .journey-section::before,
+.journey-section-list__item.is-expanded > .journey-section::before {
+  opacity: 1;
 }
 
 .journey-section__header {
@@ -418,7 +436,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .journey-section,
+  .journey-section::before,
   .journey-timeline__segment,
   .journey-timeline__node,
   .journey-details-enter-active,
