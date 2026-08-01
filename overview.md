@@ -280,6 +280,13 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - Segment interaction 只有 220ms 顏色與克制 glow transition，支援 `prefers-reduced-motion`；目前沒有掃光、stretch、scroll animation 或與 expanded state 同步。
 - 目前是詳細頁初版：分檔資料、完整 API、單段收合／展開與 Timeline Prototype 已接通，但內容校稿、Timeline 動態 segment 與更完整的可用性驗證仍待後續處理。
 
+#### Timeline Events — Future Considerations
+
+目前保留第一版的最簡單實作，以下特殊情況尚未提前實作，待後續另行設計最佳視覺方案：
+
+1. **Cross-section Duration Event**：例如 Freelance 從 `2024-01` 延續至 `2025-10`，跨越多個 Experience Sections。未來需定義 segment 如何跨越 periods、Journey Detail 展開時如何切割，並確保線段不穿過 Detail row。
+2. **Event 與 Experience 邊界重疊**：例如 Military start 與 Software Engineer start 同為 `2025-07`，或 Event end 與 Master end 同為 `2024-12`。未來需評估 nodes 是否重疊、labels 如何避碰、是否合併 node 或使用小幅偏移，同時維持 Timeline 可讀性。
+
 ### 6.4 `/project`
 
 位置：`frontend/src/views/ProjectView.vue`
