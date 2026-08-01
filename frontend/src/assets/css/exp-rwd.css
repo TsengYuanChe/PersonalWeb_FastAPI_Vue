@@ -30,6 +30,11 @@
     padding: 1.5rem 1.3rem;
   }
 
+  .journey-detail {
+    padding-right: 1.3rem;
+    padding-left: 1.3rem;
+  }
+
   .journey-section__header {
     grid-template-columns: 96px minmax(0, 1fr) max-content;
     column-gap: 24px;
@@ -55,12 +60,30 @@
     display: block;
   }
 
+  .journey-section-list__item {
+    padding-bottom: 0;
+  }
+
   .journey-section-list__item > .journey-section {
     margin-bottom: 1.6rem;
   }
 
-  .journey-section-list__item:not(:first-child)::before {
-    top: -0.8rem;
+  .journey-section-list__item::after,
+  .journey-detail-row::after {
+    bottom: 0.8rem;
+  }
+
+  .journey-section-list__item.is-last:not(.is-expanded)::after {
+    content: none;
+  }
+
+  .journey-detail-row {
+    position: relative;
+    padding-bottom: 1.6rem;
+  }
+
+  .journey-detail {
+    padding: 0 1.1rem;
   }
 
   /* Exp card spacing */

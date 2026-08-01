@@ -10,6 +10,14 @@ defineProps({
     type: String,
     default: null,
   },
+  detailSlugs: {
+    type: Array,
+    default: () => [],
+  },
+  rowBySlug: {
+    type: Object,
+    required: true,
+  },
 })
 
 const emit = defineEmits(['activate', 'deactivate'])
@@ -63,18 +71,16 @@ function handlePeriodMouseLeave(event, slug) {
 
 <template>
   <aside class="journey-timeline" aria-label="Journey timeline">
-    <div
-      class="journey-timeline__line"
-      :style="{ gridRow: `1 / span ${experiences.length}` }"
-      aria-hidden="true"
-    ></div>
-
     <ol class="journey-timeline__periods">
       <li
         v-for="(experience, index) in experiences"
         :key="experience.slug"
         class="journey-timeline__period"
-        :style="{ gridRow: index + 1 }"
+        :class="{
+          'has-detail-row': detailSlugs.includes(experience.slug),
+          'is-last': index === experiences.length - 1,
+        }"
+        :style="{ gridRow: rowBySlug[experience.slug] }"
         @mouseenter="emit('activate', experience.slug)"
         @mouseleave="handlePeriodMouseLeave($event, experience.slug)"
         @focusin="emit('activate', experience.slug)"

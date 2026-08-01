@@ -138,7 +138,7 @@ PersonalWeb_Flask_Vue/
 │   │   │   └── ProjectView.vue
 │   │   ├── components/
 │   │   │   ├── layout/DetailPageHeader.vue
-│   │   │   ├── experience/{HomeJourneyItem,JourneySection,Timeline}.vue
+│   │   │   ├── experience/{HomeJourneyItem,JourneySection,JourneyDetail,Timeline}.vue
 │   │   │   └── projects/{ProjectCover,ProjectAction,HomeProjectPreview,ProjectCard}.vue
 │   │   ├── data/home/             # 首頁三份 local Preview JSON
 │   │   ├── api/
@@ -260,15 +260,18 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - Breadcrumb：`HOME > JOURNEY`，主標題 `Journey`。
 - mount 後呼叫 `GET /api/v1/experience`。
 - 提供 loading、error、empty、success 四種狀態。
-- `JourneySection.vue` 完全由 backend Experience object 建立；Summary Header 顯示 logo、title、organization、summary、role、period，Description、Responsibilities、Highlights、Projects、Skills／Technologies 與 Additional Details 只在展開時 render。
+- `JourneySection.vue` 完全由 backend Experience object 建立，且只負責永遠顯示的 Summary Header：logo、title、organization、summary、role、period 與 More／Less Detail toggle。
+- `JourneyDetail.vue` 負責 Description、Responsibilities、Highlights、Projects、Skills／Technologies 與 Additional Details；空欄位不 render 標題或容器。
 - Journey Sections 預設全部收合；展開狀態由 `ExperienceView.vue` 以單一 `expandedExperienceSlug` 管理，因此同一時間最多只有一段展開。整個 Summary Header 可點擊，More/Less Detail button 提供鍵盤操作、`aria-expanded` 與 `aria-controls`。
 - Detail 使用與 Project Card 一致的 Vue `Transition` hooks，依實際 `scrollHeight` 執行 320ms 高度、透明度與輕微位移動畫，完成後恢復 `height: auto`，並支援 `prefers-reduced-motion`。
 - 每段 Experience 來自 `backend/data/portfolio/experience/` 下的獨立 slug JSON，由 repository 動態掃描並依 `start_date` 新到舊排序；新增經歷不需修改既有 JSON。
 - Logo filename 經 `utils/experienceLogos.js` 映射到 Vite-imported assets。
 - Timeline 第一版由獨立 `Timeline.vue` 實作，不屬於 `JourneySection.vue`。它依 API Experience 的 `start_date`／`end_date` 自動建立 nodes，並以單一連續垂直線串接；新增 Experience JSON 時會跟隨 API list 自動增加。
 - `ExperienceView.vue` 同時管理 `expandedExperienceSlug` 與 hover 用的 `activeExperienceSlug`，負責同步 Section 與 Timeline node；`JourneySection.vue` 不知道 Timeline 的存在。
-- Timeline 與 Journey Sections 由 `ExperienceView.vue` 放入相同的 CSS Grid rows；收合狀態下，每段 Timeline 的上下 node 由 row 實際高度對齊對應 Section 的上下邊界，Section 間距則共用父 Grid 的 `row-gap` 並由連續主線跨越。
-- Timeline 不再以 Desktop `160px`／Tablet `150px` 固定 period height 推算位置。Desktop 顯示於 Sections 左側、Tablet 縮小、Mobile（≤768px）暫時隱藏；展開後的 Timeline stretch 仍未實作。
+- Timeline period 與 Journey Sections 由 `ExperienceView.vue` 放入對應的 CSS Grid header rows；收合狀態下，每段 Timeline 的上下 node 由 row 實際高度對齊對應 Section 的上下邊界。
+- 展開時 `ExperienceView.vue` 在 Header 後插入獨立的 Journey Detail row；Detail 左側沒有 Timeline period，上一段 segment 高度保持不變，後續 Timeline 與 Section 一起下移，收合完成後恢復原位。同一時間仍只有一段正式展開。
+- Timeline base segment 以每個 Header row 為單位，收合時由 connector 串接相鄰 periods；Detail row 存在時對應 connector 暫停，因此主線不穿越不具時間語意的 Detail。
+- Timeline 不再以 Desktop `160px`／Tablet `150px` 固定 period height 推算位置。Desktop 顯示於 Sections 左側、Tablet 縮小、Mobile（≤768px）暫時隱藏。
 - Journey 詳細頁採用 **Timeline + Sections**，不沿用 Project Page 的 Card design language。每段 Journey 以極低對比 surface 輔助閱讀，移除外框、陰影、浮起與 hover border，主要透過 spacing 與淡 divider 區隔；Timeline 是頁面的主要視覺結構。
 - Hover 或 keyboard focus Journey Section，以及 hover 或 focus 該 period 任一 Timeline node 時，`ExperienceView.vue` 以同一個 `activeExperienceSlug` 同步高亮上下 nodes 與中間 period segment。Timeline 保留完整低對比 base line，active segment 只覆蓋 Experience row，Experience 間的 connector gap 不高亮。
 - Segment interaction 只有 220ms 顏色與克制 glow transition，支援 `prefers-reduced-motion`；目前沒有掃光、stretch、scroll animation 或與 expanded state 同步。
@@ -302,7 +305,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 ### 7.1 共用元件
 
 - `DetailPageHeader.vue`：三個詳細頁共用 Breadcrumb、唯一 `h1` 與 description。
-- `HomeJourneyItem.vue` / `JourneySection.vue`：首頁 Preview 與 API-driven 詳細 Journey 分離。
+- `HomeJourneyItem.vue` / `JourneySection.vue` / `JourneyDetail.vue`：首頁 Preview、詳細頁 Summary Header 與展開 Detail 分離。
 - `Timeline.vue`：詳細 Journey 專用的 data-driven Timeline Prototype；只 render line/nodes 並 emit hover/focus state，不包含 Section 或展開邏輯。
 - `ProjectCover.vue`：首頁與詳細 Projects 共用的 160×100、16:10 cover／placeholder。
 - `ProjectAction.vue`：首頁與詳細 Projects 共用 Live／Source／Internal 判斷與外部連結語意。

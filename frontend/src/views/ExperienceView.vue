@@ -1,6 +1,7 @@
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { getExperience } from '@/api/contentApi'
+import JourneyDetail from '@/components/experience/JourneyDetail.vue'
 import JourneySection from '@/components/experience/JourneySection.vue'
 import Timeline from '@/components/experience/Timeline.vue'
 import DetailPageHeader from '@/components/layout/DetailPageHeader.vue'
@@ -9,10 +10,63 @@ const experiences = ref([])
 const loading = ref(true)
 const error = ref('')
 const expandedExperienceSlug = ref(null)
+const leavingDetailSlugs = ref([])
 const activeExperienceSlug = ref(null)
 
+const detailRowSlugs = computed(() => {
+  const slugs = new Set(leavingDetailSlugs.value)
+
+  if (expandedExperienceSlug.value) {
+    slugs.add(expandedExperienceSlug.value)
+  }
+
+  return slugs
+})
+
+const journeyRows = computed(() => {
+  let row = 1
+
+  return experiences.value.map((experience) => {
+    const entry = {
+      experience,
+      headerRow: row,
+      detailRow: null,
+    }
+
+    row += 1
+
+    if (detailRowSlugs.value.has(experience.slug)) {
+      entry.detailRow = row
+      row += 1
+    }
+
+    return entry
+  })
+})
+
+const timelineRows = computed(() =>
+  Object.fromEntries(journeyRows.value.map(({ experience, headerRow }) => [experience.slug, headerRow])),
+)
+
 function toggleExperience(slug) {
-  expandedExperienceSlug.value = expandedExperienceSlug.value === slug ? null : slug
+  const currentSlug = expandedExperienceSlug.value
+
+  if (currentSlug === slug) {
+    leavingDetailSlugs.value = [...new Set([...leavingDetailSlugs.value, slug])]
+    expandedExperienceSlug.value = null
+    return
+  }
+
+  if (currentSlug) {
+    leavingDetailSlugs.value = [...new Set([...leavingDetailSlugs.value, currentSlug])]
+  }
+
+  leavingDetailSlugs.value = leavingDetailSlugs.value.filter((value) => value !== slug)
+  expandedExperienceSlug.value = slug
+}
+
+function finishDetailLeave(slug) {
+  leavingDetailSlugs.value = leavingDetailSlugs.value.filter((value) => value !== slug)
 }
 
 function activateExperience(slug) {
@@ -39,6 +93,46 @@ function handleExperienceMouseLeave(event, slug) {
   }
 
   deactivateExperience(slug)
+}
+
+function beforeDetailEnter(element) {
+  element.style.height = '0'
+  element.style.opacity = '0'
+  element.style.transform = 'translateY(-4px)'
+  element.inert = false
+  element.removeAttribute('aria-hidden')
+}
+
+function enterDetail(element) {
+  requestAnimationFrame(() => {
+    element.style.height = `${element.scrollHeight}px`
+    element.style.opacity = '1'
+    element.style.transform = 'translateY(0)'
+  })
+}
+
+function afterDetailEnter(element) {
+  element.style.height = 'auto'
+  element.style.opacity = ''
+  element.style.transform = ''
+}
+
+function beforeDetailLeave(element) {
+  element.style.height = `${element.scrollHeight}px`
+  element.style.opacity = '1'
+  element.style.transform = 'translateY(0)'
+  element.inert = true
+  element.setAttribute('aria-hidden', 'true')
+}
+
+function leaveDetail(element) {
+  void element.offsetHeight
+
+  requestAnimationFrame(() => {
+    element.style.height = '0'
+    element.style.opacity = '0'
+    element.style.transform = 'translateY(-4px)'
+  })
 }
 
 onMounted(async () => {
@@ -88,31 +182,52 @@ onMounted(async () => {
       <Timeline
         :experiences="experiences"
         :active-slug="activeExperienceSlug"
+        :detail-slugs="[...detailRowSlugs]"
+        :row-by-slug="timelineRows"
         @activate="activateExperience"
         @deactivate="deactivateExperience"
       />
 
       <div class="journey-section-list">
-        <div
-          v-for="(experience, index) in experiences"
-          :key="experience.slug"
-          class="journey-section-list__item"
-          :class="{
-            'is-active': activeExperienceSlug === experience.slug,
-            'is-expanded': expandedExperienceSlug === experience.slug,
-          }"
-          :style="{ gridRow: index + 1 }"
-          @mouseenter="activateExperience(experience.slug)"
-          @mouseleave="handleExperienceMouseLeave($event, experience.slug)"
-          @focusin="activateExperience(experience.slug)"
-          @focusout="handleExperienceFocusOut($event, experience.slug)"
-        >
-          <JourneySection
-            :experience="experience"
-            :expanded="expandedExperienceSlug === experience.slug"
-            @toggle="toggleExperience"
-          />
-        </div>
+        <template v-for="(entry, index) in journeyRows" :key="entry.experience.slug">
+          <div
+            class="journey-section-list__item"
+            :class="{
+              'is-active': activeExperienceSlug === entry.experience.slug,
+              'is-expanded': expandedExperienceSlug === entry.experience.slug,
+              'is-last': index === journeyRows.length - 1,
+            }"
+            :style="{ gridRow: entry.headerRow }"
+            @mouseenter="activateExperience(entry.experience.slug)"
+            @mouseleave="handleExperienceMouseLeave($event, entry.experience.slug)"
+            @focusin="activateExperience(entry.experience.slug)"
+            @focusout="handleExperienceFocusOut($event, entry.experience.slug)"
+          >
+            <JourneySection
+              :experience="entry.experience"
+              :expanded="expandedExperienceSlug === entry.experience.slug"
+              @toggle="toggleExperience"
+            />
+          </div>
+
+          <Transition
+            name="journey-details"
+            @before-enter="beforeDetailEnter"
+            @enter="enterDetail"
+            @after-enter="afterDetailEnter"
+            @before-leave="beforeDetailLeave"
+            @leave="leaveDetail"
+            @after-leave="finishDetailLeave(entry.experience.slug)"
+          >
+            <div
+              v-if="expandedExperienceSlug === entry.experience.slug"
+              class="journey-detail-row"
+              :style="{ gridRow: entry.detailRow }"
+            >
+              <JourneyDetail :experience="entry.experience" />
+            </div>
+          </Transition>
+        </template>
       </div>
     </div>
   </section>
