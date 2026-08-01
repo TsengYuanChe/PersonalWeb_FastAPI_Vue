@@ -6,8 +6,14 @@
 /* ---------- Tablet (max-width: 1024px) ---------- */
 @media (max-width: 1024px) {
   .journey-page-layout {
-    grid-template-columns: 24px minmax(0, 1fr);
-    column-gap: 20px;
+    --journey-timeline-axis: 62px;
+    grid-template-columns: 68px minmax(0, 1fr);
+    column-gap: 16px;
+  }
+
+  .journey-timeline__label {
+    width: calc(var(--journey-timeline-axis) - 10px);
+    font-size: 0.65rem;
   }
 
   .journey-timeline__node {
