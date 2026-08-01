@@ -1,12 +1,13 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import { getExperience } from '@/api/contentApi'
+import { getExperience, getTimelineEvents } from '@/api/contentApi'
 import JourneyDetail from '@/components/experience/JourneyDetail.vue'
 import JourneySection from '@/components/experience/JourneySection.vue'
 import Timeline from '@/components/experience/Timeline.vue'
 import DetailPageHeader from '@/components/layout/DetailPageHeader.vue'
 
 const experiences = ref([])
+const timelineEvents = ref([])
 const loading = ref(true)
 const error = ref('')
 const expandedExperienceSlug = ref(null)
@@ -137,9 +138,15 @@ function leaveDetail(element) {
 
 onMounted(async () => {
   try {
-    const response = await getExperience()
-    experiences.value = Array.isArray(response.content?.experience)
-      ? response.content.experience
+    const [experienceResponse, timelineEventsResponse] = await Promise.all([
+      getExperience(),
+      getTimelineEvents(),
+    ])
+    experiences.value = Array.isArray(experienceResponse.content?.experience)
+      ? experienceResponse.content.experience
+      : []
+    timelineEvents.value = Array.isArray(timelineEventsResponse.content?.timeline_events)
+      ? timelineEventsResponse.content.timeline_events
       : []
   } catch (requestError) {
     error.value = requestError instanceof Error ? requestError.message : 'Unable to load experiences.'
@@ -181,6 +188,7 @@ onMounted(async () => {
     <div v-else class="journey-page-layout">
       <Timeline
         :experiences="experiences"
+        :events="timelineEvents"
         :active-slug="activeExperienceSlug"
         :detail-slugs="[...detailRowSlugs]"
         :row-by-slug="timelineRows"

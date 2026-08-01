@@ -117,6 +117,7 @@ PersonalWeb_Flask_Vue/
 │   │   │   ├── ezoom.json
 │   │   │   ├── nycu-master.json
 │   │   │   └── nchu-bachelor.json
+│   │   ├── portfolio/timeline-events.json # Journey Timeline 的非 Experience 事件
 │   │   └── portfolio/projects/     # 每個完整 Project 各一份 slug JSON
 │   │       ├── mris.json
 │   │       ├── personal-portfolio.json
@@ -271,6 +272,8 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - Timeline period 與 Journey Sections 由 `ExperienceView.vue` 放入對應的 CSS Grid header rows；收合狀態下，每段 Timeline 的上下 node 由 row 實際高度對齊對應 Section 的上下邊界。
 - 展開時 `ExperienceView.vue` 在 Header 後插入獨立的 Journey Detail row；Detail 左側沒有 Timeline period，上一段 segment 高度保持不變，後續 Timeline 與 Section 一起下移，收合完成後恢復原位。同一時間仍只有一段正式展開。
 - Timeline base segment 以每個 Header row 為單位，收合時由 connector 串接相鄰 periods；Detail row 存在時對應 connector 暫停，因此主線不穿越不具時間語意的 Detail。
+- Timeline Events 來自獨立的 `timeline-events.json` 與 API，不屬於 Experience、Section 或 Detail。第一版支援單節點 Point Event 與雙節點／segment Duration Event，由 `Timeline.vue` 依年月在既有 Experience period 內換算位置並統一 render。
+- Timeline Events 第一版只有靜態 label、node 與 duration segment，沒有 hover、highlight、animation、focus 或 click interaction；不會建立額外 Timeline column 或改變 Experience rows。
 - Timeline 不再以 Desktop `160px`／Tablet `150px` 固定 period height 推算位置。Desktop 顯示於 Sections 左側、Tablet 縮小、Mobile（≤768px）暫時隱藏。
 - Journey 詳細頁採用 **Timeline + Sections**，不沿用 Project Page 的 Card design language。每段 Journey 以極低對比 surface 輔助閱讀，移除外框、陰影、浮起與 hover border，主要透過 spacing 與淡 divider 區隔；Timeline 是頁面的主要視覺結構。
 - Hover 或 keyboard focus Journey Section，以及 hover 或 focus 該 period 任一 Timeline node 時，`ExperienceView.vue` 以同一個 `activeExperienceSlug` 同步高亮上下 nodes 與中間 period segment。Timeline 保留完整低對比 base line，active segment 只覆蓋 Experience row，Experience 間的 connector gap 不高亮。
@@ -398,6 +401,7 @@ Desktop social links 位於 Sidebar 底部；Mobile 則以 App template 中的 f
 | 首頁 Projects Preview | `frontend/src/data/home/projects.json` | HomeProjectPreview |
 | 完整 About JSON | `backend/data/profile/about.json` | About API；目前頁面內容未使用 |
 | 完整 Experience JSON | `backend/data/portfolio/experience/{ezoom,nycu-master,nchu-bachelor}.json` | Experience API/detail page |
+| Timeline Events JSON | `backend/data/portfolio/timeline-events.json` | Timeline Events API／Timeline.vue |
 | 完整 Projects JSON | `backend/data/portfolio/projects/{mris,personal-portfolio,mamatoya}.json` | Projects API/detail page |
 | Experience logos | `frontend/src/assets/images/exp/*.png` | Vite asset imports |
 | Future project screenshots | 預定 `frontend/public/images/projects/covers/*.webp` | 目前檔案尚不存在 |
@@ -445,10 +449,12 @@ Desktop social links 位於 Sidebar 底部；Mobile 則以 App template 中的 f
 | GET | `/health` | `{ "status": "ok" }` |
 | GET | `/api/about` | About object + top-level `updated_at`（legacy） |
 | GET | `/api/experience` | Experience object + `updated_at`（legacy） |
+| GET | `/api/timeline-events` | Timeline Events list + `updated_at`（legacy） |
 | GET | `/api/projects` | 三個完整 Project objects + 最新檔案 `updated_at`（legacy shape） |
 | GET | `/api/projects/{slug}` | 指定 slug 的完整 `ProjectItem`；不存在時回傳標準 404 error envelope |
 | GET | `/api/v1/about` | `AboutResponse` |
 | GET | `/api/v1/experience` | `ExperienceResponse` |
+| GET | `/api/v1/timeline-events` | `TimelineEventsResponse` |
 | GET | `/api/v1/projects` | `ProjectsResponse` |
 | GET | `/docs`, `/redoc`, `/openapi.json` | FastAPI defaults |
 
@@ -485,6 +491,11 @@ ExperienceData
     ├── projects: string[]
     └── gpa?: string | null
 
+TimelineEventsData
+└── timeline_events: (PointTimelineEvent | DurationTimelineEvent)[]
+    ├── Point: id / label / type="point" / date（YYYY-MM）
+    └── Duration: id / label / type="duration" / start_date / end_date（YYYY-MM）
+
 ProjectData
 └── projects: ProjectItem[]
     ├── slug: string
@@ -510,6 +521,8 @@ ProjectData
 `GET /api/projects` 與 `GET /api/v1/projects` 會依 repository 的固定順序讀取並逐筆以 `ProjectItem` 驗證；`GET /api/projects/{slug}` 使用相同 repository 與 schema，不建立第二套 loader。三個 Project 的 `showcase` 目前都是空陣列，但 `ShowcaseItem` 已定義 image、image_alt 與選填 caption，供後續加入公開素材。
 
 `GET /api/experience` 與 `GET /api/v1/experience` 共用相同 repository/service aggregation：repository 動態讀取 `portfolio/experience/*.json`，service 逐筆以 `ExperienceItem` 驗證並組成 Experience list。現況沒有 `GET /api/experience/{slug}` endpoint。
+
+`GET /api/timeline-events` 與 `GET /api/v1/timeline-events` 讀取獨立的 `portfolio/timeline-events.json`，並以 discriminated union schema 驗證 point／duration 所需欄位；Experience objects 不包含 Timeline Events。
 
 首頁 Projects Preview schema 是獨立的前端 schema，不應與 backend `ProjectItem` 混用。
 

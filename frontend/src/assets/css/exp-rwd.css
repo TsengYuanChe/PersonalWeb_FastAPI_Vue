@@ -21,6 +21,16 @@
     height: 9px;
   }
 
+  .journey-timeline-event__label {
+    width: calc(var(--journey-timeline-axis) - 10px);
+    font-size: 0.6rem;
+  }
+
+  .journey-timeline-event__node {
+    width: 6px;
+    height: 6px;
+  }
+
   .journey-timeline__segment.is-active,
   .journey-timeline__node.is-active {
     box-shadow: 0 0 4px rgba(155, 188, 255, 0.28);

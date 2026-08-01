@@ -5,8 +5,9 @@ from repositories.content_repository import (
     read_json_with_timestamp,
     read_project_with_timestamp,
     read_projects_with_timestamps,
+    read_timeline_events_with_timestamp,
 )
-from schemas.content import ExperienceItem, ProjectItem
+from schemas.content import ExperienceItem, ProjectItem, TimelineEventsData
 
 
 def get_legacy_content(filename):
@@ -61,6 +62,25 @@ def get_experience_v1():
     }
 
 
+def get_timeline_events_legacy():
+    timeline_events, updated_at = _get_validated_timeline_events()
+    return {
+        "timeline_events": timeline_events,
+        "updated_at": updated_at,
+    }
+
+
+def get_timeline_events_v1():
+    timeline_events, updated_at = _get_validated_timeline_events()
+    return {
+        "data": {"timeline_events": timeline_events},
+        "meta": {
+            "updated_at": updated_at,
+            "version": "v1",
+        },
+    }
+
+
 def get_projects_v1():
     projects, updated_at = _get_validated_projects()
     return {
@@ -97,3 +117,9 @@ def _get_validated_experiences():
         for experience in experiences
     ]
     return validated, updated_at
+
+
+def _get_validated_timeline_events():
+    data, updated_at = read_timeline_events_with_timestamp()
+    validated = TimelineEventsData.model_validate(data)
+    return [event.model_dump(mode="json") for event in validated.timeline_events], updated_at

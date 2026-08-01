@@ -11,6 +11,7 @@ PROJECT_FILES = {
     "mamatoya": "portfolio/projects/mamatoya.json",
 }
 EXPERIENCE_DIR = "portfolio/experience"
+TIMELINE_EVENTS_FILE = "portfolio/timeline-events.json"
 
 
 def read_json_with_timestamp(filename):
@@ -58,3 +59,7 @@ def read_experiences_with_timestamps():
 
     experiences.sort(key=lambda item: item.get("start_date", ""), reverse=True)
     return experiences, max(timestamps) if timestamps else None
+
+
+def read_timeline_events_with_timestamp():
+    return read_json_with_timestamp(TIMELINE_EVENTS_FILE)

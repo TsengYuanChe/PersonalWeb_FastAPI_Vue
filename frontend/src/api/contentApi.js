@@ -16,6 +16,14 @@ export async function getExperience() {
   }
 }
 
+export async function getTimelineEvents() {
+  const res = await requestRaw("/api/v1/timeline-events")
+  return {
+    content: res.data,
+    updatedAt: res.meta?.updated_at ?? null,
+  }
+}
+
 export async function getProjects() {
   const res = await requestRaw("/api/v1/projects")
   return {

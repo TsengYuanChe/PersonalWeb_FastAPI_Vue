@@ -8,7 +8,7 @@ BACKEND_ROOT = Path(__file__).resolve().parents[1]
 if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
-from schemas.content import AboutResponse, ExperienceItem, ProjectItem
+from schemas.content import AboutResponse, ExperienceItem, ProjectItem, TimelineEventsData
 
 
 def main():
@@ -18,6 +18,7 @@ def main():
         "portfolio/projects/mris.json": (ProjectItem, False),
         "portfolio/projects/personal-portfolio.json": (ProjectItem, False),
         "portfolio/projects/mamatoya.json": (ProjectItem, False),
+        "portfolio/timeline-events.json": (TimelineEventsData, False),
     }
 
     errors = []

@@ -162,6 +162,77 @@
   outline-offset: 3px;
 }
 
+.journey-timeline-events {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  right: 0;
+  bottom: var(--journey-row-gap);
+  left: 0;
+  pointer-events: none;
+}
+
+.journey-timeline-event {
+  position: absolute;
+  right: 0;
+  left: 0;
+}
+
+.journey-timeline-event--point {
+  height: 0;
+}
+
+.journey-timeline-event__label {
+  position: absolute;
+  left: 0;
+  width: calc(var(--journey-timeline-axis) - 12px);
+  color: rgba(143, 163, 189, 0.82);
+  font-size: 0.66rem;
+  font-weight: 500;
+  line-height: 1.15;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.journey-timeline-event--point .journey-timeline-event__label {
+  top: 0;
+  transform: translateY(-50%);
+}
+
+.journey-timeline-event--duration .journey-timeline-event__label {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.journey-timeline-event__segment {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--journey-timeline-axis);
+  width: 1px;
+  background: rgba(113, 133, 161, 0.72);
+  transform: translateX(-50%);
+}
+
+.journey-timeline-event__node {
+  position: absolute;
+  left: var(--journey-timeline-axis);
+  width: 7px;
+  height: 7px;
+  border: 1px solid var(--site-bg);
+  border-radius: 50%;
+  background: #7185a1;
+  transform: translate(-50%, -50%);
+}
+
+.journey-timeline-event__node--first {
+  top: 0;
+}
+
+.journey-timeline-event__node--last {
+  top: 100%;
+}
+
 /* Journey Section Layout */
 .journey-section {
   position: relative;
