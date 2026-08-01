@@ -138,7 +138,7 @@ PersonalWeb_Flask_Vue/
 │   │   │   └── ProjectView.vue
 │   │   ├── components/
 │   │   │   ├── layout/DetailPageHeader.vue
-│   │   │   ├── experience/{HomeJourneyItem,JourneyCard}.vue
+│   │   │   ├── experience/{HomeJourneyItem,JourneyCard,Timeline}.vue
 │   │   │   └── projects/{ProjectCover,ProjectAction,HomeProjectPreview,ProjectCard}.vue
 │   │   ├── data/home/             # 首頁三份 local Preview JSON
 │   │   ├── api/
@@ -265,8 +265,10 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - Detail 使用與 Project Card 一致的 Vue `Transition` hooks，依實際 `scrollHeight` 執行 320ms 高度、透明度與輕微位移動畫，完成後恢復 `height: auto`，並支援 `prefers-reduced-motion`。
 - 每段 Experience 來自 `backend/data/portfolio/experience/` 下的獨立 slug JSON，由 repository 動態掃描並依 `start_date` 新到舊排序；新增經歷不需修改既有 JSON。
 - Logo filename 經 `utils/experienceLogos.js` 映射到 Vite-imported assets。
-- Timeline 尚未實作；Card 是獨立元件，沒有 Timeline DOM、狀態或動畫，未來可由頁面外層加入 Timeline column 而不改變 Card 內部資料流。
-- 目前是詳細頁初版：分檔資料、完整 API、基本狀態與單卡收合／展開已接通，但內容校稿、Timeline 與更完整的可用性驗證仍待後續處理。
+- Timeline 第一版由獨立 `Timeline.vue` 實作，不屬於 `JourneyCard.vue`。它依 API Experience 的 `start_date`／`end_date` 自動建立 nodes，並以單一連續垂直線串接；新增 Experience JSON 時會跟隨 API list 自動增加。
+- `ExperienceView.vue` 同時管理 `expandedExperienceSlug` 與 hover 用的 `activeExperienceSlug`，負責同步 Card 與 Timeline node；`JourneyCard.vue` 不知道 Timeline 的存在。
+- Prototype Timeline 在 Desktop 顯示於 Cards 左側，Tablet 縮小，Mobile（≤768px）暫時隱藏。第一版高度固定，不隨 Card detail 展開，且不包含 segment stretch animation 或 glow segment。
+- 目前是詳細頁初版：分檔資料、完整 API、單卡收合／展開與 Timeline Prototype 已接通，但內容校稿、Timeline 動態 segment 與更完整的可用性驗證仍待後續處理。
 
 ### 6.4 `/project`
 
@@ -297,6 +299,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 
 - `DetailPageHeader.vue`：三個詳細頁共用 Breadcrumb、唯一 `h1` 與 description。
 - `HomeJourneyItem.vue` / `JourneyCard.vue`：首頁 Preview 與 API-driven 詳細 Journey 分離。
+- `Timeline.vue`：詳細 Journey 專用的 data-driven Timeline Prototype；只 render line/nodes 並 emit hover/focus state，不包含 Card 或展開邏輯。
 - `ProjectCover.vue`：首頁與詳細 Projects 共用的 160×100、16:10 cover／placeholder。
 - `ProjectAction.vue`：首頁與詳細 Projects 共用 Live／Source／Internal 判斷與外部連結語意。
 - `HomeProjectPreview.vue` / `ProjectCard.vue`：首頁與詳細 Projects 分離，並共用 `ProjectCover.vue`。
@@ -684,7 +687,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 
 - **About 正式內容**：將六個 `Coming soon.` sections 補成正式個人與工程介紹。
 - **About API 整合**：現有 `/api/v1/about` 已完成，但只回傳 `paragraphs`；需先決定 section-based contract，再把 `/about` 接回 API。這不是缺少 endpoint，而是 schema 與頁面結構尚未對齊。
-- **Experience 詳細內容**：三份 slug JSON、聚合 API 與單卡收合／展開已存在；仍需內容校稿、公開資訊確認、Timeline 與詳細頁視覺整理。
+- **Experience 詳細內容**：三份 slug JSON、聚合 API、單卡收合／展開與固定高度 Timeline Prototype 已存在；仍需內容校稿、公開資訊確認、Timeline segment stretch/glow 與詳細頁視覺整理。
 - **Project 詳細內容**：三份 slug JSON、API、完整欄位與單卡收合／展開互動已存在；仍需內容校稿、公開資訊確認、Showcase、架構圖與詳細頁視覺整理。
 - **Homepage Project screenshots**：三張 future paths 已設定，但實體 `.webp` 尚未加入，`image_ready` 仍為 false。
 - **Homepage Project 資料挑選**：目前固定維護三筆 local JSON，尚無自動排序／選取規則；需人工確認哪些作品最適合 recruiter-first 首頁。

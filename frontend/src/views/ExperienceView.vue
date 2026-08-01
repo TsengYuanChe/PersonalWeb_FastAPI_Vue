@@ -2,15 +2,27 @@
 import { onMounted, ref } from 'vue'
 import { getExperience } from '@/api/contentApi'
 import JourneyCard from '@/components/experience/JourneyCard.vue'
+import Timeline from '@/components/experience/Timeline.vue'
 import DetailPageHeader from '@/components/layout/DetailPageHeader.vue'
 
 const experiences = ref([])
 const loading = ref(true)
 const error = ref('')
 const expandedExperienceSlug = ref(null)
+const activeExperienceSlug = ref(null)
 
 function toggleExperience(slug) {
   expandedExperienceSlug.value = expandedExperienceSlug.value === slug ? null : slug
+}
+
+function activateExperience(slug) {
+  activeExperienceSlug.value = slug
+}
+
+function deactivateExperience(slug) {
+  if (activeExperienceSlug.value === slug) {
+    activeExperienceSlug.value = null
+  }
 }
 
 onMounted(async () => {
@@ -56,14 +68,30 @@ onMounted(async () => {
       No experience entries are available yet.
     </div>
 
-    <div v-else>
-      <JourneyCard
-        v-for="experience in experiences"
-        :key="experience.slug"
-        :experience="experience"
-        :expanded="expandedExperienceSlug === experience.slug"
-        @toggle="toggleExperience"
+    <div v-else class="journey-page-layout">
+      <Timeline
+        :experiences="experiences"
+        :active-slug="activeExperienceSlug"
+        @activate="activateExperience"
+        @deactivate="deactivateExperience"
       />
+
+      <div class="journey-card-list">
+        <div
+          v-for="experience in experiences"
+          :key="experience.slug"
+          class="journey-card-list__item"
+          :class="{ 'is-active': activeExperienceSlug === experience.slug }"
+          @mouseenter="activateExperience(experience.slug)"
+          @mouseleave="deactivateExperience(experience.slug)"
+        >
+          <JourneyCard
+            :experience="experience"
+            :expanded="expandedExperienceSlug === experience.slug"
+            @toggle="toggleExperience"
+          />
+        </div>
+      </div>
     </div>
   </section>
 </template>

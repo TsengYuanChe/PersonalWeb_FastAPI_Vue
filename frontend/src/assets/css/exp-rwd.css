@@ -5,6 +5,21 @@
 
 /* ---------- Tablet (max-width: 1024px) ---------- */
 @media (max-width: 1024px) {
+  .journey-page-layout {
+    --journey-timeline-row-height: 150px;
+    grid-template-columns: 24px minmax(0, 1fr);
+    column-gap: 20px;
+  }
+
+  .journey-timeline {
+    width: 24px;
+  }
+
+  .journey-timeline__node {
+    width: 9px;
+    height: 9px;
+  }
+
   .journey-card {
     padding: 1.5rem 1.3rem;
   }
@@ -21,6 +36,14 @@
 
 /* ---------- Mobile (max-width: 768px) ---------- */
 @media (max-width: 768px) {
+
+  .journey-page-layout {
+    display: block;
+  }
+
+  .journey-timeline {
+    display: none;
+  }
 
   /* Exp card spacing */
   #exp {
