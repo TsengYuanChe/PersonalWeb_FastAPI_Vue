@@ -1,0 +1,32 @@
+{
+  "slug": "nchu-bachelor",
+  "category": "Undergraduate Education",
+  "title": "Department of Chemistry — Bachelor’s",
+  "organization": "National Chung Hsing University",
+  "role": "Undergraduate Researcher",
+  "location": "",
+  "start_date": "2017-09",
+  "end_date": "2021-06",
+  "period": "Sep 2017 — Jun 2021",
+  "summary": "Studied organic synthesis, experimental design, and catalytic reaction optimization.",
+  "logo": "nchu.png",
+  "skills": ["MATLAB", "Origin", "Organic Synthesis", "Experimental Design", "Method Development", "Data Analysis"],
+  "description": [
+    "Conducted research under <a href=\"https://arspb.nstc.gov.tw/NSCWebFront/modules/talentSearch/talentSearch.do?action=initBasic&rsNo=5c0c516dd31d4d83aae898bdd5835add&LANG=chi\" target=\"_blank\">Prof. Chin-Fa Lee</a>, a well-known scholar in organometallic catalysis and former department chair.",
+    "Focused on experimental design, organic synthesis, methodology development, and reaction optimization to identify effective catalytic systems.",
+    "Processed and visualized analytical data using Origin and MATLAB, including results obtained from GC-MS and HPLC, for quantitative and qualitative chemical analysis.",
+    "Developed practical laboratory skills in synthesis planning, catalyst evaluation, reaction monitoring, and scientific data interpretation."
+  ],
+  "responsibilities": [
+    "Plan and conduct organic synthesis and catalyst-evaluation experiments.",
+    "Monitor reactions and analyze GC-MS and HPLC results.",
+    "Process, visualize, and interpret experimental data with Origin and MATLAB."
+  ],
+  "highlights": [
+    "Applied experimental design and method development to catalytic reaction optimization.",
+    "Built a foundation in structured investigation, quantitative analysis, and scientific communication."
+  ],
+  "projects": [],
+  "technologies": ["MATLAB", "Origin", "GC-MS", "HPLC"],
+  "gpa": "GPA: 3.8 / 4.3"
+}

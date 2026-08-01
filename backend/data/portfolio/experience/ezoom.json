@@ -1,0 +1,34 @@
+{
+  "slug": "ezoom",
+  "category": "Professional Experience",
+  "title": "Software Development Engineer — RDSS",
+  "organization": "eZoom Information, Inc.",
+  "role": "Software Engineer",
+  "location": "",
+  "start_date": "2025-07",
+  "end_date": null,
+  "period": "Jul 2025 — Present",
+  "summary": "Building and maintaining full-stack systems for government maritime and rescue platforms.",
+  "logo": "ezoom.png",
+  "skills": ["C#", ".NET 6/8", "FastAPI", "Vue", "MSSQL", "PostgreSQL", "Docker", "CI/CD", "Windows Server (IIS)", "System Analysis and Design"],
+  "description": [
+    "Serving as a research and development substitute service (RDSS) engineer, participating in full-stack development across government-related maritime information platforms.",
+    "Implemented frontend features using Vue, Kendo UI, and legacy cshtml Razor pages, ensuring smooth migration and compatibility between new and existing systems.",
+    "Developed backend services using .NET (C#) as the primary stack, supplemented with Python-based FastAPI microservices for automation, data processing, and API integrations.",
+    "Designed and managed databases in both MSSQL and PostgreSQL, including schema design, stored procedures, query optimization, and data migration planning based on system analysis (SA) documentation.",
+    "Handled deployment and infrastructure tasks involving IIS configuration, CI/CD pipelines, Docker image builds, and server-side troubleshooting to ensure stable production releases.",
+    "Collaborated with cross-functional teams to deliver end-to-end features—from system analysis and architecture planning, to development, testing, documentation, release, and post-deployment maintenance."
+  ],
+  "responsibilities": [
+    "Develop and maintain frontend and backend features across established production systems.",
+    "Integrate APIs and data workflows across Vue, .NET, FastAPI, MSSQL, and PostgreSQL services.",
+    "Support deployment, troubleshooting, documentation, and post-release maintenance."
+  ],
+  "highlights": [
+    "Delivered end-to-end features while maintaining compatibility with existing systems.",
+    "Worked across application, database, deployment, and production-support boundaries."
+  ],
+  "projects": [],
+  "technologies": ["C#", ".NET 6/8", "FastAPI", "Vue", "MSSQL", "PostgreSQL", "Docker", "CI/CD", "IIS"],
+  "gpa": null
+}

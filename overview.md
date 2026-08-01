@@ -1,6 +1,6 @@
 # adamtseng.com 專案現況總覽
 
-> 更新日期：2026-07-27
+> 更新日期：2026-08-01
 > 盤點基準：repository 當前實際程式碼，而非 README、舊架構文件或先前版本。
 > 目的：讓未讀過程式碼的工程師快速理解網站定位、資訊架構、資料流、部署方式與大改版風險。
 
@@ -113,7 +113,10 @@ PersonalWeb_Flask_Vue/
 │   │   └── content.py             # About / Experience / Project models
 │   ├── data/
 │   │   ├── profile/about.json
-│   │   ├── profile/experience.json
+│   │   ├── portfolio/experience/  # 每段完整 Journey 各一份 slug JSON
+│   │   │   ├── ezoom.json
+│   │   │   ├── nycu-master.json
+│   │   │   └── nchu-bachelor.json
 │   │   └── portfolio/projects/     # 每個完整 Project 各一份 slug JSON
 │   │       ├── mris.json
 │   │       ├── personal-portfolio.json
@@ -135,7 +138,7 @@ PersonalWeb_Flask_Vue/
 │   │   │   └── ProjectView.vue
 │   │   ├── components/
 │   │   │   ├── layout/DetailPageHeader.vue
-│   │   │   ├── experience/{HomeJourneyItem,ExperienceCard}.vue
+│   │   │   ├── experience/{HomeJourneyItem,JourneyCard}.vue
 │   │   │   └── projects/{ProjectCover,ProjectAction,HomeProjectPreview,ProjectCard}.vue
 │   │   ├── data/home/             # 首頁三份 local Preview JSON
 │   │   ├── api/
@@ -257,9 +260,13 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - Breadcrumb：`HOME > JOURNEY`，主標題 `Journey`。
 - mount 後呼叫 `GET /api/v1/experience`。
 - 提供 loading、error、empty、success 四種狀態。
-- `ExperienceCard.vue` 顯示 logo、position、duration、location、GPA、HTML details、skills。
+- `JourneyCard.vue` 完全由 backend Experience object 建立；Summary Header 顯示 logo、title、organization、summary、role、period，Description、Responsibilities、Highlights、Projects、Skills／Technologies 與 Additional Details 只在展開時 render。
+- Journey Cards 預設全部收合；展開狀態由 `ExperienceView.vue` 以單一 `expandedExperienceSlug` 管理，因此同一時間最多只有一張展開。整個 Summary Header 可點擊，More/Less Detail button 提供鍵盤操作、`aria-expanded` 與 `aria-controls`。
+- Detail 使用與 Project Card 一致的 Vue `Transition` hooks，依實際 `scrollHeight` 執行 320ms 高度、透明度與輕微位移動畫，完成後恢復 `height: auto`，並支援 `prefers-reduced-motion`。
+- 每段 Experience 來自 `backend/data/portfolio/experience/` 下的獨立 slug JSON，由 repository 動態掃描並依 `start_date` 新到舊排序；新增經歷不需修改既有 JSON。
 - Logo filename 經 `utils/experienceLogos.js` 映射到 Vite-imported assets。
-- 目前是詳細頁初版：完整 API 資料與基本狀態已接通，但內容校稿、視覺一致性與更完整的可用性驗證仍待後續處理。
+- Timeline 尚未實作；Card 是獨立元件，沒有 Timeline DOM、狀態或動畫，未來可由頁面外層加入 Timeline column 而不改變 Card 內部資料流。
+- 目前是詳細頁初版：分檔資料、完整 API、基本狀態與單卡收合／展開已接通，但內容校稿、Timeline 與更完整的可用性驗證仍待後續處理。
 
 ### 6.4 `/project`
 
@@ -289,7 +296,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 ### 7.1 共用元件
 
 - `DetailPageHeader.vue`：三個詳細頁共用 Breadcrumb、唯一 `h1` 與 description。
-- `HomeJourneyItem.vue` / `ExperienceCard.vue`：首頁與詳細 Journey 分離。
+- `HomeJourneyItem.vue` / `JourneyCard.vue`：首頁 Preview 與 API-driven 詳細 Journey 分離。
 - `ProjectCover.vue`：首頁與詳細 Projects 共用的 160×100、16:10 cover／placeholder。
 - `ProjectAction.vue`：首頁與詳細 Projects 共用 Live／Source／Internal 判斷與外部連結語意。
 - `HomeProjectPreview.vue` / `ProjectCard.vue`：首頁與詳細 Projects 分離，並共用 `ProjectCover.vue`。
@@ -380,7 +387,7 @@ Desktop social links 位於 Sidebar 底部；Mobile 則以 App template 中的 f
 | 首頁 Journey Preview | `frontend/src/data/home/experiences.json` | HomeJourneyItem |
 | 首頁 Projects Preview | `frontend/src/data/home/projects.json` | HomeProjectPreview |
 | 完整 About JSON | `backend/data/profile/about.json` | About API；目前頁面內容未使用 |
-| 完整 Experience JSON | `backend/data/profile/experience.json` | Experience API/detail page |
+| 完整 Experience JSON | `backend/data/portfolio/experience/{ezoom,nycu-master,nchu-bachelor}.json` | Experience API/detail page |
 | 完整 Projects JSON | `backend/data/portfolio/projects/{mris,personal-portfolio,mamatoya}.json` | Projects API/detail page |
 | Experience logos | `frontend/src/assets/images/exp/*.png` | Vite asset imports |
 | Future project screenshots | 預定 `frontend/public/images/projects/covers/*.webp` | 目前檔案尚不存在 |
@@ -457,12 +464,15 @@ AboutData
 
 ExperienceData
 └── experience: ExperienceItem[]
-    ├── details: string[]
-    ├── duration: string
+    ├── slug / category: string
+    ├── title / organization / role: string
     ├── location: string
-    ├── position: string
-    ├── skills: string[]
-    ├── logo?: string | null
+    ├── start_date: string
+    ├── end_date?: string | null
+    ├── period / summary / logo: string
+    ├── skills / technologies: string[]
+    ├── description / responsibilities / highlights: string[]
+    ├── projects: string[]
     └── gpa?: string | null
 
 ProjectData
@@ -488,6 +498,8 @@ ProjectData
 ```
 
 `GET /api/projects` 與 `GET /api/v1/projects` 會依 repository 的固定順序讀取並逐筆以 `ProjectItem` 驗證；`GET /api/projects/{slug}` 使用相同 repository 與 schema，不建立第二套 loader。三個 Project 的 `showcase` 目前都是空陣列，但 `ShowcaseItem` 已定義 image、image_alt 與選填 caption，供後續加入公開素材。
+
+`GET /api/experience` 與 `GET /api/v1/experience` 共用相同 repository/service aggregation：repository 動態讀取 `portfolio/experience/*.json`，service 逐筆以 `ExperienceItem` 驗證並組成 Experience list。現況沒有 `GET /api/experience/{slug}` endpoint。
 
 首頁 Projects Preview schema 是獨立的前端 schema，不應與 backend `ProjectItem` 混用。
 
@@ -619,7 +631,6 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - `/about` 六個 sections 全部是 `Coming soon.`。
 - 三張 Project screenshots 尚未存在；首頁 `image_ready` 與 backend `cover_ready` 全為 false，三份 backend `showcase` 亦為空陣列。
 - Backend About API 仍只有 `paragraphs`，無法直接表達六個 section 的 slug/title/order。
-- Backend experience 第一筆 position 有 `Developnment` 拼字錯誤。
 
 ### 14.2 Frontend debt
 
@@ -663,6 +674,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 | Home/Detail summary duplication | 首頁小型 Preview JSON 與 backend Project summary 需人工同步；完整 detail 僅存在 backend | 文案、tags、links 漂移 |
 | JSON → Pydantic → Vue | 詳細頁 contract跨三層 | 欄位 rename、optional semantics、HTML rendering |
 | Experience logo mapping | Backend只給 filename，frontend hard-code imports | 新增 logo需同時改 JSON、檔案與 mapping |
+| Experience folder aggregation | Repository 會自動發現新 slug JSON，但 logo 仍由 frontend mapping，排序依 `start_date` 字串 | 新增資料需使用一致日期格式並補 logo mapping |
 | Project images | JSON path + `image_ready` + public asset | 檔名或 flag錯誤會顯示 placeholder |
 | Deploy-time API base | URL baked into frontend bundle | backend service/domain/region更名需重建 frontend |
 
@@ -672,7 +684,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 
 - **About 正式內容**：將六個 `Coming soon.` sections 補成正式個人與工程介紹。
 - **About API 整合**：現有 `/api/v1/about` 已完成，但只回傳 `paragraphs`；需先決定 section-based contract，再把 `/about` 接回 API。這不是缺少 endpoint，而是 schema 與頁面結構尚未對齊。
-- **Experience 詳細內容**：API 與完整資料已存在；仍需校稿、修正拼字、確認公開資訊與優化初版詳細頁呈現。
+- **Experience 詳細內容**：三份 slug JSON、聚合 API 與單卡收合／展開已存在；仍需內容校稿、公開資訊確認、Timeline 與詳細頁視覺整理。
 - **Project 詳細內容**：三份 slug JSON、API、完整欄位與單卡收合／展開互動已存在；仍需內容校稿、公開資訊確認、Showcase、架構圖與詳細頁視覺整理。
 - **Homepage Project screenshots**：三張 future paths 已設定，但實體 `.webp` 尚未加入，`image_ready` 仍為 false。
 - **Homepage Project 資料挑選**：目前固定維護三筆 local JSON，尚無自動排序／選取規則；需人工確認哪些作品最適合 recruiter-first 首頁。

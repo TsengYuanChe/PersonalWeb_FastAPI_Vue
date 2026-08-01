@@ -1,11 +1,12 @@
 from fastapi import HTTPException
 
 from repositories.content_repository import (
+    read_experiences_with_timestamps,
     read_json_with_timestamp,
     read_project_with_timestamp,
     read_projects_with_timestamps,
 )
-from schemas.content import ProjectItem
+from schemas.content import ExperienceItem, ProjectItem
 
 
 def get_legacy_content(filename):
@@ -30,7 +31,11 @@ def get_about_legacy():
 
 
 def get_experience_legacy():
-    return get_legacy_content("profile/experience.json")
+    experiences, updated_at = _get_validated_experiences()
+    return {
+        "experience": experiences,
+        "updated_at": updated_at,
+    }
 
 
 def get_projects_legacy():
@@ -46,7 +51,14 @@ def get_about_v1():
 
 
 def get_experience_v1():
-    return get_v1_content("profile/experience.json")
+    experiences, updated_at = _get_validated_experiences()
+    return {
+        "data": {"experience": experiences},
+        "meta": {
+            "updated_at": updated_at,
+            "version": "v1",
+        },
+    }
 
 
 def get_projects_v1():
@@ -76,3 +88,12 @@ def _get_validated_projects():
 
 def _validate_project(project):
     return ProjectItem.model_validate(project)
+
+
+def _get_validated_experiences():
+    experiences, updated_at = read_experiences_with_timestamps()
+    validated = [
+        ExperienceItem.model_validate(experience).model_dump(mode="json")
+        for experience in experiences
+    ]
+    return validated, updated_at

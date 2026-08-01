@@ -10,12 +10,23 @@ class AboutData(BaseModel):
 
 
 class ExperienceItem(BaseModel):
-    details: list[str]
-    duration: str
+    slug: str
+    category: str
+    title: str
+    organization: str
+    role: str
     location: str
-    position: str
+    start_date: str
+    end_date: Optional[str] = None
+    period: str
+    summary: str
+    logo: str
     skills: list[str]
-    logo: Optional[str] = None
+    description: list[str]
+    responsibilities: list[str]
+    highlights: list[str]
+    projects: list[str]
+    technologies: list[str]
     gpa: Optional[str] = None
 
 

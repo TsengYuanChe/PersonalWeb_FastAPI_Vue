@@ -9,95 +9,180 @@
   margin-top: 10px;
 }
 
-/* Experience Card Layout */
-.exp-card {
-  padding: 20px 25px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  transition: 0.25s ease;
+/* Journey Card Layout */
+.journey-card {
+  margin-bottom: 2.2rem;
+  padding: 1.8rem 1.6rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  transition: 0.3s ease;
+  backdrop-filter: blur(8px);
 }
-  
-.exp-card:hover {
+
+.journey-card:last-child {
+  margin-bottom: -0.5rem;
+}
+
+.journey-card:hover {
   background: rgba(255, 255, 255, 0.06);
-  transform: translateY(-3px);
+  border-color: rgba(80, 180, 255, 0.25);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  transform: translateY(-4px);
 }
 
-.exp-card a {
-  color: rgba(255, 255, 255, 0.6);
-  text-decoration: none;
+.journey-card__header {
+  display: grid;
+  grid-template-areas: "media main meta";
+  grid-template-columns: 112px minmax(0, 1fr) max-content;
+  align-items: stretch;
+  column-gap: 32px;
+  cursor: pointer;
 }
 
-.exp-card a:hover {
-  color: #fff;
-  border-bottom-color: rgba(255, 255, 255, 0.6);
-}
-  
-/* Details list */
-.exp-detail-list li {
-  margin-bottom: 6px;
+.journey-card__media {
+  grid-area: media;
+  align-self: start;
+  min-width: 0;
 }
 
-/* EXP tag container */
-.exp-tag-group {
+.journey-card__logo-wrapper {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px 14px;      /* ↑ 垂直 12px，水平 16px，讓排版更舒服 */
+  align-items: center;
+  justify-content: center;
+  width: 112px;
+  height: 100px;
+}
+
+.journey-card__logo {
+  display: block;
+  max-width: 78px;
+  max-height: 78px;
+  object-fit: contain;
+}
+
+.journey-card__logo[src*="ezoom"] {
+  max-width: 92px;
+  max-height: 92px;
+}
+
+.journey-card__main {
+  grid-area: main;
+  align-self: start;
+  min-width: 0;
+}
+
+.journey-card__heading h2 {
+  margin-top: 0;
+  overflow-wrap: anywhere;
+}
+
+.journey-card__organization {
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.journey-card__summary {
+  max-width: 48rem;
+  line-height: 1.5;
+}
+
+.journey-card__meta {
+  grid-area: meta;
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  min-width: 0;
+  color: var(--site-secondary);
+  text-align: right;
+}
+
+.journey-card__meta-group {
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.journey-card__meta-item {
+  max-width: 14rem;
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.journey-card__toggle-group {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: auto;
+  padding-top: 0.75rem;
+}
+
+.journey-card__toggle {
+  padding: 0;
+  border: 0;
+  color: var(--site-secondary);
+  background: transparent;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.journey-card__toggle:hover {
+  color: #9bbcff;
+}
+
+.journey-card__toggle:focus-visible {
+  border-radius: 2px;
+  outline: 2px solid #9bbcff;
+  outline-offset: 4px;
+}
+
+.journey-card__details {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding-top: 1.5rem;
+}
+
+.journey-details-enter-active,
+.journey-details-leave-active {
+  overflow: hidden;
+  transition:
+    height 320ms ease,
+    opacity 240ms ease,
+    transform 320ms ease;
+}
+
+.journey-detail-section + .journey-detail-section {
   margin-top: 1rem;
 }
-  
-/* Skill tags */
-.exp-skill-tag {
-  display: inline-block;
-  padding: 8px 18px;
-  border-radius: 14px;
 
-  font-size: 0.9rem;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-
-  background: rgba(150, 120, 255, 0.12);
-  border: 1px solid rgba(180, 150, 255, 0.32);
-  color: #e3d7ff;
-  
-  backdrop-filter: blur(6px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
-  
-  white-space: nowrap; /* 防止換行破版 */
-  transition: all 0.25s ease;
+.journey-card__details li {
+  margin-bottom: 0.4rem;
 }
 
-.exp-skill-tag:hover {
-  background: rgba(200, 180, 255, 0.22);
-  border-color: rgba(220, 200, 255, 0.55);
-  box-shadow: 0 4px 14px rgba(120, 90, 255, 0.35);
-  transform: translateY(-3px);
+.journey-card__details a {
+  color: rgba(255, 255, 255, 0.68);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
-/* Logo images */
-.exp-logo {
-  width: 60px;
-  height: 60px;
-  object-fit: contain;
-  border-radius: 10px;
-  padding: 0;
-  background: none;
-  box-shadow: none;
+.journey-card__details a:hover {
+  color: #fff;
 }
 
-.exp-logo-wrapper {
-  width: 64px;        /* 固定容器寬 */
-  height: 64px;
-  flex-shrink: 0;     /* 避免壓縮 */
+.journey-card__skills {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-.exp-logo[src*="ezoom"] {
-  width: 85px;
-  height: 85px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 /* Home route sections */
@@ -224,6 +309,16 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .journey-card,
+  .journey-details-enter-active,
+  .journey-details-leave-active {
+    transition-duration: 1ms;
+  }
+
+  .journey-card:hover {
+    transform: none;
+  }
+
   .home-journey-link span {
     transition: none;
   }

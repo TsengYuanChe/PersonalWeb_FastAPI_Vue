@@ -8,14 +8,13 @@ BACKEND_ROOT = Path(__file__).resolve().parents[1]
 if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
-from schemas.content import AboutResponse, ExperienceResponse, ProjectItem
+from schemas.content import AboutResponse, ExperienceItem, ProjectItem
 
 
 def main():
     data_root = BACKEND_ROOT / "data"
     file_to_schema = {
         "profile/about.json": (AboutResponse, True),
-        "profile/experience.json": (ExperienceResponse, True),
         "portfolio/projects/mris.json": (ProjectItem, False),
         "portfolio/projects/personal-portfolio.json": (ProjectItem, False),
         "portfolio/projects/mamatoya.json": (ProjectItem, False),
@@ -27,6 +26,15 @@ def main():
         p.relative_to(data_root).as_posix()
         for p in data_root.rglob("*.json")
     )
+
+    experience_files = [
+        path for path in json_files if path.startswith("portfolio/experience/")
+    ]
+    for rel_path in experience_files:
+        file_to_schema[rel_path] = (ExperienceItem, False)
+
+    if not experience_files:
+        errors.append("No Experience JSON files found in portfolio/experience/")
 
     # Fail unknown files to keep validation deterministic.
     unknown_files = [f for f in json_files if f not in file_to_schema]

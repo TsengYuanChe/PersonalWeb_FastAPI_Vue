@@ -1,12 +1,17 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { getExperience } from '@/api/contentApi'
-import ExperienceCard from '@/components/experience/ExperienceCard.vue'
+import JourneyCard from '@/components/experience/JourneyCard.vue'
 import DetailPageHeader from '@/components/layout/DetailPageHeader.vue'
 
 const experiences = ref([])
 const loading = ref(true)
 const error = ref('')
+const expandedExperienceSlug = ref(null)
+
+function toggleExperience(slug) {
+  expandedExperienceSlug.value = expandedExperienceSlug.value === slug ? null : slug
+}
 
 onMounted(async () => {
   try {
@@ -52,10 +57,12 @@ onMounted(async () => {
     </div>
 
     <div v-else>
-      <ExperienceCard
+      <JourneyCard
         v-for="experience in experiences"
-        :key="`${experience.location}-${experience.position}-${experience.duration}`"
+        :key="experience.slug"
         :experience="experience"
+        :expanded="expandedExperienceSlug === experience.slug"
+        @toggle="toggleExperience"
       />
     </div>
   </section>

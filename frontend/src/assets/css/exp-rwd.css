@@ -3,6 +3,22 @@
    Based on your original exp.css design
 ============================================ */
 
+/* ---------- Tablet (max-width: 1024px) ---------- */
+@media (max-width: 1024px) {
+  .journey-card {
+    padding: 1.5rem 1.3rem;
+  }
+
+  .journey-card__header {
+    grid-template-columns: 96px minmax(0, 1fr) max-content;
+    column-gap: 24px;
+  }
+
+  .journey-card__logo-wrapper {
+    width: 96px;
+  }
+}
+
 /* ---------- Mobile (max-width: 768px) ---------- */
 @media (max-width: 768px) {
 
@@ -11,41 +27,73 @@
     margin-bottom: 2rem !important;
   }
 
-  .exp-card {
-    padding: 18px 16px;
+  .journey-card {
+    padding: 1.2rem 1.1rem;
+    border-radius: 14px;
+    margin-bottom: 1.6rem;
   }
 
-  /* Logo */
-  .exp-logo {
-    width: 52px !important;
-    height: 52px !important;
+  .journey-card:hover {
+    box-shadow: none;
+    transform: none;
   }
 
-  .exp-logo-wrapper {
-    width: 56px !important;
-    height: 56px !important;
+  .journey-card__header {
+    grid-template-areas:
+      "media"
+      "heading"
+      "meta"
+      "summary"
+      "toggle";
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 14px;
   }
 
-  /* Position + duration */
-  .exp-card h4 {
-    font-size: 1.05rem !important;
+  .journey-card__main,
+  .journey-card__meta {
+    display: contents;
   }
 
-  .exp-card span {
-    font-size: 0.8rem !important;
+  .journey-card__media {
+    grid-area: media;
   }
 
-  .exp-detail-list li {
-    font-size: 0.85rem;
-    line-height: 1.45;
-    margin-bottom: 6px;
+  .journey-card__logo-wrapper {
+    justify-content: flex-start;
+    width: 72px;
+    height: 64px;
   }
 
-  .exp-skill-tag {
-    padding: 5px 12px !important;
-    font-size: 0.78rem !important;
-    margin-right: 6px;
-    margin-bottom: 6px;
+  .journey-card__logo,
+  .journey-card__logo[src*="ezoom"] {
+    max-width: 64px;
+    max-height: 64px;
+  }
+
+  .journey-card__heading {
+    grid-area: heading;
+  }
+
+  .journey-card__heading h2 {
+    font-size: 1.1rem;
+  }
+
+  .journey-card__meta-group {
+    grid-area: meta;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .journey-card__summary {
+    grid-area: summary;
+    margin-top: 0 !important;
+  }
+
+  .journey-card__toggle-group {
+    grid-area: toggle;
+    margin-top: 0;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
   }
 
   .home-journey-row {
@@ -96,21 +144,5 @@
 
   .home-journey-link {
     font-size: 0.82rem;
-  }
-}
-
-/* ---------- Tablet (max-width: 1024px) ---------- */
-@media (max-width: 1024px) {
-  .exp-card {
-    padding: 18px 20px;
-  }
-
-  .exp-skill-tag {
-    font-size: 0.8rem;
-    padding: 5px 12px;
-  }
-
-  .exp-detail-list li {
-    font-size: 0.95rem;
   }
 }
