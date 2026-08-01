@@ -6,13 +6,8 @@
 /* ---------- Tablet (max-width: 1024px) ---------- */
 @media (max-width: 1024px) {
   .journey-page-layout {
-    --journey-timeline-row-height: 150px;
     grid-template-columns: 24px minmax(0, 1fr);
     column-gap: 20px;
-  }
-
-  .journey-timeline {
-    width: 24px;
   }
 
   .journey-timeline__node {
@@ -43,6 +38,14 @@
 
   .journey-timeline {
     display: none;
+  }
+
+  .journey-card-list {
+    display: block;
+  }
+
+  .journey-card-list__item > .journey-card {
+    margin-bottom: 1.6rem;
   }
 
   /* Exp card spacing */

@@ -23,10 +23,19 @@ function eventLabel(experience, boundary) {
 
 <template>
   <aside class="journey-timeline" aria-label="Journey timeline">
-    <div class="journey-timeline__line" aria-hidden="true"></div>
+    <div
+      class="journey-timeline__line"
+      :style="{ gridRow: `1 / span ${experiences.length}` }"
+      aria-hidden="true"
+    ></div>
 
     <ol class="journey-timeline__periods">
-      <li v-for="experience in experiences" :key="experience.slug" class="journey-timeline__period">
+      <li
+        v-for="(experience, index) in experiences"
+        :key="experience.slug"
+        class="journey-timeline__period"
+        :style="{ gridRow: index + 1 }"
+      >
         <button
           type="button"
           class="journey-timeline__node journey-timeline__node--end"

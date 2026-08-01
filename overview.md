@@ -267,7 +267,8 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - Logo filename 經 `utils/experienceLogos.js` 映射到 Vite-imported assets。
 - Timeline 第一版由獨立 `Timeline.vue` 實作，不屬於 `JourneyCard.vue`。它依 API Experience 的 `start_date`／`end_date` 自動建立 nodes，並以單一連續垂直線串接；新增 Experience JSON 時會跟隨 API list 自動增加。
 - `ExperienceView.vue` 同時管理 `expandedExperienceSlug` 與 hover 用的 `activeExperienceSlug`，負責同步 Card 與 Timeline node；`JourneyCard.vue` 不知道 Timeline 的存在。
-- Prototype Timeline 在 Desktop 顯示於 Cards 左側，Tablet 縮小，Mobile（≤768px）暫時隱藏。第一版高度固定，不隨 Card detail 展開，且不包含 segment stretch animation 或 glow segment。
+- Timeline 與 Journey Cards 由 `ExperienceView.vue` 放入相同的 CSS Grid rows；收合狀態下，每段 Timeline 的上下 node 由 row 實際高度對齊對應 Card 的上下邊界，Card 間距則共用父 Grid 的 `row-gap` 並由連續主線跨越。
+- Timeline 不再以 Desktop `160px`／Tablet `150px` 固定 period height 推算位置。Desktop 顯示於 Cards 左側、Tablet 縮小、Mobile（≤768px）暫時隱藏；展開後的 Timeline stretch 與 glow segment 仍未實作。
 - 目前是詳細頁初版：分檔資料、完整 API、單卡收合／展開與 Timeline Prototype 已接通，但內容校稿、Timeline 動態 segment 與更完整的可用性驗證仍待後續處理。
 
 ### 6.4 `/project`

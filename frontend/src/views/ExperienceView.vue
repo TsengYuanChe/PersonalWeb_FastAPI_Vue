@@ -78,10 +78,11 @@ onMounted(async () => {
 
       <div class="journey-card-list">
         <div
-          v-for="experience in experiences"
+          v-for="(experience, index) in experiences"
           :key="experience.slug"
           class="journey-card-list__item"
           :class="{ 'is-active': activeExperienceSlug === experience.slug }"
+          :style="{ gridRow: index + 1 }"
           @mouseenter="activateExperience(experience.slug)"
           @mouseleave="deactivateExperience(experience.slug)"
         >
