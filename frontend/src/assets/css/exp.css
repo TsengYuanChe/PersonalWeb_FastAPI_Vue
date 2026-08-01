@@ -70,10 +70,29 @@
   min-width: 0;
 }
 
+.journey-timeline__segment {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  z-index: 1;
+  width: 1px;
+  background: transparent;
+  transform: translateX(-50%);
+  transition:
+    background-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.journey-timeline__segment.is-active {
+  background: rgba(210, 224, 255, 0.9);
+  box-shadow: 0 0 6px rgba(155, 188, 255, 0.3);
+}
+
 .journey-timeline__node {
   position: absolute;
   left: 50%;
-  z-index: 1;
+  z-index: 2;
   width: 11px;
   height: 11px;
   padding: 0;
@@ -82,6 +101,9 @@
   background: #9bbcff;
   cursor: pointer;
   transform: translateX(-50%);
+  transition:
+    background-color 220ms ease,
+    box-shadow 220ms ease;
 }
 
 .journey-timeline__node--end {
@@ -97,6 +119,7 @@
 .journey-timeline__node:hover,
 .journey-timeline__node.is-active {
   background: #d2e0ff;
+  box-shadow: 0 0 6px rgba(155, 188, 255, 0.3);
 }
 
 .journey-timeline__node:focus-visible {
@@ -396,6 +419,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .journey-section,
+  .journey-timeline__segment,
+  .journey-timeline__node,
   .journey-details-enter-active,
   .journey-details-leave-active {
     transition-duration: 1ms;

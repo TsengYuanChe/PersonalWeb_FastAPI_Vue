@@ -268,8 +268,10 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - Timeline 第一版由獨立 `Timeline.vue` 實作，不屬於 `JourneySection.vue`。它依 API Experience 的 `start_date`／`end_date` 自動建立 nodes，並以單一連續垂直線串接；新增 Experience JSON 時會跟隨 API list 自動增加。
 - `ExperienceView.vue` 同時管理 `expandedExperienceSlug` 與 hover 用的 `activeExperienceSlug`，負責同步 Section 與 Timeline node；`JourneySection.vue` 不知道 Timeline 的存在。
 - Timeline 與 Journey Sections 由 `ExperienceView.vue` 放入相同的 CSS Grid rows；收合狀態下，每段 Timeline 的上下 node 由 row 實際高度對齊對應 Section 的上下邊界，Section 間距則共用父 Grid 的 `row-gap` 並由連續主線跨越。
-- Timeline 不再以 Desktop `160px`／Tablet `150px` 固定 period height 推算位置。Desktop 顯示於 Sections 左側、Tablet 縮小、Mobile（≤768px）暫時隱藏；展開後的 Timeline stretch 與 glow segment 仍未實作。
+- Timeline 不再以 Desktop `160px`／Tablet `150px` 固定 period height 推算位置。Desktop 顯示於 Sections 左側、Tablet 縮小、Mobile（≤768px）暫時隱藏；展開後的 Timeline stretch 仍未實作。
 - Journey 詳細頁採用 **Timeline + Sections**，不沿用 Project Page 的 Card design language。每段 Journey 以極低對比 surface 輔助閱讀，移除外框、陰影、浮起與 hover border，主要透過 spacing 與淡 divider 區隔；Timeline 是頁面的主要視覺結構。
+- Hover 或 keyboard focus Journey Section，以及 hover 或 focus 該 period 任一 Timeline node 時，`ExperienceView.vue` 以同一個 `activeExperienceSlug` 同步高亮上下 nodes 與中間 period segment。Timeline 保留完整低對比 base line，active segment 只覆蓋 Experience row，Experience 間的 connector gap 不高亮。
+- Segment interaction 只有 220ms 顏色與克制 glow transition，支援 `prefers-reduced-motion`；目前沒有掃光、stretch、scroll animation 或與 expanded state 同步。
 - 目前是詳細頁初版：分檔資料、完整 API、單段收合／展開與 Timeline Prototype 已接通，但內容校稿、Timeline 動態 segment 與更完整的可用性驗證仍待後續處理。
 
 ### 6.4 `/project`
@@ -689,7 +691,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 
 - **About 正式內容**：將六個 `Coming soon.` sections 補成正式個人與工程介紹。
 - **About API 整合**：現有 `/api/v1/about` 已完成，但只回傳 `paragraphs`；需先決定 section-based contract，再把 `/about` 接回 API。這不是缺少 endpoint，而是 schema 與頁面結構尚未對齊。
-- **Experience 詳細內容**：三份 slug JSON、聚合 API、單卡收合／展開與固定高度 Timeline Prototype 已存在；仍需內容校稿、公開資訊確認、Timeline segment stretch/glow 與詳細頁視覺整理。
+- **Experience 詳細內容**：三份 slug JSON、聚合 API、單段收合／展開、shared-row Timeline 與 active segment glow 已存在；仍需內容校稿、公開資訊確認、Timeline stretch 與詳細頁視覺整理。
 - **Project 詳細內容**：三份 slug JSON、API、完整欄位與單卡收合／展開互動已存在；仍需內容校稿、公開資訊確認、Showcase、架構圖與詳細頁視覺整理。
 - **Homepage Project screenshots**：三張 future paths 已設定，但實體 `.webp` 尚未加入，`image_ready` 仍為 false。
 - **Homepage Project 資料挑選**：目前固定維護三筆 local JSON，尚無自動排序／選取規則；需人工確認哪些作品最適合 recruiter-first 首頁。

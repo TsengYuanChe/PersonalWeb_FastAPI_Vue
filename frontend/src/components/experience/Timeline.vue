@@ -19,6 +19,22 @@ function eventLabel(experience, boundary) {
   const event = boundary === 'end' ? 'end' : 'start'
   return `${experience.organization} ${event}: ${date}`
 }
+
+function handlePeriodFocusOut(event, slug) {
+  if (event.currentTarget.contains(event.relatedTarget)) {
+    return
+  }
+
+  emit('deactivate', slug)
+}
+
+function handlePeriodMouseLeave(event, slug) {
+  if (event.currentTarget.contains(document.activeElement)) {
+    return
+  }
+
+  emit('deactivate', slug)
+}
 </script>
 
 <template>
@@ -35,26 +51,27 @@ function eventLabel(experience, boundary) {
         :key="experience.slug"
         class="journey-timeline__period"
         :style="{ gridRow: index + 1 }"
+        @mouseenter="emit('activate', experience.slug)"
+        @mouseleave="handlePeriodMouseLeave($event, experience.slug)"
+        @focusin="emit('activate', experience.slug)"
+        @focusout="handlePeriodFocusOut($event, experience.slug)"
       >
+        <div
+          class="journey-timeline__segment"
+          :class="{ 'is-active': activeSlug === experience.slug }"
+          aria-hidden="true"
+        ></div>
         <button
           type="button"
           class="journey-timeline__node journey-timeline__node--end"
           :class="{ 'is-active': activeSlug === experience.slug }"
           :aria-label="eventLabel(experience, 'end')"
-          @mouseenter="emit('activate', experience.slug)"
-          @mouseleave="emit('deactivate', experience.slug)"
-          @focus="emit('activate', experience.slug)"
-          @blur="emit('deactivate', experience.slug)"
         ></button>
         <button
           type="button"
           class="journey-timeline__node journey-timeline__node--start"
           :class="{ 'is-active': activeSlug === experience.slug }"
           :aria-label="eventLabel(experience, 'start')"
-          @mouseenter="emit('activate', experience.slug)"
-          @mouseleave="emit('deactivate', experience.slug)"
-          @focus="emit('activate', experience.slug)"
-          @blur="emit('deactivate', experience.slug)"
         ></button>
       </li>
     </ol>

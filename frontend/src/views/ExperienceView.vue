@@ -25,6 +25,22 @@ function deactivateExperience(slug) {
   }
 }
 
+function handleExperienceFocusOut(event, slug) {
+  if (event.currentTarget.contains(event.relatedTarget)) {
+    return
+  }
+
+  deactivateExperience(slug)
+}
+
+function handleExperienceMouseLeave(event, slug) {
+  if (event.currentTarget.contains(document.activeElement)) {
+    return
+  }
+
+  deactivateExperience(slug)
+}
+
 onMounted(async () => {
   try {
     const response = await getExperience()
@@ -84,7 +100,9 @@ onMounted(async () => {
           :class="{ 'is-active': activeExperienceSlug === experience.slug }"
           :style="{ gridRow: index + 1 }"
           @mouseenter="activateExperience(experience.slug)"
-          @mouseleave="deactivateExperience(experience.slug)"
+          @mouseleave="handleExperienceMouseLeave($event, experience.slug)"
+          @focusin="activateExperience(experience.slug)"
+          @focusout="handleExperienceFocusOut($event, experience.slug)"
         >
           <JourneySection
             :experience="experience"
