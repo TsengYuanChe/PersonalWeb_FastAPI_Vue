@@ -217,9 +217,11 @@ PersonalWeb_Flask_Vue/
 - `detail`：不 render Sidebar/footer，使用 full-width `.detail-main` 與一般 document scrolling。
 - `<RouterView />` 是所有頁面的 render outlet。
 
-`App.vue` 仍擁有 Last updated 的單次 About API loading、route-aware shell、hash scroll、route watcher 與全域 effects；同一個 `updatedTime` 以 props 傳給 `HomeSidebar` 與 `MobileFooter`。兩者共用 `SocialLinks.vue`，而 social／resume URLs 統一由 `config/siteLinks.js` 管理。
+`App.vue` 仍擁有 Last updated 的單次 About API loading、route-aware shell、route watcher 與全域 effects；同一個 `updatedTime` 以 props 傳給 `HomeSidebar` 與 `MobileFooter`。兩者共用 `SocialLinks.vue`，而 social／resume URLs 統一由 `config/siteLinks.js` 管理。
 
 Home header、mobile footer 與 viewport 的量測由 `useHomeViewportMetrics({ profilePart, mobileFooter })` 管理。App 只提供 template refs；composable 負責 `--header-height`、`--footer-height`、`--real-vh`、初次 mounted 更新與 resize listener lifecycle，不使用 document selectors。
+
+Home main scroll與 hash section定位由 `useHomeSectionNavigation({ route, mainContent })` 管理。App 提供 `<main>` template ref，並在既有 mounted／route watcher時機呼叫 `scrollToCurrentSection()`；無 hash回到頂部，有 hash則維持依 target offset扣除 `#about` top spacing的既有演算法。
 
 `useScrollProxy()` 只在 `.layout-container--home` 存在時攔截 wheel 並轉送給 `.main-content`。`useMouseGlow()` 仍在 App 全域啟用，Mobile 由 CSS 隱藏。
 
@@ -246,7 +248,7 @@ Home header、mobile footer 與 viewport 的量測由 `useHomeViewportMetrics({ 
 | Projects (`#projects`) | `HomeProjectPreview.vue` | `src/data/home/projects.json` | 不依賴 API |
 | Last updated | App Sidebar/footer | `GET /api/v1/about` 的 `meta.updated_at` | **依賴 API** |
 
-Sidebar navigation 使用 Vue Router hash links回到首頁的 `#about`、`#experiences`、`#projects`。`App.vue` 以 imperative `scrollTo()` 對齊相同頂部空間。
+Sidebar navigation 使用 Vue Router hash links回到首頁的 `#about`、`#experiences`、`#projects`。`useHomeSectionNavigation()` 以 imperative `scrollTo()` 對齊相同頂部空間。
 
 Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避免 Cloud Run backend cold start 阻塞首頁主要內容。首頁仍會為 Last updated 呼叫 About API，但該請求失敗時只顯示 `—`，不會阻止三個 Preview sections render。
 
@@ -709,7 +711,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 ### 14.2 Frontend debt
 
 - Global CSS 共 8 個檔案且依載入順序生效；仍有大量 Bootstrap utility、`!important`、散落顏色與重複數值。
-- `App.vue` 仍負責 route-aware layout、Last updated loading、hash scroll、route watcher、全域 effects 與 RouterView；Home Sidebar／Mobile Footer markup及 viewport resize lifecycle 已抽離。
+- `App.vue` 仍負責 route-aware layout、Last updated loading、route watcher、全域 effects 與 RouterView；Home Sidebar／Mobile Footer markup、viewport resize lifecycle與 Home hash scroll implementation已抽離。
 - `useScrollProxy` 攔截首頁所有 wheel events；nested scrolling、鍵盤與觸控行為需要持續驗證。
 - Mobile 首頁高度依 DOM measurement 與三個 runtime CSS variables，受 orientation、browser chrome、內容高度影響。
 - `useMouseGlow` 每次 mousemove 查 DOM 並讀取尺寸；詳細頁 Desktop 仍會啟用。
@@ -740,7 +742,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 
 | 區域 | 耦合原因 | 可能影響 |
 |---|---|---|
-| `App.vue` + `main-rwd.css` | route meta、hash scroll selectors、template refs 與 mobile measurements | 首頁 scrolling、detail layout、mobile viewport |
+| `App.vue` + Home composables + `main-rwd.css` | route meta、template refs、section offsets 與 mobile measurements | 首頁 scrolling、detail layout、mobile viewport |
 | `.main-content` | 首頁是內層 scroll；詳細頁是 document flow | wheel proxy、route scroll、anchor spacing |
 | Global CSS | Home/detail selectors共存在同一 cascade | 修改 `.project-card`、`.exp-card` 或 Bootstrap class可能跨頁影響 |
 | Home/Detail summary duplication | 首頁小型 Preview JSON 與 backend Project summary 需人工同步；完整 detail 僅存在 backend | 文案、tags、links 漂移 |

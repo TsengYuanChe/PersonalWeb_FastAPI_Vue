@@ -4,6 +4,7 @@ import { RouterView, useRoute } from 'vue-router'
 import { getAbout } from '@/api/contentApi'
 import HomeSidebar from '@/components/layout/HomeSidebar.vue'
 import MobileFooter from '@/components/layout/MobileFooter.vue'
+import { useHomeSectionNavigation } from '@/composables/useHomeSectionNavigation'
 import { useHomeViewportMetrics } from '@/composables/useHomeViewportMetrics'
 import { useMouseGlow } from '@/composables/useMouseGlow'
 import { useScrollProxy } from '@/composables/useScrollProxy'
@@ -13,8 +14,10 @@ const isHomeLayout = computed(() => route.meta.layout === 'home')
 const updatedTime = ref('—')
 const profilePart = ref(null)
 const mobileFooter = ref(null)
+const mainContent = ref(null)
 let hasLoadedUpdatedTime = false
 
+const { scrollToCurrentSection } = useHomeSectionNavigation({ route, mainContent })
 const { updateLayoutVars } = useHomeViewportMetrics({ profilePart, mobileFooter })
 useScrollProxy()
 useMouseGlow()
@@ -31,21 +34,9 @@ async function loadUpdatedTime() {
   }
 }
 
-function scrollMainContent() {
-  const container = document.querySelector('.main-content')
-  if (!container) return
-
-  const target = route.hash ? document.querySelector(route.hash) : null
-  const homeTopSpacing = document.querySelector('#about')?.offsetTop || 0
-  container.scrollTo({
-    top: target ? Math.max(target.offsetTop - homeTopSpacing, 0) : 0,
-    behavior: route.hash ? 'smooth' : 'auto',
-  })
-}
-
 onMounted(async () => {
   await nextTick()
-  scrollMainContent()
+  scrollToCurrentSection()
 })
 
 watch(
@@ -53,7 +44,7 @@ watch(
   async () => {
     await nextTick()
     if (route.name === 'home') await loadUpdatedTime()
-    scrollMainContent()
+    scrollToCurrentSection()
     updateLayoutVars()
   },
   { immediate: true },
@@ -69,7 +60,7 @@ watch(
     >
       <HomeSidebar v-if="isHomeLayout" ref="profilePart" :updated-time="updatedTime" />
 
-      <main class="main-content" :class="{ 'detail-main': !isHomeLayout }">
+      <main ref="mainContent" class="main-content" :class="{ 'detail-main': !isHomeLayout }">
         <RouterView />
       </main>
 
