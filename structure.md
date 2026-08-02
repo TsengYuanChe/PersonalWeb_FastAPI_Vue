@@ -243,7 +243,7 @@ frontend/
 ### Frontend entry, shell, and routing
 
 - `src/main.js` — **runtime entry**：建立 Vue app、安裝 router、依固定順序全域載入 Bootstrap、icons 與八個自訂 CSS 檔。
-- `src/App.vue` — **runtime application shell**：依 route meta 切換 Home／Detail layout，組合 HomeSidebar／main／MobileFooter；擁有 Last updated API request、route watcher、global effects 與 RouterView，將 `updatedTime` 下傳給兩個 Home shell children，並提供 navigation／viewport composables所需 template refs。
+- `src/App.vue` — **runtime application shell**：依 route meta 切換 Home／Detail layout，組合 HomeSidebar／main／MobileFooter；擁有 Last updated API request、route watcher、global effects 與 RouterView，將 `updatedTime` 下傳給兩個 Home shell children，並提供 navigation／viewport／scroll proxy composables所需 template refs與 Home enablement。
 - `src/router/index.js` — **runtime routing**：history-mode `/`、`/about`、`/experience`、`/project`；route meta 指定 layout；route change 回到頂部。沒有 catch-all 404 route。
 
 ### Views
@@ -295,7 +295,7 @@ frontend/
 - `useHomeSectionNavigation.js`：接收 reactive route與 Home main DOM ref，依既有 `#about` top spacing計算 Home／Journey／Projects hash位置，公開 `scrollToCurrentSection()`；不擁有 watcher、router instance或其他 shell state。
 - `useHomeViewportMetrics.js`：接收 HomeSidebar／MobileFooter template refs，更新 `--header-height`、`--footer-height`、`--real-vh`，並擁有 mounted 初次量測與 resize listener cleanup；不使用 DOM selectors。
 - `useMouseGlow.js`：全域 mousemove cursor glow；由 `App.vue` 使用。
-- `useScrollProxy.js`：首頁 wheel event 轉送到 `.main-content`；由 `App.vue` 使用。
+- `useScrollProxy.js`：接收 main content template ref與 Home-layout `enabled` computed；mounted時註冊 non-passive window wheel listener，只在啟用時轉送相同 `deltaY` 並呼叫 `preventDefault()`，unmount時解除 listener，不使用 DOM selectors。
 - `ProjectCard.vue` 的 `safeArray` 是其 detail template 專用 local helper；沒有建立只有單一 consumer 的 composable 或 utility。
 - `experienceLogos.js`：backend logo filename 到 Vite image imports 的固定 mapping。
 - `projectSearch.js`：Project public text collection、whole-token search、exact filters、dynamic option sorting。
@@ -438,7 +438,7 @@ CSS import order is part of current behavior. Feature files contain both Home an
 
 - **Global CSS coupling**：八個 custom CSS 全域載入，約 2,200 行；Home/detail feature styles 混在同一檔案並依 cascade/import order 生效。
 - **Large orchestration files**：`ExperienceView.vue`、`Timeline.vue`、`ProjectCard.vue` 都超過 200 行，同時負責多種狀態、rendering 或 transition concerns。
-- **App shell coupling**：Sidebar、Mobile Footer、重複 link data、viewport resize lifecycle與 Home section scroll implementation已抽離；`App.vue` 仍同時管理 route-aware layout、Last updated、route watcher、global effects 與 RouterView。
+- **App shell coupling**：Sidebar、Mobile Footer、重複 link data、viewport resize lifecycle、Home section scroll implementation與 scroll proxy selector coupling已抽離；`App.vue` 仍同時管理 route-aware layout、Last updated、route watcher、global effects 與 RouterView。
 - **No frontend stores/types/tests**：沒有 store、TypeScript types、unit/component/E2E test directories；資料 shape 主要由 backend schema、JSON 與 runtime property access約束。
 - **API naming**：frontend 沒有 `services/`；`contentApi.js` 實際扮演 service layer，而 `client.js` 保留唯一使用中的 low-level `requestRaw()` transport。
 - **Synchronous JSON I/O**：每個 content request 都同步開檔、parse JSON、validate；沒有 cache。

@@ -223,7 +223,7 @@ Home header、mobile footer 與 viewport 的量測由 `useHomeViewportMetrics({ 
 
 Home main scroll與 hash section定位由 `useHomeSectionNavigation({ route, mainContent })` 管理。App 提供 `<main>` template ref，並在既有 mounted／route watcher時機呼叫 `scrollToCurrentSection()`；無 hash回到頂部，有 hash則維持依 target offset扣除 `#about` top spacing的既有演算法。
 
-`useScrollProxy()` 只在 `.layout-container--home` 存在時攔截 wheel 並轉送給 `.main-content`。`useMouseGlow()` 仍在 App 全域啟用，Mobile 由 CSS 隱藏。
+`useScrollProxy({ container: mainContent, enabled: scrollProxyEnabled })` 接收 App 提供的 `<main>` template ref 與 Home-layout computed；只在 Home 啟用時攔截 wheel，並將相同的 `deltaY` 轉送到 main content。Composable 不再查找 `.main-content` 或 Home layout selector。`useMouseGlow()` 仍在 App 全域啟用，Mobile 由 CSS 隱藏。
 
 ### 5.3 首頁設計原則
 
@@ -712,7 +712,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 
 - Global CSS 共 8 個檔案且依載入順序生效；仍有大量 Bootstrap utility、`!important`、散落顏色與重複數值。
 - `App.vue` 仍負責 route-aware layout、Last updated loading、route watcher、全域 effects 與 RouterView；Home Sidebar／Mobile Footer markup、viewport resize lifecycle與 Home hash scroll implementation已抽離。
-- `useScrollProxy` 攔截首頁所有 wheel events；nested scrolling、鍵盤與觸控行為需要持續驗證。
+- `useScrollProxy` 已移除 DOM selector coupling，但啟用時仍攔截首頁所有 wheel events；nested scrolling、鍵盤與觸控行為需要持續驗證。
 - Mobile 首頁高度依 DOM measurement 與三個 runtime CSS variables，受 orientation、browser chrome、內容高度影響。
 - `useMouseGlow` 每次 mousemove 查 DOM 並讀取尺寸；詳細頁 Desktop 仍會啟用。
 - `requestRaw()` 無 timeout/abort/retry，且先呼叫 `res.json()`；非 JSON error response 會變成 parse error。

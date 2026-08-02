@@ -1,22 +1,19 @@
-import { onMounted, onBeforeUnmount } from "vue";
+import { onBeforeUnmount, onMounted } from 'vue'
 
-export function useScrollProxy() {
-  let contentArea = null;
-
+export function useScrollProxy({ container, enabled }) {
   const handleWheel = (e) => {
-    if (!contentArea || !document.querySelector('.layout-container--home')) return;
-    contentArea.scrollTop += e.deltaY; // 滾動 right content
-    e.preventDefault(); // 禁止 body 捲動
-  };
+    const contentArea = container.value
+    if (!contentArea || !enabled.value) return
+    contentArea.scrollTop += e.deltaY // 滾動 right content
+    e.preventDefault() // 禁止 body 捲動
+  }
 
   onMounted(() => {
-    contentArea = document.querySelector(".main-content");
-
     // 全域監聽，不只 sidebar
-    window.addEventListener("wheel", handleWheel, { passive: false });
-  });
+    window.addEventListener('wheel', handleWheel, { passive: false })
+  })
 
   onBeforeUnmount(() => {
-    window.removeEventListener("wheel", handleWheel);
-  });
+    window.removeEventListener('wheel', handleWheel)
+  })
 }

@@ -11,6 +11,7 @@ import { useScrollProxy } from '@/composables/useScrollProxy'
 
 const route = useRoute()
 const isHomeLayout = computed(() => route.meta.layout === 'home')
+const scrollProxyEnabled = computed(() => isHomeLayout.value)
 const updatedTime = ref('—')
 const profilePart = ref(null)
 const mobileFooter = ref(null)
@@ -19,7 +20,7 @@ let hasLoadedUpdatedTime = false
 
 const { scrollToCurrentSection } = useHomeSectionNavigation({ route, mainContent })
 const { updateLayoutVars } = useHomeViewportMetrics({ profilePart, mobileFooter })
-useScrollProxy()
+useScrollProxy({ container: mainContent, enabled: scrollProxyEnabled })
 useMouseGlow()
 
 async function loadUpdatedTime() {
