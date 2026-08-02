@@ -221,6 +221,7 @@ frontend/
 ├── jsconfig.json
 ├── nginx.conf
 ├── Dockerfile
+├── .dockerignore
 ├── .env.development
 ├── .env.production
 └── setup/editor/documentation files
@@ -293,14 +294,15 @@ frontend/
 
 ### Frontend build and deployment files
 
-- `package.json` / `package-lock.json`：npm scripts、runtime/dev dependencies、lockfile。
-- `vite.config.js`：Vue、Vue DevTools plugins 與 `@` alias。
+- `package.json` / `package-lock.json`：npm scripts、實際使用的 runtime/dev dependencies 與 reproducible install lockfile；HTTP 使用 browser Fetch，不依賴 Axios。
+- `vite.config.js`：Vue plugin、development-only Vue DevTools plugin 與 `@` alias；production build 不載入 DevTools plugin。
 - `eslint.config.js`：ESLint flat config。
 - `.prettierrc.json`：formatting rules；format script只針對 `src/`。
 - `jsconfig.json`：JavaScript tooling 與 alias；不是 TypeScript config。
 - `.env.development` / `.env.production`：tracked build-time API base configuration；不要在文件記錄實際值。
 - `nginx.conf`：production static server 與 SPA `try_files` fallback。
-- `Dockerfile`：Node build stage + Nginx runtime stage。
+- `Dockerfile`：Node build stage 以 `npm ci` 按 lockfile 安裝，再由 Nginx runtime stage 提供 build output。
+- `.dockerignore`：排除 local `node_modules`、`dist`、coverage、editor metadata、logs 與 npm/Vite caches，縮小 Docker build context。
 
 ## Data Flow
 
@@ -423,12 +425,11 @@ CSS import order is part of current behavior. Feature files contain both Home an
 - **App shell coupling**：`App.vue` 同時管理 layout、Sidebar、navigation、social links、Last updated、DOM measurements、hash scrolling 與 RouterView。
 - **No frontend stores/types/tests**：沒有 store、TypeScript types、unit/component/E2E test directories；資料 shape 主要由 backend schema、JSON 與 runtime property access約束。
 - **API naming**：frontend 沒有 `services/`；`contentApi.js` 實際扮演 service layer，而 `client.js` 保留唯一使用中的 low-level `requestRaw()` transport。
-- **Unused dependency**：`axios` 存在於 dependencies，但 source code 使用 native Fetch，沒有 Axios imports。
 - **Synchronous JSON I/O**：每個 content request 都同步開檔、parse JSON、validate；沒有 cache。
 - **Duplicated content responsibility**：首頁三份 local preview JSON 與 backend detail summary 需人工同步，可能產生文案、links、tags 漂移。
 - **Rich HTML handling**：首頁 About preview 與 Experience detail 使用 `v-html`；沒有 frontend sanitization layer。
 - **Router gaps**：沒有 catch-all 404 route；route URLs 使用既有 singular `/experience`、`/project` naming。
-- **Build/deployment debt**：frontend Docker 使用 `npm install` 而非 `npm ci`；Vue DevTools plugin 未依 mode關閉；images 只推 mutable `latest` tag。
+- **Build/deployment debt**：images 只推 mutable `latest` tag；Node build image 仍使用未固定 patch 的 `node:20`。
 - **Environment configuration**：frontend environment files被 tracked，API base 在 build time寫入 bundle；任何環境切換都需 rebuild。
 - **Documentation duplication**：root 有多份中英文 architecture/features/system-design/TODO 文件，內容可能彼此或與 runtime code不同步。
 - **Generated local artifacts**：workspace 可見 `backend/venv/`、`__pycache__/`、`.DS_Store`，目前均未 tracked；仍可能增加掃描噪音。
@@ -450,7 +451,7 @@ CSS import order is part of current behavior. Feature files contain both Home an
 2. 將 Project detail section rendering與 transition hooks從 `ProjectCard.vue` 適度拆分，但維持 card API。
 3. 決定首頁 preview 與 backend summary 的 single-source-of-truth 或產生流程。
 4. 補齊 request timeout、abort 與 non-JSON error handling。
-5. 清理 Axios dependency 與 placeholder directories/files。
+5. 清理 placeholder directories/files。
 
 ### Priority Low
 

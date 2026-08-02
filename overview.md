@@ -82,10 +82,9 @@ backend/data/**/*.json
 | Bootstrap | `^5.3.7` | spacing、flex、typography utilities | `frontend/src/main.js`、templates |
 | Bootstrap Icons | `^1.13.1` | social、status、external action icons | App 與詳細頁元件 |
 | Fetch API | Browser built-in | FastAPI client | `frontend/src/api/client.js` |
-| Axios | `^1.11.0` | **目前未被任何程式 import** | `frontend/package.json` |
 | ESLint | `^9.31.0` | JS/Vue lint | `frontend/eslint.config.js` |
 | Prettier | `3.6.2` | `src/` formatting | `.prettierrc.json` |
-| Vue DevTools plugin | `^8.0.0` | Vite devtools plugin；未依 mode 關閉 | `frontend/vite.config.js` |
+| Vue DevTools plugin | `^8.0.0` | 僅在 Vite development mode 啟用 | `frontend/vite.config.js` |
 
 **【程式碼事實】** 專案是 JavaScript，不是 TypeScript；只有 `jsconfig.json` alias 設定，沒有 `tsconfig` 或 project types。
 
@@ -179,6 +178,7 @@ PersonalWeb_Flask_Vue/
 │   ├── nginx.conf
 │   ├── package.json / package-lock.json
 │   ├── .env.development / .env.production
+│   ├── .dockerignore              # 排除 dependency、build output 與 local cache
 │   └── Dockerfile
 ├── AGENTS.md                       # agent 與 recruiter-first 產品方向
 ├── BACKEND.md                      # Backend architecture and maintenance guide
@@ -660,7 +660,7 @@ python backend/scripts/validate_content_schema.py
 
 ### 12.3 Docker
 
-- Frontend：`node:20` build stage 執行 `npm install` + `npm run build`，再複製到 `nginx:stable-alpine-slim`。
+- Frontend：`node:20` build stage 依 lockfile 執行 `npm ci` + `npm run build`，再複製到 `nginx:stable-alpine-slim`；`.dockerignore` 排除 local dependencies、build output、editor metadata、logs 與 caches。
 - Backend：`python:3.13.9`，先複製 requirements 以利用 dependency layer cache，再複製由 `.dockerignore` 過濾的 backend context；Uvicorn 綁定 `0.0.0.0:8080`，符合目前 Cloud Run `PORT=8080` 設定。
 - Frontend Nginx 對所有未知檔案 path fallback 到 `index.html`。
 
@@ -707,10 +707,8 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - `useMouseGlow` 每次 mousemove 查 DOM 並讀取尺寸；詳細頁 Desktop 仍會啟用。
 - `requestRaw()` 無 timeout/abort/retry，且先呼叫 `res.json()`；非 JSON error response 會變成 parse error。
 - 首頁 Profile 本地 JSON與詳細 Experience API內容使用 `v-html`；沒有 frontend sanitization。
-- Axios 目前沒有 consumer；dependency cleanup 留待後續獨立 phase。
 - 沒有 catch-all 404 route。
 - `index.html` 的 `lang` 為空，且缺少 description、canonical、Open Graph、Twitter card 與 structured data。
-- Vue DevTools plugin 沒有明確限制只在 development 使用。
 
 ### 14.3 Backend debt
 
@@ -727,7 +725,6 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - Images 只使用 mutable `latest` tag，缺少 commit SHA tag與明確 rollback artifact。
 - Backend image 使用完整 `python:3.13.9` 而非 slim variant；可在另一次 image compatibility 驗證後評估縮小。
 - Backend Docker `CMD` 固定使用 8080，與目前 Cloud Run 設定一致，但沒有動態讀取平台注入的 `$PORT`。
-- Frontend Docker 使用 `npm install` 而非 `npm ci`。
 - Cloud Run deploy command沒有在 repository 中設定 resource limits、autoscaling、health probe 或 unauthenticated policy。
 - Production API URL 是 build-time config，切換環境需要重新 build frontend。
 
