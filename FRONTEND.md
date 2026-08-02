@@ -8,7 +8,7 @@ The frontend intentionally uses two content strategies. Home preview content is 
 
 State remains local to the application shell or owning View. There is no global state management layer because the current pages do not share mutable domain state, authentication state, or a coordinated client cache. Rendering is component-based, with shared components introduced only where current reuse establishes a stable responsibility.
 
-This document describes frontend architecture, ownership boundaries, design principles, and maintenance philosophy. Refer to `overview.md` for whole-project architecture and page behavior, `structure.md` for the current repository tree and exact file ownership, and `FRONTEND_REVIEW.md` for the historical architecture review rather than current design authority.
+This document defines the frontend system design, architectural responsibilities, ownership boundaries, and long-term maintenance principles. It is the design authority for frontend responsibility decisions and should change only when those responsibilities or boundaries change. Refer to `overview.md` for whole-project architecture and page behavior, `structure.md` for the current repository tree and exact file ownership, and `FRONTEND_REVIEW.md` for the historical architecture review rather than current design authority.
 
 ## Design Principles
 
@@ -25,24 +25,21 @@ This document describes frontend architecture, ownership boundaries, design prin
 
 ## Architecture
 
-The primary responsibility flow is:
+The frontend is organized through explicit ownership relationships:
 
 ```text
-User
-  ↓
-Vue Router
-  ↓
-View
-  ├─→ Components
-  ├─→ Composable / Utility
-  └─→ Content API → Backend API
-                       ↓
-                 Normalized response
-                       ↓
-                     View
+App
+├── Vue Router
+│   └── Route View
+│       ├── Feature Components
+│       ├── Composables
+│       ├── Utilities
+│       └── Content API
+├── Layout Components
+└── Shell Composables
 ```
 
-The flow is coordinated by the View rather than treated as a strict rendering pipeline. Components render and emit intent, composables support reactive or lifecycle behavior, utilities provide pure calculations, and the Content API hides transport-envelope details from feature code.
+App owns the route-aware application shell without absorbing page responsibilities. Vue Router selects the owning View. The View coordinates its feature boundary and composes components, composables, utilities, and content access according to their respective contracts. Layout components and shell composables remain owned by App because their responsibilities span the application shell rather than a single feature.
 
 ### Application Shell
 
@@ -103,41 +100,11 @@ Shared components represent behavior or presentation that has multiple real cons
 
 ## Data Flow
 
-### Home Preview Content
+The frontend intentionally supports two presentation strategies. Home uses small bundled preview data so its primary content remains immediately available and independent of backend startup. That data is presentation-focused and is not a second source for complete detail content.
 
-```text
-Home View
-  ↓
-Local Preview JSON
-  ↓
-Preview Components
-  ↓
-Home Rendering
-```
+Detail pages use backend-owned structured content. Their Views own page-level orchestration while feature components render the prepared content. These strategies coexist because Home optimizes preview availability and detail pages preserve authoritative content ownership.
 
-Home preview content is intentionally small and bundled with the frontend. It supports immediate rendering without waiting for backend startup and contains only the summary information required by Home. Preview wording, selection, and ordering are frontend presentation responsibilities.
-
-Local preview data is not a second store for complete About, Journey, or Project details. Fields that represent the same public summary may require deliberate synchronization, while preview-specific wording may remain intentionally shorter.
-
-### Detail Content
-
-```text
-Detail View
-  ↓
-Content API
-  ↓
-Backend
-  ↓
-Normalized response
-  ↓
-View orchestration
-  ↓
-Feature Components
-```
-
-Detail pages request complete resource content from the backend. The Content API normalizes the backend response, the View owns request and page state, and feature components render the resulting content. Complete detail JSON is not maintained in the frontend.
-
-The two flows intentionally coexist: Home prioritizes bundled preview availability, while detail pages prioritize backend-owned structured content and maintainable resource contracts.
+Detailed request paths, normalization boundaries, Timeline processing, and rendering flows are defined in `DATAFLOW.md` rather than duplicated in this system design document.
 
 ## State Management
 
@@ -166,11 +133,9 @@ Presentation-specific reactive mapping remains with the component or View; only 
 
 ## Styling Architecture
 
-Frontend styles remain globally loaded and are organized through documented ownership rather than scoped modules. Global styles own design tokens, document and application shell rules, shared page primitives, and genuinely shared UI primitives. Feature styles own About, Journey, and Projects presentation respectively. Each responsive stylesheet owns only the responsive behavior of its matching global or feature responsibility.
+Frontend styling follows the same ownership boundaries as rendering. Global styles own application-wide foundations, shell behavior, and primitives with genuine cross-feature semantics. Feature styles own the presentation and responsive behavior of their feature. A rule becomes shared only when multiple consumers have the same responsibility and should evolve together; visual similarity alone does not establish shared ownership.
 
-Shared styling is based on actual cross-feature consumers with the same semantics. Similar-looking feature surfaces, controls, or interactions remain separate when they represent different responsibilities. Feature-specific variables remain with the owning feature; global variables are reserved for values shared by the application shell or multiple features.
-
-Because styles participate in one global cascade, import order and selector convention remain part of current behavior. Exact file ownership, responsive organization, and current risks are documented in `structure.md` and `overview.md`; this document does not duplicate a selector inventory.
+Styles remain globally loaded, so responsibility boundaries and predictable cascade behavior must be preserved when rules change. Exact stylesheet and selector-level ownership belongs in `structure.md`; whole-project styling context and risks belong in `overview.md`.
 
 ## Maintenance Guide
 
@@ -204,3 +169,16 @@ When frontend architecture or responsibility changes:
 - update `structure.md` for the actual repository tree and file-level ownership.
 
 `FRONTEND_REVIEW.md` remains a historical review and planning artifact rather than the source of current architecture. Avoid copying detailed file inventories or operational instructions into this document. If documentation disagrees with executable code, verify the current code and update each document within its stated responsibility.
+
+## Out of Scope
+
+`FRONTEND.md` intentionally does not document:
+
+- file-by-file or selector-level ownership, which belongs in `structure.md`;
+- runtime data movement and transformation paths, which belong in `DATAFLOW.md`;
+- deployment and operational context, which belong in `overview.md` and the relevant operational documentation;
+- build configuration and implementation artifacts, which are recorded by `structure.md` and their owning configuration files;
+- API contracts and backend resource design, which belong in `overview.md`, `structure.md`, and `BACKEND.md` according to scope;
+- implementation history, review findings, and refactor planning, which remain in `FRONTEND_REVIEW.md`.
+
+This document should remain stable through ordinary content and implementation updates. It changes when frontend system design, architectural responsibilities, or ownership boundaries change.
