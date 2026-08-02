@@ -145,6 +145,7 @@ PersonalWeb_Flask_Vue/
 │   │           ├── personal-portfolio.json
 │   │           └── mamatoya.json
 │   ├── scripts/validate_content_schema.py
+│   ├── .dockerignore              # 排除 venv/cache/bytecode 等非 runtime build context
 │   ├── requirements.txt
 │   └── Dockerfile
 ├── frontend/
@@ -659,7 +660,7 @@ python backend/scripts/validate_content_schema.py
 ### 12.3 Docker
 
 - Frontend：`node:20` build stage 執行 `npm install` + `npm run build`，再複製到 `nginx:stable-alpine-slim`。
-- Backend：`python:3.13.9`，安裝 requirements，以 Uvicorn 監聽 8080。
+- Backend：`python:3.13.9`，先複製 requirements 以利用 dependency layer cache，再複製由 `.dockerignore` 過濾的 backend context；Uvicorn 綁定 `0.0.0.0:8080`，符合目前 Cloud Run `PORT=8080` 設定。
 - Frontend Nginx 對所有未知檔案 path fallback 到 `index.html`。
 
 ### 12.4 GitHub Actions / Cloud Run
@@ -719,10 +720,13 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - Project visibility、hide、featured、public、archived 與分類篩選尚未設計或實作；目前固定依 repository mapping 顯示三筆。
 - `python-multipart` 已安裝但未使用。
 - 沒有 authentication、rate limiting、explicit cache headers 或 security headers。
+- FastAPI 使用預設 OpenAPI title/version metadata；不影響 runtime，但尚未提供 portfolio API 專屬描述。
 
 ### 14.4 Deployment debt
 
 - Images 只使用 mutable `latest` tag，缺少 commit SHA tag與明確 rollback artifact。
+- Backend image 使用完整 `python:3.13.9` 而非 slim variant；可在另一次 image compatibility 驗證後評估縮小。
+- Backend Docker `CMD` 固定使用 8080，與目前 Cloud Run 設定一致，但沒有動態讀取平台注入的 `$PORT`。
 - Frontend Docker 使用 `npm install` 而非 `npm ci`。
 - Cloud Run deploy command沒有在 repository 中設定 resource limits、autoscaling、health probe 或 unauthenticated policy。
 - Production API URL 是 build-time config，切換環境需要重新 build frontend。

@@ -41,6 +41,7 @@ backend/
 ├── main.py
 ├── requirements.txt
 ├── Dockerfile
+├── .dockerignore
 ├── setup.md
 ├── data/
 │   └── portfolio/
@@ -91,9 +92,10 @@ backend/
 
 ### Backend entry and runtime
 
-- `main.py` — **runtime**：建立 FastAPI app、設定 CORS、註冊 content/health routers，提供 root endpoint 與統一 JSON error envelopes。
+- `main.py` — **runtime**：建立 FastAPI app、設定 CORS、各註冊一次 About／Experience／Projects／Timeline／Health routers，提供 root endpoint、FastAPI 預設 docs/OpenAPI 與統一 JSON error envelopes。
 - `requirements.txt` — **build/runtime dependency manifest**：FastAPI、Uvicorn、Pydantic 等 pinned dependencies。
-- `Dockerfile` — **deployment build**：以 Python 3.13.9 建置，安裝 requirements，使用 Uvicorn 在 8080 啟動。
+- `Dockerfile` — **deployment build/runtime**：以 Python 3.13.9 建置；先複製並安裝 requirements，再複製 backend source；使用 Uvicorn 綁定 `0.0.0.0:8080`。
+- `.dockerignore` — **deployment build context filter**：排除 local virtual environments、Python bytecode/cache、tool caches、logs 與 `.DS_Store`，避免 `COPY . .` 納入非 runtime artifacts。
 - `setup.md` — **documentation**：backend local setup notes，不參與 runtime。
 
 ### `backend/data/portfolio/`
