@@ -57,9 +57,30 @@
   overflow-wrap: anywhere;
 }
 
-.about-page-placeholder {
+.about-page-section__paragraphs {
   margin: 8px 0 0;
+}
+
+.about-page-section__paragraphs p,
+.about-page-section__items {
   color: var(--site-secondary);
   font-size: 1rem;
   line-height: 1.45;
+}
+
+.about-page-section__paragraphs p {
+  margin: 0 0 10px;
+}
+
+.about-page-section__paragraphs p:last-child {
+  margin-bottom: 0;
+}
+
+.about-page-section__items {
+  margin: 10px 0 0;
+  padding-left: 1.2rem;
+}
+
+.about-page-section__items li + li {
+  margin-top: 4px;
 }

@@ -31,8 +31,12 @@
     font-size: 1.1rem;
   }
 
-  .about-page-placeholder {
+  .about-page-section__paragraphs {
     margin-top: 6px;
+  }
+
+  .about-page-section__paragraphs p,
+  .about-page-section__items {
     font-size: 0.9rem;
   }
 }

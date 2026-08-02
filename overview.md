@@ -29,7 +29,7 @@
 **【程式碼事實】** 網站目前有四個前端 route：
 
 1. `/`：首頁 Preview，包含 Profile、Journey、Projects。
-2. `/about`：About 詳細頁架構，目前六個 section 都是 `Coming soon.`。
+2. `/about`：About 詳細頁，從 FastAPI 動態載入六個結構化 sections。
 3. `/experience`：完整 Journey，從 FastAPI 載入。
 4. `/project`：完整 Projects，從 FastAPI 載入。
 
@@ -139,6 +139,7 @@ PersonalWeb_Flask_Vue/
 │   │   │   ├── ExperienceView.vue
 │   │   │   └── ProjectView.vue
 │   │   ├── components/
+│   │   │   ├── about/AboutSection.vue
 │   │   │   ├── layout/DetailPageHeader.vue
 │   │   │   ├── experience/{HomeJourneyItem,JourneySection,JourneyDetail,Timeline}.vue
 │   │   │   └── projects/{ProjectCover,ProjectAction,HomeProjectPreview,ProjectCard}.vue
@@ -252,8 +253,10 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - Header：`About Me` + 一行 description。
 - 正文最大寬度 880px。
 - Sections：Introduction、What I Do、Current Role、Engineering Approach、Technical Background、Current Focus。
-- 每個 section 目前僅顯示 `Coming soon.`。
-- **目前不呼叫 About API**；後端已提供保留 legacy `paragraphs` 並新增 `sections[{id,title,paragraphs,items}]` 的可擴充 contract，前端串接留待下一階段。
+- mount 後透過既有 `getAbout()` 呼叫 `GET /api/v1/about`，資料來源是 `backend/data/portfolio/about/about.json`。
+- `AboutView.vue` 提供 loading、error、empty、success 四種狀態，並依 API 順序動態 render `sections[]`。
+- `AboutSection.vue` 負責單一 section 的 title、paragraphs 與 optional items；不包含 API request、layout 或互動邏輯。
+- Backend 保留 legacy `paragraphs` 並提供 `sections[{id,title,paragraphs,items}]`；詳細頁只消費結構化 sections。
 
 ### 6.3 `/experience`
 
@@ -316,6 +319,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 ### 7.1 共用元件
 
 - `DetailPageHeader.vue`：三個詳細頁共用 Breadcrumb、唯一 `h1` 與 description。
+- `AboutSection.vue`：About 詳細頁的 data-driven section renderer，顯示 title、paragraphs 與 optional items。
 - `HomeJourneyItem.vue` / `JourneySection.vue` / `JourneyDetail.vue`：首頁 Preview、詳細頁 Summary Header 與展開 Detail 分離。
 - `Timeline.vue`：詳細 Journey 專用的 data-driven Timeline Prototype；只 render line/nodes 並 emit hover/focus state，不包含 Section 或展開邏輯。
 - `ProjectCover.vue`：首頁與詳細 Projects 共用的 160×100、16:10 cover／placeholder。
@@ -674,9 +678,8 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 
 ### 14.1 已知未完成內容
 
-- `/about` 六個 sections 全部是 `Coming soon.`。
+- `/about` 六個 sections 已由 API 提供初版正式內容，但仍需公開資訊確認與英文文案校稿。
 - 三張 Project screenshots 尚未存在；首頁 `image_ready` 與 backend `cover_ready` 全為 false，三份 backend `showcase` 亦為空陣列。
-- Backend About API 已具備結構化 sections，但 `/about` 仍是 frontend placeholder，尚未消費正式內容。
 
 ### 14.2 Frontend debt
 
@@ -728,8 +731,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 
 ### 16.1 目前內容 Roadmap
 
-- **About 正式內容**：將六個 `Coming soon.` sections 補成正式個人與工程介紹。
-- **About API 整合**：現有 `/api/v1/about` 已同時提供 backward-compatible `paragraphs` 與結構化 `sections`；下一步是讓 `/about` 取代 frontend placeholder 並加入 loading/error/empty states。
+- **About 內容校稿**：六個 sections 與 API 串接已完成；後續需確認公開範圍、英文文案與 items 的資訊密度。
 - **Experience 詳細內容**：三份 slug JSON、聚合 API、單段收合／展開、shared-row Timeline 與 active segment glow 已存在；仍需內容校稿、公開資訊確認、Timeline stretch 與詳細頁視覺整理。
 - **Project 詳細內容**：三份 slug JSON、API、完整欄位與單卡收合／展開互動已存在；仍需內容校稿、公開資訊確認、Showcase、架構圖與詳細頁視覺整理。
 - **Homepage Project screenshots**：三張 future paths 已設定，但實體 `.webp` 尚未加入，`image_ready` 仍為 false。
