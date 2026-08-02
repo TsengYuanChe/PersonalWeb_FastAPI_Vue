@@ -78,7 +78,10 @@ backend/
 ├── schemas/
 │   ├── __init__.py
 │   ├── common.py
-│   └── content.py
+│   ├── about.py
+│   ├── experience.py
+│   ├── project.py
+│   └── timeline.py
 ├── routers/
 │   ├── __init__.py
 │   └── v1/
@@ -136,12 +139,12 @@ backend/
 ### `backend/schemas/`
 
 - `common.py` — **runtime validation/serialization**：`Meta`、通用 `ApiResponse`。
-- `content.py` — **runtime validation/serialization**：
-  - About section/data/response models。
-  - Experience item/list/response models。
-  - Point/Duration Timeline Event discriminated union。
-  - Project summary/detail nested models 與 response。
-- 同一份 schema 也由 validation tooling 使用。
+- `about.py` — **runtime validation/serialization**：About section、data 與 response models。
+- `experience.py` — **runtime validation/serialization**：Experience item、list data 與 response models。
+- `project.py` — **runtime validation/serialization**：Project summary/detail nested models、showcase、challenge、item、data 與 response。
+- `timeline.py` — **runtime validation/serialization**：Point／Duration Timeline Event models、discriminated union、data 與 response。
+- `content.py` 已移除；目前沒有 compatibility wrapper、dead model 或 runtime consumer。
+- Resource schemas 同時供 runtime services/routers 與 content validation tooling 使用。
 
 ### `backend/routers/`
 
@@ -434,7 +437,6 @@ CSS import order is part of current behavior. Feature files contain both Home an
 - **Partially unused helper**：`useProjectHelpers.js` 只有 `safeArray` 被使用；featured/preview/link helpers 沒有 consumer，且格式與其他 source files 不一致。
 - **Unused dependency**：`axios` 存在於 dependencies，但 source code 使用 native Fetch，沒有 Axios imports。
 - **Synchronous JSON I/O**：每個 content request 都同步開檔、parse JSON、validate；沒有 cache。
-- **Centralized backend schema module**：resource routes/services 已拆分，但所有 content schemas 仍集中於單一 feature-agnostic file；新增頁面會持續擴大此 module。
 - **Placeholder backend packages**：`core/config.py`、`core/logging.py` 未實作；`data/content/.gitkeep` 沒有 runtime用途。
 - **Duplicated content responsibility**：首頁三份 local preview JSON 與 backend detail summary 需人工同步，可能產生文案、links、tags 漂移。
 - **Rich HTML handling**：首頁 About preview 與 Experience detail 使用 `v-html`；沒有 frontend sanitization layer。
@@ -459,10 +461,9 @@ CSS import order is part of current behavior. Feature files contain both Home an
 
 1. 拆分大型 Journey Timeline 計算、row orchestration 與 transition concerns，保留目前元件責任邊界。
 2. 將 Project detail section rendering與 transition hooks從 `ProjectCard.vue` 適度拆分，但維持 card API。
-3. 評估依 resource 拆分 backend schemas，或建立明確 content registry，避免 schema 單檔持續成長。
-4. 決定首頁 preview 與 backend summary 的 single-source-of-truth 或產生流程。
-5. 補齊 request timeout、abort、non-JSON error handling；移除未使用的 `request()` 或明確採用。
-6. 清理 `useProjectHelpers.js` 未使用 exports、Axios dependency與 placeholder directories/files。
+3. 決定首頁 preview 與 backend summary 的 single-source-of-truth 或產生流程。
+4. 補齊 request timeout、abort、non-JSON error handling；移除未使用的 `request()` 或明確採用。
+5. 清理 `useProjectHelpers.js` 未使用 exports、Axios dependency與 placeholder directories/files。
 
 ### Priority Low
 

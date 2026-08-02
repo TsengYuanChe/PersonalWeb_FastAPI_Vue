@@ -1,5 +1,5 @@
 from repositories.about_repository import read_about_with_timestamp
-from schemas.content import AboutData
+from schemas.about import AboutData
 
 
 def get_about_v1():

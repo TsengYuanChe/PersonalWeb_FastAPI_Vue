@@ -8,7 +8,10 @@ BACKEND_ROOT = Path(__file__).resolve().parents[1]
 if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
-from schemas.content import AboutResponse, ExperienceItem, ProjectItem, TimelineEventsData
+from schemas.about import AboutResponse
+from schemas.experience import ExperienceItem
+from schemas.project import ProjectItem
+from schemas.timeline import TimelineEventsData
 
 
 def main():

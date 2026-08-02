@@ -1,5 +1,5 @@
 from repositories.timeline_repository import read_timeline_events_with_timestamp
-from schemas.content import TimelineEventsData
+from schemas.timeline import TimelineEventsData
 
 
 def get_timeline_events_v1():

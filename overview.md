@@ -128,7 +128,10 @@ PersonalWeb_Flask_Vue/
 │   │   └── timeline_repository.py # Timeline Events path 與讀取
 │   ├── schemas/
 │   │   ├── common.py              # Meta / ApiResponse
-│   │   └── content.py             # About / Experience / Project models
+│   │   ├── about.py               # About section/data/response models
+│   │   ├── experience.py          # Experience item/data/response models
+│   │   ├── project.py             # Project nested/item/data/response models
+│   │   └── timeline.py            # Timeline union/data/response models
 │   ├── data/
 │   │   └── portfolio/              # 依 Portfolio page 分組的 backend content
 │   │       ├── about/about.json

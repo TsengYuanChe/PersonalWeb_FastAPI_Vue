@@ -4,7 +4,7 @@ from repositories.project_repository import (
     read_project_with_timestamp,
     read_projects_with_timestamps,
 )
-from schemas.content import ProjectItem
+from schemas.project import ProjectItem
 
 
 def get_projects_v1():

@@ -82,7 +82,7 @@ def health():
 
 ### 2.1 ✅ Introduce Pydantic response models
 - Short explanation: enforce schema consistency and type safety.
-- Current state: ✅ Implemented. Pydantic schema models are defined in `backend/schemas/common.py` and `backend/schemas/content.py`, and `/api/v1/*` routes use `response_model` validation without changing response shape.
+- Current state: ✅ Implemented. Shared response models remain in `backend/schemas/common.py`; About, Experience, Project, and Timeline models are separated by resource, and `/api/v1/*` routes use `response_model` validation without changing response shape.
 - Suggested structure or code example:
 ```python
 from pydantic import BaseModel
@@ -132,8 +132,11 @@ backend/
     project_repository.py
     timeline_repository.py
   schemas/
-    content.py
     common.py
+    about.py
+    experience.py
+    project.py
+    timeline.py
 ```
 - Benefits of the change:
   - Faster onboarding
