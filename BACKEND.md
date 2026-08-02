@@ -1,186 +1,149 @@
-# Backend Architecture and Maintenance Guide
+# Backend System Design
 
 ## Backend Overview
 
-The backend is a small, read-only FastAPI service for portfolio content. JSON files are the content source of truth; Pydantic models validate them before FastAPI serializes a response. The application does not use a database, authentication, write endpoint, or administration UI.
+The backend is a small, read-only FastAPI content service for the portfolio. Portfolio JSON is the runtime content source, and Pydantic models define the contracts that all content must satisfy before it is returned to a consumer.
 
-The architecture is intentionally resource-oriented. About, Journey, Projects, and Timeline Events each have their own router, service, repository, and schema module. This keeps routine content updates separate from application code changes.
+The backend is intentionally resource-oriented. About, Journey, Projects, and Timeline Events follow the same architectural boundaries while retaining resource-specific validation, ordering, and lookup behavior. Health is an infrastructure resource and does not read portfolio content.
+
+This document describes backend architecture, responsibilities, maintenance principles, and design decisions. Refer to `overview.md` for whole-project architecture and runtime context, `structure.md` for the current repository tree and exact file ownership, and `backend/setup.md` for setup and runtime instructions.
+
+## Design Principles
+
+- **Read-only backend**: the service publishes portfolio content and does not provide content mutation, administration, authentication, or persistence workflows.
+- **JSON as the source of truth**: public portfolio content is maintained as structured files rather than duplicated in application code or another storage layer.
+- **Resource-oriented architecture**: each portfolio resource has a clear router, service, repository, and schema boundary.
+- **Explicit schema validation**: Pydantic validation is mandatory; malformed or incomplete content must not become a successful response or deployable content set.
+- **Thin routers**: routers own HTTP concerns and delegate application behavior to the matching service.
+- **Service orchestration**: services coordinate repository reads, schema validation, resource rules, and response preparation.
+- **Repository-owned filesystem access**: repositories alone own content paths, file discovery, JSON reads, and timestamps.
+- **Schema-owned contracts**: schemas define accepted field names, nested structures, optionality, unions, and shared response metadata.
+- **Predictable maintenance boundaries**: content changes should remain in portfolio JSON unless the contract or resource behavior changes.
+- **No duplicated loading paths**: shared JSON and timestamp mechanics remain centralized, and no router or service creates a parallel JSON loader.
 
 ## Architecture
 
-The request and content flow is:
+The primary responsibility flow is:
 
 ```text
-HTTP request
-    ↓
-Resource Router
-    ↓
-Resource Service
-    ↓
-Resource Repository
-    ↓
-Portfolio JSON
-    ↓ raw data
-Resource Schema Validation
-    ↓
-data + meta response
+Router
+  ↓
+Service
+  ├─→ Repository → Portfolio JSON
+  └─→ Schema validation
+         ↓
+Validated response
 ```
+
+This preserves the architectural boundary commonly summarized as Router → Service → Repository, with Schema validation enforced by the Service before response preparation. Repository output is raw data; it is never treated as a validated contract by itself.
 
 ### Router
 
-Files in `backend/routers/v1/` own HTTP paths, response models, and delegation to the matching service. Routers do not read files or implement content validation.
+Files in `backend/routers/v1/` own transport-level concerns: resource routing, response model declaration, and delegation to the matching service. Routers stay thin and do not read files, implement ordering, or validate raw content directly.
 
 ### Service
 
-Files in `backend/services/` coordinate repository reads, invoke Pydantic validation, preserve resource ordering, prepare the v1 response envelope, and handle resource-specific behavior such as Project slug 404 responses.
+Files in `backend/services/` own resource orchestration. A service requests raw content from its repository, validates it through the resource schema, preserves resource-specific behavior, and prepares the established response shape. Cross-resource convenience logic does not belong in a service when it weakens a resource boundary.
 
 ### Repository
 
-Files in `backend/repositories/` own filesystem paths and raw JSON access. They return raw data and file modification timestamps. `repositories/common.py` contains only the shared JSON reader, data root, and timestamp formatting.
+Files in `backend/repositories/` own filesystem data access. They define resource paths, read raw JSON, handle file discovery or explicit mapping where required, and expose modification timestamps. Shared file-reading and timestamp behavior belongs in `repositories/common.py`; feature behavior does not.
+
+Repositories do not own HTTP responses or Pydantic contracts.
 
 ### Schema
 
-Files in `backend/schemas/` define the data contract. Resource schemas validate About, Journey, Project, and Timeline Event structures. `schemas/common.py` contains the shared `Meta` and `ApiResponse` models.
+Files in `backend/schemas/` define Pydantic contracts by resource. They describe the accepted data shape and shared response metadata without performing file access or transport handling. Point and Duration Timeline Events remain a discriminated union, while nested About, Journey, and Project structures remain explicit models rather than unrestricted dictionaries.
+
+`schemas/common.py` is reserved for models that are genuinely shared across resources.
 
 ## Directory Structure
 
+Only architectural layers are shown here. See `structure.md` for the complete tracked tree and file-by-file responsibilities.
+
 ```text
 backend/
-├── main.py                         # FastAPI app, middleware, routers, errors
-├── requirements.txt                # Pinned runtime dependency set
-├── setup.md                        # Local setup and content workflow
-├── Dockerfile                      # Cloud Run container runtime
-├── .dockerignore                   # Backend build-context exclusions
-├── routers/v1/                     # HTTP endpoints by resource
-├── services/                       # Validation orchestration and responses
-├── repositories/                   # Filesystem JSON data access
-├── schemas/                        # Pydantic contracts by resource
-├── data/portfolio/                 # Runtime portfolio content
-└── scripts/
-    └── validate_content_schema.py  # Fail-closed JSON validation
+├── routers/v1/          # HTTP routing by resource
+├── services/            # Resource orchestration and response preparation
+├── repositories/        # Filesystem JSON access and timestamps
+├── schemas/             # Pydantic resource contracts
+├── data/portfolio/      # Runtime portfolio content by page/resource
+└── scripts/             # Fail-closed content validation tooling
 ```
 
-## API Reference
+Each layer is separated by responsibility rather than by implementation symmetry alone. Shared code is introduced only for behavior that is truly common; resource logic remains in its resource module.
 
-| Endpoint | Purpose | Data source |
-|---|---|---|
-| `GET /api/v1/about` | Complete About sections | `backend/data/portfolio/about/about.json` |
-| `GET /api/v1/journey` | Complete Journey entries | `backend/data/portfolio/journey/*.json` |
-| `GET /api/v1/projects` | Ordered complete Project list | `backend/data/portfolio/projects/*.json` through the Project mapping |
-| `GET /api/v1/projects/{slug}` | One complete Project or 404 | Project slug mapping in `project_repository.py` |
-| `GET /api/v1/timeline-events` | Point and duration Timeline Events | `backend/data/portfolio/timeline/events.json` |
-| `GET /api/v1/health` | Runtime health response | No content file |
+## Backend Resources
 
-The backend also exposes `GET /` as a basic running message and FastAPI's default `/docs`, `/redoc`, and `/openapi.json` endpoints.
+Every resource follows the same Router → Service → Repository → Schema architecture while preserving its own domain-specific behavior.
+
+- **About**: structured portfolio introduction and About sections from a single page-owned content source.
+- **Journey**: independently maintained Journey entries aggregated into the established ordered collection.
+- **Projects**: independently maintained Project summary and detail content, with deterministic collection order and slug lookup behavior.
+- **Timeline Events**: Journey Timeline point and duration events maintained separately from Journey entries.
+- **Health**: infrastructure status independent of portfolio JSON.
+
+HTTP paths and current consumers are intentionally documented in `overview.md` and `structure.md`, not duplicated here.
 
 ## Data Management
 
+Portfolio content is organized by page/resource under `backend/data/portfolio/`:
+
 ```text
-backend/data/portfolio/
+portfolio/
 ├── about/
-│   └── about.json
 ├── journey/
-│   └── {journey-slug}.json
 ├── projects/
-│   └── {project-slug}.json
 └── timeline/
-    └── events.json
 ```
 
-### Updating About
+About has one page-owned document. Journey and Projects use one JSON document per stable item or slug. Timeline Events remain a separate Journey-related data source because they are Timeline events, not Journey entries.
 
-Edit `about/about.json` and preserve the current section-based schema. The About repository uses this fixed path.
+Content files contain public portfolio data only. Secrets, credentials, private infrastructure details, confidential customer information, and proprietary source code do not belong in this data source.
 
-### Adding or Updating Journey
+Adding a resource or changing a content contract is an architecture change: its router, service, repository, schema, validation coverage, and documentation must remain aligned. Routine content edits should not require a second data source or parallel loading path.
 
-Edit an existing file or add one JSON file per Journey under `journey/`. The Journey repository scans `*.json` automatically, and the response is ordered by `start_date` descending.
+## Validation
 
-### Adding or Updating a Project
+All portfolio content is validated against its resource Pydantic schema. Validation is mandatory for About, Journey, Projects, and Timeline Events, including nested structures and discriminated event types.
 
-Project content uses one JSON file per slug, but Project discovery is intentionally ordered rather than automatic. For a new Project:
+Validation is fail-closed: missing expected content, unknown content outside the explicit validation mapping, or schema-invalid JSON blocks the deployment workflow. Runtime service validation remains necessary even though deployment validation exists; both enforce the same content contract at different boundaries.
 
-1. Add `projects/{slug}.json`.
-2. Add its slug/path to `PROJECT_FILES` in `backend/repositories/project_repository.py` at the intended display position.
-3. Add the file to the validation mapping in `backend/scripts/validate_content_schema.py`.
-4. Run validation and test both the collection and slug endpoints.
-
-### Updating Timeline Events
-
-Edit `timeline/events.json`. Point and duration events use a discriminated Pydantic union and must retain their existing JSON shapes.
-
-Never add secrets, tokens, credentials, internal hostnames, private infrastructure details, confidential customer data, or proprietary source code to public portfolio content.
-
-## JSON Validation
-
-Run from `backend/`:
-
-```bash
-python scripts/validate_content_schema.py
-```
-
-The validator:
-
-- validates About, Journey, Project, and Timeline JSON with their resource schemas;
-- rejects missing expected files;
-- rejects JSON files without an explicit schema mapping;
-- verifies nested structures and Timeline Event discriminator rules;
-- exits non-zero so deployment can stop before building an invalid content image.
-
-Validation does not replace an API smoke test. After content changes, start FastAPI and inspect the affected response.
-
-## Local Development
-
-From `backend/`:
-
-```bash
-python -m venv venv
-source venv/bin/activate
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-python scripts/validate_content_schema.py
-uvicorn main:app --reload --host 127.0.0.1 --port 8080
-```
-
-Use `http://127.0.0.1:8080/docs` for interactive API documentation. Windows activation and container commands are documented in `backend/setup.md`.
+Executable validation and smoke-test instructions belong in `backend/setup.md`.
 
 ## Deployment
 
-`backend/Dockerfile` builds the backend with Python 3.13.9, installs `requirements.txt`, copies the filtered backend context, and starts Uvicorn on `0.0.0.0:8080`. `backend/.dockerignore` prevents local environments, bytecode, caches, logs, and OS metadata from entering the image.
-
-The backend is deployed as a separate Cloud Run service. The current container and Cloud Run configuration expect port 8080. Deployment automation also runs the JSON validation script before building the image. Detailed CI/CD credentials and production configuration are intentionally outside this guide.
+The backend is deployed independently from the frontend so content API changes and frontend presentation changes retain separate runtime and release boundaries. Deployment implementation details are intentionally maintained outside this system design document; refer to `overview.md`, `structure.md`, and `backend/setup.md` for current operational context.
 
 ## Maintenance Guide
 
-### Content Update
+### Content Changes
 
-Most future maintenance should only change `backend/data/portfolio/`:
+Most maintenance should remain a content-only change under `backend/data/portfolio/`. Preserve the current resource schema, public-content rules, ordering semantics, and ownership boundary. Every content change must pass mandatory validation before release.
 
-- revise About paragraphs or items;
-- update Journey details;
-- update Project descriptions and metadata;
-- add public Timeline Events.
+### Architecture Changes
 
-Always validate JSON and smoke-test the affected endpoint before deployment.
+Backend code changes are appropriate when introducing or changing a resource, contract, discovery rule, ordering rule, lookup behavior, error behavior, or response behavior. Keep the resource boundary consistent across router, service, repository, and schema modules.
 
-### Code Change
+Do not bypass a layer for convenience:
 
-Backend code normally needs to change only when:
+- routers do not read JSON;
+- services do not create independent filesystem loaders;
+- repositories do not construct HTTP responses;
+- schemas do not perform I/O;
+- raw JSON does not bypass Pydantic validation.
 
-- adding or changing an API endpoint;
-- changing an API response contract;
-- introducing a new JSON schema or data type;
-- changing discovery, ordering, validation, or error behavior;
-- adding a new Portfolio resource.
+### Operational Guidance
 
-Keep the resource boundary consistent across router, service, repository, and schema layers. Do not create a second JSON loader or bypass Pydantic validation.
+Use `backend/setup.md` for environment setup, executable validation, local runtime, smoke testing, and other operational instructions.
 
 ### Documentation Sync
 
-When architecture or responsibility changes, update:
+When backend architecture or responsibility changes:
 
-- `BACKEND.md` for backend maintenance behavior;
-- `backend/setup.md` for executable local commands;
-- `overview.md` for whole-project architecture and risk;
-- `structure.md` for the actual repository tree and file responsibilities.
+- update `BACKEND.md` for system design, boundaries, and maintenance principles;
+- update `overview.md` for whole-project architecture, runtime context, and risk;
+- update `structure.md` for the actual repository tree and file ownership;
+- update `backend/setup.md` only when executable setup, validation, or runtime instructions change.
 
-If documents disagree with executable code, verify the code and validation path first, then correct the documents.
+Avoid copying detailed operational information into this document. If documentation disagrees with executable code, verify the current code and validation path, then update each document within its stated responsibility.
