@@ -1,28 +1,23 @@
 <script setup>
-import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { RouterView, useRoute } from 'vue-router'
 import { getAbout } from '@/api/contentApi'
 import HomeSidebar from '@/components/layout/HomeSidebar.vue'
 import MobileFooter from '@/components/layout/MobileFooter.vue'
+import { useHomeViewportMetrics } from '@/composables/useHomeViewportMetrics'
 import { useMouseGlow } from '@/composables/useMouseGlow'
 import { useScrollProxy } from '@/composables/useScrollProxy'
 
 const route = useRoute()
 const isHomeLayout = computed(() => route.meta.layout === 'home')
 const updatedTime = ref('—')
+const profilePart = ref(null)
+const mobileFooter = ref(null)
 let hasLoadedUpdatedTime = false
 
+const { updateLayoutVars } = useHomeViewportMetrics({ profilePart, mobileFooter })
 useScrollProxy()
 useMouseGlow()
-
-function updateLayoutVars() {
-  const header = document.querySelector('.profile-part')
-  const footer = document.querySelector('.mobile-footer')
-
-  document.documentElement.style.setProperty('--header-height', `${header?.offsetHeight || 140}px`)
-  document.documentElement.style.setProperty('--footer-height', `${footer?.offsetHeight || 80}px`)
-  document.documentElement.style.setProperty('--real-vh', `${window.innerHeight}px`)
-}
 
 async function loadUpdatedTime() {
   if (hasLoadedUpdatedTime) return
@@ -49,14 +44,8 @@ function scrollMainContent() {
 }
 
 onMounted(async () => {
-  updateLayoutVars()
-  window.addEventListener('resize', updateLayoutVars)
   await nextTick()
   scrollMainContent()
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('resize', updateLayoutVars)
 })
 
 watch(
@@ -78,13 +67,13 @@ watch(
       class="layout-container text-light min-vh-100"
       :class="isHomeLayout ? 'layout-container--home' : 'layout-container--detail'"
     >
-      <HomeSidebar v-if="isHomeLayout" :updated-time="updatedTime" />
+      <HomeSidebar v-if="isHomeLayout" ref="profilePart" :updated-time="updatedTime" />
 
       <main class="main-content" :class="{ 'detail-main': !isHomeLayout }">
         <RouterView />
       </main>
 
-      <MobileFooter v-if="isHomeLayout" :updated-time="updatedTime" />
+      <MobileFooter v-if="isHomeLayout" ref="mobileFooter" :updated-time="updatedTime" />
     </div>
   </div>
 </template>
