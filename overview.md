@@ -115,7 +115,11 @@ PersonalWeb_Flask_Vue/
 │   │   ├── projects.py            # /api/v1/projects 與 /{slug}
 │   │   ├── timeline.py            # /api/v1/timeline-events
 │   │   └── health.py              # /api/v1/health
-│   ├── services/content_service.py
+│   ├── services/
+│   │   ├── about_service.py       # About validation 與 v1 response
+│   │   ├── experience_service.py  # Experience validation 與 aggregation
+│   │   ├── project_service.py     # Project list、slug lookup 與 404
+│   │   └── timeline_service.py    # Timeline Events validation 與 response
 │   ├── repositories/content_repository.py
 │   ├── schemas/
 │   │   ├── common.py              # Meta / ApiResponse
@@ -180,7 +184,7 @@ PersonalWeb_Flask_Vue/
 
 - Frontend 沒有 `src/types/`、TypeScript interface 或 TypeScript service；資料 shape 由 JSON、Vue runtime props 與使用端條件判斷共同約束。
 - Frontend service layer 是 `src/api/client.js` 與 `src/api/contentApi.js`。
-- Backend service layer 是 `backend/services/content_service.py`，並由 `repositories/content_repository.py` 讀取 JSON。
+- Backend service layer 依 Portfolio resource 拆為 `about_service.py`、`experience_service.py`、`project_service.py` 與 `timeline_service.py`，共同由 `repositories/content_repository.py` 讀取 JSON。
 
 ## 5. Routes、Layout 與頁面資料流
 
@@ -705,7 +709,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - CORS 同時使用 `allow_origins=["*"]` 與 `allow_credentials=True`，production policy 過寬且語意不清。
 - JSON rich text 含外部 `<a target="_blank">`，部分內容未包含 `rel="noopener noreferrer"`，並由 `v-html` render。
 - 每個 request 都同步開檔與解析 JSON，沒有 cache。
-- HTTP route 已統一為 `/api/v1/*`；`content_service.py` 仍保留未被 router 使用的 legacy response helper，後續可在確認無其他 Python consumer 後移除。
+- HTTP route 與 service 均已依 Portfolio resource 分離；schema 與 repository 仍維持共用模組。
 - Project visibility、hide、featured、public、archived 與分類篩選尚未設計或實作；目前固定依 repository mapping 顯示三筆。
 - `core/config.py` 與 `core/logging.py` 只是 placeholder。
 - `python-multipart` 已安裝但未使用。

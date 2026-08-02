@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from schemas.content import AboutResponse
-from services.content_service import get_about_v1
+from services.about_service import get_about_v1
 
 router = APIRouter(prefix="/api/v1", tags=["About"])
 

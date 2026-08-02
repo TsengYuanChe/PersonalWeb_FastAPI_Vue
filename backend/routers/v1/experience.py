@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from schemas.content import ExperienceResponse
-from services.content_service import get_experience_v1
+from services.experience_service import get_experience_v1
 
 router = APIRouter(prefix="/api/v1", tags=["Experience"])
 

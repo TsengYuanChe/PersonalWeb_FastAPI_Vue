@@ -27,7 +27,7 @@ This design keeps presentation and content delivery decoupled while preserving a
 - `main.py`: FastAPI app bootstrap + CORS middleware + router mount.
 - `routers/v1/about.py`, `experience.py`, `projects.py`, `timeline.py`: resource-specific v1 content endpoints.
 - `routers/v1/health.py`: health endpoint (`GET /api/v1/health`).
-- `services/content_service.py`: business response shaping for the active v1 contracts.
+- `services/about_service.py`, `experience_service.py`, `project_service.py`, `timeline_service.py`: resource-specific validation and v1 response shaping.
 - `repositories/content_repository.py`: filesystem JSON reads + timestamp extraction.
 - `core/config.py`, `core/logging.py`: backend core placeholders for settings/logging.
 - `schemas/content.py`, `schemas/common.py`: Pydantic schemas for v1 response validation.
@@ -77,7 +77,7 @@ flowchart LR
 3. Router forwards request to service layer.
 4. Service requests content from repository layer.
 5. Repository reads target JSON file and timestamp from filesystem.
-6. Service shapes response (`legacy` or `data` + `meta`) and returns to router.
+6. Resource service shapes the `data` + `meta` response and returns it to the router.
 7. API response is returned to frontend as structured JSON envelope.
 8. Frontend binds response to reactive state and renders sections.
 9. Frontend computes a single displayed update date from all endpoint timestamps.

@@ -67,7 +67,10 @@ backend/
 │   └── content_repository.py
 ├── services/
 │   ├── __init__.py
-│   └── content_service.py
+│   ├── about_service.py
+│   ├── experience_service.py
+│   ├── project_service.py
+│   └── timeline_service.py
 ├── schemas/
 │   ├── __init__.py
 │   ├── common.py
@@ -120,12 +123,11 @@ backend/
 
 ### `backend/services/`
 
-- `content_service.py` — **runtime application/content layer**：
-  - 呼叫 repository。
-  - 使用 Pydantic models 驗證 JSON。
-  - 組裝目前 router 使用的 v1 response shape；檔案內仍有未被 HTTP router 使用的 legacy response helpers。
-  - 提供 Project slug 404 行為。
-- About、Experience、Projects、Timeline Events 目前共用同一個 service module，未依 feature 分檔。
+- `about_service.py` — **runtime application/content layer**：讀取並驗證 About，組裝 About v1 response 與 timestamp metadata。
+- `experience_service.py` — **runtime application/content layer**：驗證 Experience list、依 `start_date` descending 確保排序，並組裝 Experience v1 response。
+- `project_service.py` — **runtime application/content layer**：驗證 Project list、保留 repository ordering，並處理 slug lookup 與 404。
+- `timeline_service.py` — **runtime application/content layer**：驗證 Point／Duration Timeline Events，組裝 Timeline v1 response。
+- `content_service.py` 已移除；目前沒有 legacy response helper 或集中式 service runtime consumer。
 
 ### `backend/schemas/`
 
@@ -311,7 +313,7 @@ frontend/
 ```text
 backend/data/portfolio/about/about.json
   → content_repository.read_about_with_timestamp()
-  → content_service._get_validated_about()
+  → about_service.get_about_v1()
   → AboutData / AboutResponse
   → GET /api/v1/about
   → frontend api/contentApi.getAbout()
@@ -326,21 +328,21 @@ backend/data/portfolio/about/about.json
 ```text
 backend/data/portfolio/experience/*.json
   → content_repository.read_experiences_with_timestamps()
-  → ExperienceItem validation + content service aggregation
+  → experience_service ExperienceItem validation + response aggregation
   → GET /api/v1/experience
   → frontend api/contentApi.getExperience()
   → ExperienceView.vue
   → JourneySection.vue + JourneyDetail.vue + Timeline.vue
 ```
 
-Experience order 由 repository 依 `start_date` descending 排序。Logo 圖片由 frontend `experienceLogos.js` 另行映射。
+Experience service 依 `start_date` descending 確保 response order；repository 目前也維持相同既有讀取順序。Logo 圖片由 frontend `experienceLogos.js` 另行映射。
 
 ### Timeline Events
 
 ```text
 backend/data/portfolio/timeline/events.json
   → content_repository.read_timeline_events_with_timestamp()
-  → TimelineEventsData discriminated-union validation
+  → timeline_service TimelineEventsData discriminated-union validation
   → GET /api/v1/timeline-events
   → frontend api/contentApi.getTimelineEvents()
   → ExperienceView.vue
@@ -354,7 +356,7 @@ Timeline Events 不建立 Journey Section/Detail；位置由 Timeline 依 Experi
 ```text
 backend/data/portfolio/projects/*.json
   → content_repository fixed PROJECT_FILES mapping
-  → ProjectItem validation + content service
+  → project_service ProjectItem validation + list/slug response handling
   → GET /api/v1/projects
   → frontend api/contentApi.getProjects()
   → ProjectView.vue
@@ -427,9 +429,8 @@ CSS import order is part of current behavior. Feature files contain both Home an
 - **API naming**：frontend 沒有 `services/`；`contentApi.js` 實際扮演 service layer。`client.js` 的 `request()` 沒有 consumer。
 - **Partially unused helper**：`useProjectHelpers.js` 只有 `safeArray` 被使用；featured/preview/link helpers 沒有 consumer，且格式與其他 source files 不一致。
 - **Unused dependency**：`axios` 存在於 dependencies，但 source code 使用 native Fetch，沒有 Axios imports。
-- **Unused compatibility helpers**：unversioned HTTP routes 已移除，但 `content_service.py` 仍保留未被 router 使用的 legacy response helpers。
 - **Synchronous JSON I/O**：每個 content request 都同步開檔、parse JSON、validate；沒有 cache。
-- **Centralized backend service/schema modules**：resource routes 已拆分，但所有 content schemas 與 services 仍集中於單一 feature-agnostic files；新增頁面會持續擴大這兩個 modules。
+- **Centralized backend schema module**：resource routes/services 已拆分，但所有 content schemas 仍集中於單一 feature-agnostic file；新增頁面會持續擴大此 module。
 - **Placeholder backend packages**：`core/config.py`、`core/logging.py` 未實作；`data/content/.gitkeep` 沒有 runtime用途。
 - **Duplicated content responsibility**：首頁三份 local preview JSON 與 backend detail summary 需人工同步，可能產生文案、links、tags 漂移。
 - **Rich HTML handling**：首頁 About preview 與 Experience detail 使用 `v-html`；沒有 frontend sanitization layer。
@@ -448,14 +449,13 @@ CSS import order is part of current behavior. Feature files contain both Home an
 1. 建立 frontend/backend contract tests，覆蓋四組 v1 responses、404/error envelope 與 JSON validation。
 2. 為 About、Journey、Projects 建立最小 component/E2E regression tests，保護 loading/error/empty/expanded/filter states。
 3. 建立 CSS ownership/token inventory，逐步隔離 Home 與 Detail feature selectors，降低全域 cascade 風險。
-4. 定義 legacy API deprecation/consumer audit，確認可否移出 `routers/v1/` 或正式淘汰。
-5. 為 `v-html` content 建立可信來源規範與 sanitization policy。
+4. 為 `v-html` content 建立可信來源規範與 sanitization policy。
 
 ### Priority Medium
 
 1. 拆分大型 Journey Timeline 計算、row orchestration 與 transition concerns，保留目前元件責任邊界。
 2. 將 Project detail section rendering與 transition hooks從 `ProjectCard.vue` 適度拆分，但維持 card API。
-3. 依 feature 拆分 backend routes/services/schemas，或建立明確 content registry，避免單檔持續成長。
+3. 評估依 resource 拆分 backend schemas，或建立明確 content registry，避免 schema 單檔持續成長。
 4. 決定首頁 preview 與 backend summary 的 single-source-of-truth 或產生流程。
 5. 補齊 request timeout、abort、non-JSON error handling；移除未使用的 `request()` 或明確採用。
 6. 清理 `useProjectHelpers.js` 未使用 exports、Axios dependency與 placeholder directories/files。

@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from schemas.content import TimelineEventsResponse
-from services.content_service import get_timeline_events_v1
+from services.timeline_service import get_timeline_events_v1
 
 router = APIRouter(prefix="/api/v1", tags=["Timeline"])
 

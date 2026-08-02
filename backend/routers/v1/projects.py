@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from schemas.content import ProjectItem, ProjectsResponse
-from services.content_service import get_project_by_slug, get_projects_v1
+from services.project_service import get_project_by_slug, get_projects_v1
 
 router = APIRouter(prefix="/api/v1", tags=["Projects"])
 

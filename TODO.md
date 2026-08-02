@@ -36,19 +36,22 @@ def get_about():
 
 ### 1.2 ✅ Add backend layering (router -> service -> repository)
 - Short explanation: separate HTTP concerns from business logic and data access.
-- Current state: ✅ Implemented. Routers delegate to `services/content_service.py`, which delegates data access to `repositories/content_repository.py` (router -> service -> repository -> filesystem JSON).
+- Current state: ✅ Implemented. Resource routers delegate to matching About, Experience, Project, and Timeline services, which share `repositories/content_repository.py` (router -> resource service -> repository -> filesystem JSON).
 - Suggested structure or code example:
 ```text
 backend/
   routers/
   services/
-    content_service.py
+    about_service.py
+    experience_service.py
+    project_service.py
+    timeline_service.py
   repositories/
     content_repository.py
 ```
 ```python
-# routers call service, not filesystem
-payload = content_service.get_about()
+# routers call their resource service, not filesystem
+payload = about_service.get_about_v1()
 ```
 - Benefits of the change:
   - Better testability
@@ -114,7 +117,10 @@ backend/
       timeline.py
       health.py
   services/
-    content_service.py
+    about_service.py
+    experience_service.py
+    project_service.py
+    timeline_service.py
   repositories/
     content_repository.py
   schemas/
