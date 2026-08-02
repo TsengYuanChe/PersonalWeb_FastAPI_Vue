@@ -397,6 +397,10 @@ Desktop social links 位於 `HomeSidebar` 底部；Mobile 則由 fixed `MobileFo
 
 全部是 global CSS；沒有 scoped styles、CSS Modules 或 Sass。Cascade 與 import order 是實際 design system 的一部分。
 
+目前八個檔案依實際 consumer 維持以下 ownership：`main.css`／`main-rwd.css` 負責 global tokens、application shell、shared page primitives、三個 Home sections 共用的 heading/link pattern，以及 Journey／Project 共用 tags；`about*` 只負責 Home About 與 About detail；`journey*` 只負責 Home Journey、Journey detail 與 Timeline；`projects*` 只負責 Home Projects、Project page、Project components 與 search/filter。每個 `*-rwd.css` 只放置其對應責任的 responsive overrides。
+
+CSS 仍由 `main.js` 全域載入，ownership 依 feature boundary 與 selector convention 維持，並未模組化。這次保持既有 import order；`.project-category` 歸 Projects，跨 Journey／Project 的 `.tag`／`.tag-tool` 與跨 Home sections 的 `.home-section`、`.section-heading`、`.home-journey-link` 歸 shared main styles。
+
 ### 8.2 核心 tokens 與 typography
 
 `main.css :root`：
@@ -719,7 +723,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 
 ### 14.2 Frontend debt
 
-- Global CSS 共 8 個檔案且依載入順序生效；仍有大量 Bootstrap utility、`!important`、散落顏色與重複數值。
+- Global CSS 共 8 個檔案且依載入順序生效；feature ownership 已依實際 consumers 整理，但仍有 Bootstrap utility、`!important`、散落顏色、重複數值與待確認後刪除的 dead selectors。
 - `App.vue` 仍負責 route-aware layout、Last updated loading、route watcher、全域 effects 與 RouterView；Home Sidebar／Mobile Footer markup、viewport resize lifecycle與 Home hash scroll implementation已抽離。
 - `useScrollProxy` 已移除 DOM selector coupling，但啟用時仍攔截首頁所有 wheel events；nested scrolling、鍵盤與觸控行為需要持續驗證。
 - Mobile 首頁高度依 DOM measurement 與三個 runtime CSS variables，受 orientation、browser chrome、內容高度影響。

@@ -417,16 +417,16 @@ Backend resource routes 分別定義在 `backend/routers/v1/` 的 `about.py`、`
 
 | File | Current responsibility |
 |---|---|
-| `main.css` | Design tokens、Home/Detail application layout、Sidebar、navigation、social links、detail container、shared page state、shared tags |
-| `main-rwd.css` | Main layout Desktop/Laptop/Tablet/Mobile rules、Home Sidebar/footer behavior |
+| `main.css` | Global design tokens、document/App shell、Home/Detail layout、Sidebar/footer、shared page state/header、Home section heading/link primitive、Journey/Project shared tags |
+| `main-rwd.css` | App shell、shared detail layout、shared Home link 與 shared tag responsive behavior |
 | `about.css` | Home Profile typography + `/about` sections、paragraphs、items |
 | `about-rwd.css` | About/Home Profile responsive typography and spacing |
-| `journey.css` | Home Journey preview + `/journey` Timeline、events、Section、Detail、transitions |
+| `journey.css` | Home Journey preview + `/journey` Timeline、events、Section、Detail、transitions（不擁有跨 Home section/link 或 shared tag primitives） |
 | `journey-rwd.css` | Journey/Timeline/Home preview responsive behavior；Mobile hides Timeline |
-| `projects.css` | Home Project preview + `/project` cards、cover/action、details、search/filter toolbar |
-| `projects-rwd.css` | Project preview/cards/tools responsive layouts |
+| `projects.css` | Home Project preview + `/project` cards、category、cover/action、details、search/filter toolbar；Project cover variables 保持 feature-owned |
+| `projects-rwd.css` | Project preview/cards/tools 與 Project-only tag container/language tag responsive layouts |
 
-CSS import order is part of current behavior. Feature files contain both Home and Detail styles, so selectors are namespaced by convention rather than module/scoped isolation.
+CSS import order remains `main → main-rwd → projects → projects-rwd → about → about-rwd → journey → journey-rwd` and is part of current behavior. Styles remain global；ownership 由 actual consumers、feature boundary 與 selector convention 維持，而不是 module/scoped isolation。`.project-category` 已歸 Projects；`.tag`／`.tag-tool` 因 JourneyDetail 與 ProjectDetail 共用而歸 main；`.home-section`、`.section-heading`、`.home-journey-link` 因跨 Home About／Journey／Projects 使用而歸 main。
 
 ## Deployment and Automation Structure
 
@@ -445,7 +445,8 @@ CSS import order is part of current behavior. Feature files contain both Home an
 
 以下皆為目前程式或 tracked structure 可直接確認的狀態；本文件只記錄，不執行修正。
 
-- **Global CSS coupling**：八個 custom CSS 全域載入，約 2,200 行；Home/detail feature styles 混在同一檔案並依 cascade/import order 生效。
+- **Global CSS coupling**：八個 custom CSS 仍全域載入並依 cascade/import order 生效；ownership 已建立，但 selector convention 無法提供 scoped isolation。
+- **Deferred CSS cleanup**：仍有已知或疑似 dead selectors（例如 `.code-btn`、`.tag-lang`、`.see-more-*`、`.section-footer-link`、`.exp-gpa`、mobile `#exp`）、重複 media query、`!important`、hardcoded accent/surface/motion values 與 `.home-journey-link` naming debt；本階段未刪除或改名。
 - **Large orchestration files**：`JourneyView.vue` 與 `Timeline.vue` 仍超過 200 行並負責多種狀態、rendering 或 transition concerns；Project detail rendering 已從 ProjectCard 分離。
 - **App shell coupling**：Sidebar、Mobile Footer、重複 link data、viewport resize lifecycle、Home section scroll implementation與 scroll proxy selector coupling已抽離；`App.vue` 仍同時管理 route-aware layout、Last updated、route watcher、global effects 與 RouterView。
 - **No frontend stores/types/tests**：沒有 store、TypeScript types、unit/component/E2E test directories；資料 shape 主要由 backend schema、JSON 與 runtime property access約束。
@@ -467,7 +468,7 @@ CSS import order is part of current behavior. Feature files contain both Home an
 
 1. 建立 frontend/backend contract tests，覆蓋四組 v1 responses、404/error envelope 與 JSON validation。
 2. 為 About、Journey、Projects 建立最小 component/E2E regression tests，保護 loading/error/empty/expanded/filter states。
-3. 建立 CSS ownership/token inventory，逐步隔離 Home 與 Detail feature selectors，降低全域 cascade 風險。
+3. 在既有 ownership 基礎上分批驗證並移除 dead selectors，再盤點可安全 token 化的重複 accent、surface 與 motion values。
 4. 為 `v-html` content 建立可信來源規範與 sanitization policy。
 
 ### Priority Medium

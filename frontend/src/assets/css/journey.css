@@ -428,19 +428,6 @@
   gap: 8px;
 }
 
-/* Home route sections */
-.home-section {
-  margin-bottom: 3rem;
-}
-
-.section-heading {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
-}
-
 .section-footer-link {
   display: inline-block;
   margin-top: 0.25rem;
@@ -531,26 +518,6 @@
   -webkit-line-clamp: 2;
 }
 
-.home-journey-link {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 0.95rem;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.home-journey-link span {
-  display: inline-block;
-  transition: transform 0.2s ease;
-}
-
-.home-journey-link:hover {
-  color: rgba(255, 255, 255, 1);
-}
-
-.home-journey-link:hover span {
-  transform: translateX(3px);
-}
-
 @media (prefers-reduced-motion: reduce) {
   .journey-section::before,
   .journey-timeline__segment,
@@ -560,11 +527,4 @@
     transition-duration: 1ms;
   }
 
-  .home-journey-link span {
-    transition: none;
-  }
-
-  .home-journey-link:hover span {
-    transform: none;
-  }
 }

@@ -7,6 +7,23 @@
   .cursor-glow {
     display: none !important;
   }
+
+  .tag {
+    padding: 4px 10px !important;
+    font-size: 0.75rem !important;
+    border-radius: 999px !important;
+  }
+
+  .tag-tool {
+    background: rgba(100, 255, 218, 0.22) !important;
+    border-color: rgba(100, 255, 218, 0.45) !important;
+    color: #e0fff6 !important;
+  }
+
+  .tag:hover {
+    transform: none !important;
+    opacity: 0.9;
+  }
 }
 
 /* Tablet layout width fix */
@@ -29,6 +46,11 @@
 
   .detail-page-container {
     padding: 44px 36px 60px;
+  }
+
+  .tag {
+    font-size: 0.8rem;
+    padding: 5px 12px;
   }
 }
 
@@ -192,6 +214,10 @@
 
   .detail-page-container {
     padding: 28px 20px 48px;
+  }
+
+  .home-journey-link {
+    font-size: 0.82rem;
   }
 
 }
