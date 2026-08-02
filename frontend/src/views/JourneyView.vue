@@ -1,24 +1,24 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
-import { getExperience, getTimelineEvents } from '@/api/contentApi'
-import JourneyDetail from '@/components/experience/JourneyDetail.vue'
-import JourneySection from '@/components/experience/JourneySection.vue'
-import Timeline from '@/components/experience/Timeline.vue'
+import { getJourney, getTimelineEvents } from '@/api/contentApi'
+import JourneyDetail from '@/components/journey/JourneyDetail.vue'
+import JourneySection from '@/components/journey/JourneySection.vue'
+import Timeline from '@/components/journey/Timeline.vue'
 import DetailPageHeader from '@/components/layout/DetailPageHeader.vue'
 
-const experiences = ref([])
+const journeyItems = ref([])
 const timelineEvents = ref([])
 const loading = ref(true)
 const error = ref('')
-const expandedExperienceSlug = ref(null)
+const expandedJourneySlug = ref(null)
 const leavingDetailSlugs = ref([])
-const activeExperienceSlug = ref(null)
+const activeJourneySlug = ref(null)
 
 const detailRowSlugs = computed(() => {
   const slugs = new Set(leavingDetailSlugs.value)
 
-  if (expandedExperienceSlug.value) {
-    slugs.add(expandedExperienceSlug.value)
+  if (expandedJourneySlug.value) {
+    slugs.add(expandedJourneySlug.value)
   }
 
   return slugs
@@ -27,16 +27,16 @@ const detailRowSlugs = computed(() => {
 const journeyRows = computed(() => {
   let row = 1
 
-  return experiences.value.map((experience) => {
+  return journeyItems.value.map((journeyItem) => {
     const entry = {
-      experience,
+      journeyItem,
       headerRow: row,
       detailRow: null,
     }
 
     row += 1
 
-    if (detailRowSlugs.value.has(experience.slug)) {
+    if (detailRowSlugs.value.has(journeyItem.slug)) {
       entry.detailRow = row
       row += 1
     }
@@ -46,15 +46,17 @@ const journeyRows = computed(() => {
 })
 
 const timelineRows = computed(() =>
-  Object.fromEntries(journeyRows.value.map(({ experience, headerRow }) => [experience.slug, headerRow])),
+  Object.fromEntries(
+    journeyRows.value.map(({ journeyItem, headerRow }) => [journeyItem.slug, headerRow]),
+  ),
 )
 
-function toggleExperience(slug) {
-  const currentSlug = expandedExperienceSlug.value
+function toggleJourney(slug) {
+  const currentSlug = expandedJourneySlug.value
 
   if (currentSlug === slug) {
     leavingDetailSlugs.value = [...new Set([...leavingDetailSlugs.value, slug])]
-    expandedExperienceSlug.value = null
+    expandedJourneySlug.value = null
     return
   }
 
@@ -63,37 +65,37 @@ function toggleExperience(slug) {
   }
 
   leavingDetailSlugs.value = leavingDetailSlugs.value.filter((value) => value !== slug)
-  expandedExperienceSlug.value = slug
+  expandedJourneySlug.value = slug
 }
 
 function finishDetailLeave(slug) {
   leavingDetailSlugs.value = leavingDetailSlugs.value.filter((value) => value !== slug)
 }
 
-function activateExperience(slug) {
-  activeExperienceSlug.value = slug
+function activateJourney(slug) {
+  activeJourneySlug.value = slug
 }
 
-function deactivateExperience(slug) {
-  if (activeExperienceSlug.value === slug) {
-    activeExperienceSlug.value = null
+function deactivateJourney(slug) {
+  if (activeJourneySlug.value === slug) {
+    activeJourneySlug.value = null
   }
 }
 
-function handleExperienceFocusOut(event, slug) {
+function handleJourneyFocusOut(event, slug) {
   if (event.currentTarget.contains(event.relatedTarget)) {
     return
   }
 
-  deactivateExperience(slug)
+  deactivateJourney(slug)
 }
 
-function handleExperienceMouseLeave(event, slug) {
+function handleJourneyMouseLeave(event, slug) {
   if (event.currentTarget.contains(document.activeElement)) {
     return
   }
 
-  deactivateExperience(slug)
+  deactivateJourney(slug)
 }
 
 function beforeDetailEnter(element) {
@@ -138,18 +140,18 @@ function leaveDetail(element) {
 
 onMounted(async () => {
   try {
-    const [experienceResponse, timelineEventsResponse] = await Promise.all([
-      getExperience(),
+    const [journeyResponse, timelineEventsResponse] = await Promise.all([
+      getJourney(),
       getTimelineEvents(),
     ])
-    experiences.value = Array.isArray(experienceResponse.content?.experience)
-      ? experienceResponse.content.experience
+    journeyItems.value = Array.isArray(journeyResponse.content?.journey)
+      ? journeyResponse.content.journey
       : []
     timelineEvents.value = Array.isArray(timelineEventsResponse.content?.timeline_events)
       ? timelineEventsResponse.content.timeline_events
       : []
   } catch (requestError) {
-    error.value = requestError instanceof Error ? requestError.message : 'Unable to load experiences.'
+    error.value = requestError instanceof Error ? requestError.message : 'Unable to load journey.'
   } finally {
     loading.value = false
   }
@@ -158,63 +160,63 @@ onMounted(async () => {
 
 <template>
   <section
-    class="exp-section route-page detail-page-container"
-    aria-labelledby="experience-heading"
+    class="journey-page-section route-page detail-page-container"
+    aria-labelledby="journey-heading"
   >
     <DetailPageHeader
       current="JOURNEY"
-      heading-id="experience-heading"
+      heading-id="journey-heading"
       title="Journey"
       description="A detailed view of my professional and academic experience."
     />
 
     <div v-if="loading" class="page-state" role="status">
       <span class="spinner-border spinner-border-sm" aria-hidden="true"></span>
-      Loading experiences…
+      Loading journey…
     </div>
 
     <div v-else-if="error" class="page-state page-state-error" role="alert">
       <i class="bi bi-exclamation-circle" aria-hidden="true"></i>
       <div>
-        <strong>Experiences could not be loaded.</strong>
+        <strong>Journey could not be loaded.</strong>
         <p class="mb-0">{{ error }} Please try again later.</p>
       </div>
     </div>
 
-    <div v-else-if="experiences.length === 0" class="page-state">
-      No experience entries are available yet.
+    <div v-else-if="journeyItems.length === 0" class="page-state">
+      No journey entries are available yet.
     </div>
 
     <div v-else class="journey-page-layout">
       <Timeline
-        :experiences="experiences"
+        :journey-items="journeyItems"
         :events="timelineEvents"
-        :active-slug="activeExperienceSlug"
+        :active-slug="activeJourneySlug"
         :detail-slugs="[...detailRowSlugs]"
         :row-by-slug="timelineRows"
-        @activate="activateExperience"
-        @deactivate="deactivateExperience"
+        @activate="activateJourney"
+        @deactivate="deactivateJourney"
       />
 
       <div class="journey-section-list">
-        <template v-for="(entry, index) in journeyRows" :key="entry.experience.slug">
+        <template v-for="(entry, index) in journeyRows" :key="entry.journeyItem.slug">
           <div
             class="journey-section-list__item"
             :class="{
-              'is-active': activeExperienceSlug === entry.experience.slug,
-              'is-expanded': expandedExperienceSlug === entry.experience.slug,
+              'is-active': activeJourneySlug === entry.journeyItem.slug,
+              'is-expanded': expandedJourneySlug === entry.journeyItem.slug,
               'is-last': index === journeyRows.length - 1,
             }"
             :style="{ gridRow: entry.headerRow }"
-            @mouseenter="activateExperience(entry.experience.slug)"
-            @mouseleave="handleExperienceMouseLeave($event, entry.experience.slug)"
-            @focusin="activateExperience(entry.experience.slug)"
-            @focusout="handleExperienceFocusOut($event, entry.experience.slug)"
+            @mouseenter="activateJourney(entry.journeyItem.slug)"
+            @mouseleave="handleJourneyMouseLeave($event, entry.journeyItem.slug)"
+            @focusin="activateJourney(entry.journeyItem.slug)"
+            @focusout="handleJourneyFocusOut($event, entry.journeyItem.slug)"
           >
             <JourneySection
-              :experience="entry.experience"
-              :expanded="expandedExperienceSlug === entry.experience.slug"
-              @toggle="toggleExperience"
+              :journey="entry.journeyItem"
+              :expanded="expandedJourneySlug === entry.journeyItem.slug"
+              @toggle="toggleJourney"
             />
           </div>
 
@@ -225,14 +227,14 @@ onMounted(async () => {
             @after-enter="afterDetailEnter"
             @before-leave="beforeDetailLeave"
             @leave="leaveDetail"
-            @after-leave="finishDetailLeave(entry.experience.slug)"
+            @after-leave="finishDetailLeave(entry.journeyItem.slug)"
           >
             <div
-              v-if="expandedExperienceSlug === entry.experience.slug"
+              v-if="expandedJourneySlug === entry.journeyItem.slug"
               class="journey-detail-row"
               :style="{ gridRow: entry.detailRow }"
             >
-              <JourneyDetail :experience="entry.experience" />
+              <JourneyDetail :journey="entry.journeyItem" />
             </div>
           </Transition>
         </template>

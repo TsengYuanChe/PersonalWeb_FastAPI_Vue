@@ -9,7 +9,7 @@ if str(BACKEND_ROOT) not in sys.path:
     sys.path.insert(0, str(BACKEND_ROOT))
 
 from schemas.about import AboutResponse
-from schemas.experience import ExperienceItem
+from schemas.journey import JourneyItem
 from schemas.project import ProjectItem
 from schemas.timeline import TimelineEventsData
 
@@ -31,14 +31,14 @@ def main():
         for p in data_root.rglob("*.json")
     )
 
-    experience_files = [
-        path for path in json_files if path.startswith("portfolio/experience/")
+    journey_files = [
+        path for path in json_files if path.startswith("portfolio/journey/")
     ]
-    for rel_path in experience_files:
-        file_to_schema[rel_path] = (ExperienceItem, False)
+    for rel_path in journey_files:
+        file_to_schema[rel_path] = (JourneyItem, False)
 
-    if not experience_files:
-        errors.append("No Experience JSON files found in portfolio/experience/")
+    if not journey_files:
+        errors.append("No Journey JSON files found in portfolio/journey/")
 
     # Fail unknown files to keep validation deterministic.
     unknown_files = [f for f in json_files if f not in file_to_schema]

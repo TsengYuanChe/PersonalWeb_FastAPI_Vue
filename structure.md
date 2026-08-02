@@ -49,7 +49,7 @@ backend/
 │   └── portfolio/
 │       ├── about/
 │       │   └── about.json
-│       ├── experience/
+│       ├── journey/
 │       │   ├── ezoom.json
 │       │   ├── nycu-master.json
 │       │   └── nchu-bachelor.json
@@ -63,20 +63,20 @@ backend/
 │   ├── __init__.py
 │   ├── common.py
 │   ├── about_repository.py
-│   ├── experience_repository.py
+│   ├── journey_repository.py
 │   ├── project_repository.py
 │   └── timeline_repository.py
 ├── services/
 │   ├── __init__.py
 │   ├── about_service.py
-│   ├── experience_service.py
+│   ├── journey_service.py
 │   ├── project_service.py
 │   └── timeline_service.py
 ├── schemas/
 │   ├── __init__.py
 │   ├── common.py
 │   ├── about.py
-│   ├── experience.py
+│   ├── journey.py
 │   ├── project.py
 │   └── timeline.py
 ├── routers/
@@ -84,7 +84,7 @@ backend/
 │   └── v1/
 │       ├── __init__.py
 │       ├── about.py
-│       ├── experience.py
+│       ├── journey.py
 │       ├── projects.py
 │       ├── timeline.py
 │       └── health.py
@@ -94,7 +94,7 @@ backend/
 
 ### Backend entry and runtime
 
-- `main.py` — **runtime**：建立 FastAPI app、設定 CORS、各註冊一次 About／Experience／Projects／Timeline／Health routers，提供 root endpoint、FastAPI 預設 docs/OpenAPI 與統一 JSON error envelopes。
+- `main.py` — **runtime**：建立 FastAPI app、設定 CORS、各註冊一次 About／Journey／Projects／Timeline／Health routers，提供 root endpoint、FastAPI 預設 docs/OpenAPI 與統一 JSON error envelopes。
 - `requirements.txt` — **build/runtime dependency manifest**：FastAPI、Uvicorn、Pydantic 等 pinned dependencies。
 - `Dockerfile` — **deployment build/runtime**：以 Python 3.13.9 建置；先複製並安裝 requirements，再複製 backend source；使用 Uvicorn 綁定 `0.0.0.0:8080`。
 - `.dockerignore` — **deployment build context filter**：排除 local virtual environments、Python bytecode/cache、tool caches、logs 與 `.DS_Store`，避免 `COPY . .` 納入非 runtime artifacts。
@@ -105,15 +105,15 @@ backend/
 所有檔案均為 **runtime content source**，同時由 validation script 檢查：
 
 - `about/about.json`：About legacy paragraphs 與結構化 `sections[{id,title,paragraphs,items}]`。
-- `experience/*.json`：每段 Journey 一份 slug JSON；repository 動態掃描並以 `start_date` 新到舊排序。
+- `journey/*.json`：每段 Journey 一份 slug JSON；repository 動態掃描並以 `start_date` 新到舊排序。
 - `projects/*.json`：每個 Project 一份 summary + detail JSON；目前 repository 以固定 mapping 控制三筆順序及 slug lookup。
-- `timeline/events.json`：不屬於 Experience 的 point/duration Timeline Events。
+- `timeline/events.json`：不屬於 Journey 的 point/duration Timeline Events。
 
 ### `backend/repositories/`
 
 - `common.py` — **runtime shared data access utility**：定義 backend data root、同步讀取 JSON，並將 filesystem mtime 格式化為 `updated_at`；不包含 resource logic。
 - `about_repository.py` — **runtime data access**：管理 About JSON path，回傳 raw About data 與 timestamp。
-- `experience_repository.py` — **runtime data access**：管理 Experience directory、動態掃描 `*.json`，並維持既有 `start_date` descending ordering 與最新 timestamp。
+- `journey_repository.py` — **runtime data access**：管理 Journey directory、動態掃描 `*.json`，並維持既有 `start_date` descending ordering 與最新 timestamp。
 - `project_repository.py` — **runtime data access**：管理 Project directory、固定 slug/file mapping、list ordering 與 single-project lookup。
 - `timeline_repository.py` — **runtime data access**：管理 Timeline Events JSON path，回傳 raw event data 與 timestamp。
 - `content_repository.py` 已移除；目前沒有 wrapper、dead function 或 runtime consumer。
@@ -122,7 +122,7 @@ backend/
 ### `backend/services/`
 
 - `about_service.py` — **runtime application/content layer**：讀取並驗證 About，組裝 About v1 response 與 timestamp metadata。
-- `experience_service.py` — **runtime application/content layer**：驗證 Experience list、依 `start_date` descending 確保排序，並組裝 Experience v1 response。
+- `journey_service.py` — **runtime application/content layer**：驗證 Journey list、依 `start_date` descending 確保排序，並組裝 Journey v1 response。
 - `project_service.py` — **runtime application/content layer**：驗證 Project list、保留 repository ordering，並處理 slug lookup 與 404。
 - `timeline_service.py` — **runtime application/content layer**：驗證 Point／Duration Timeline Events，組裝 Timeline v1 response。
 - `content_service.py` 已移除；目前沒有 legacy response helper 或集中式 service runtime consumer。
@@ -131,7 +131,7 @@ backend/
 
 - `common.py` — **runtime validation/serialization**：`Meta`、通用 `ApiResponse`。
 - `about.py` — **runtime validation/serialization**：About section、data 與 response models。
-- `experience.py` — **runtime validation/serialization**：Experience item、list data 與 response models。
+- `journey.py` — **runtime validation/serialization**：Journey item、list data 與 response models。
 - `project.py` — **runtime validation/serialization**：Project summary/detail nested models、showcase、challenge、item、data 與 response。
 - `timeline.py` — **runtime validation/serialization**：Point／Duration Timeline Event models、discriminated union、data 與 response。
 - `content.py` 已移除；目前沒有 compatibility wrapper、dead model 或 runtime consumer。
@@ -140,7 +140,7 @@ backend/
 ### `backend/routers/`
 
 - `routers/v1/about.py` — **runtime HTTP routing**：只處理 `GET /api/v1/about`。
-- `routers/v1/experience.py` — **runtime HTTP routing**：只處理 `GET /api/v1/experience`。
+- `routers/v1/journey.py` — **runtime HTTP routing**：只處理 `GET /api/v1/journey`。
 - `routers/v1/projects.py` — **runtime HTTP routing**：處理 Project collection 與 slug endpoints。
 - `routers/v1/timeline.py` — **runtime HTTP routing**：只處理 `GET /api/v1/timeline-events`。
 - `routers/v1/health.py` — **runtime HTTP routing**：只處理 `GET /api/v1/health`。
@@ -150,7 +150,7 @@ backend/
 
 - `validate_content_schema.py` — **validation/tooling**：
   - 掃描 `backend/data/**/*.json`。
-  - 驗證 About、Experience、Projects、Timeline Events。
+  - 驗證 About、Journey、Projects、Timeline Events。
   - 對未知或缺少 schema mapping 的 JSON fail closed。
   - 由 backend GitHub Actions workflow 在 deployment build 前執行。
 
@@ -169,12 +169,12 @@ frontend/
 │   ├── views/
 │   │   ├── HomeView.vue
 │   │   ├── AboutView.vue
-│   │   ├── ExperienceView.vue
+│   │   ├── JourneyView.vue
 │   │   └── ProjectView.vue
 │   ├── components/
 │   │   ├── about/
 │   │   │   └── AboutSection.vue
-│   │   ├── experience/
+│   │   ├── journey/
 │   │   │   ├── HomeJourneyItem.vue
 │   │   │   ├── JourneySection.vue
 │   │   │   ├── JourneyDetail.vue
@@ -199,13 +199,13 @@ frontend/
 │   │   └── siteLinks.js
 │   ├── utils/
 │   │   ├── journey/
-│   │   │   ├── experienceLogos.js
+│   │   │   ├── journeyLogos.js
 │   │   │   └── timelineMath.js
 │   │   └── projects/
 │   │       └── projectSearch.js
 │   ├── data/home/
 │   │   ├── about.json
-│   │   ├── experiences.json
+│   │   ├── journey.json
 │   │   └── projects.json
 │   └── assets/
 │       ├── css/
@@ -213,11 +213,11 @@ frontend/
 │       │   ├── main-rwd.css
 │       │   ├── about.css
 │       │   ├── about-rwd.css
-│       │   ├── exp.css
-│       │   ├── exp-rwd.css
+│       │   ├── journey.css
+│       │   ├── journey-rwd.css
 │       │   ├── projects.css
 │       │   └── projects-rwd.css
-│       └── images/exp/
+│       └── images/journey/
 │           ├── ezoom.png
 │           ├── nycu.png
 │           └── nchu.png
@@ -248,13 +248,13 @@ frontend/
 
 - `src/main.js` — **runtime entry**：建立 Vue app、安裝 router、依固定順序全域載入 Bootstrap、icons 與八個自訂 CSS 檔。
 - `src/App.vue` — **runtime application shell**：依 route meta 切換 Home／Detail layout，組合 HomeSidebar／main／MobileFooter；擁有 Last updated API request、route watcher、global effects 與 RouterView，將 `updatedTime` 下傳給兩個 Home shell children，並提供 navigation／viewport／scroll proxy composables所需 template refs與 Home enablement。
-- `src/router/index.js` — **runtime routing**：history-mode `/`、`/about`、`/experience`、`/project`；route meta 指定 layout；route change 回到頂部。沒有 catch-all 404 route。
+- `src/router/index.js` — **runtime routing**：history-mode `/`、`/about`、`/journey`、`/project`；route meta 指定 layout；route change 回到頂部。沒有 catch-all 404 route。
 
 ### Views
 
 - `HomeView.vue` — **Home-only**：直接 import 三份 frontend local preview JSON，組裝 Profile、Journey、Projects previews。
 - `AboutView.vue` — **About-only**：透過 `getAbout()` 載入 sections，處理 loading/error/empty/success，交給 `AboutSection` render。
-- `ExperienceView.vue` — **Journey-only orchestration**：載入 Experience + Timeline Events、管理 active/expanded/leaving states、計算 Grid rows、協調 Timeline、JourneySection、JourneyDetail 與 dynamic-height transition。
+- `JourneyView.vue` — **Journey-only orchestration**：載入 Journey + Timeline Events、管理 active/expanded/leaving states、計算 Grid rows、協調 Timeline、JourneySection、JourneyDetail 與 dynamic-height transition。
 - `ProjectView.vue` — **Projects-only orchestration**：載入 Projects、管理 search/filter/empty state 與單一 expanded slug，render ProjectCard list。
 
 ### Components
@@ -263,12 +263,12 @@ frontend/
 
 - `AboutSection.vue` — **About page-specific**：顯示單一 API section 的 heading、paragraphs、optional items；無 API 或 state ownership。
 
-#### `components/experience/`
+#### `components/journey/`
 
 - `HomeJourneyItem.vue` — **Home-specific**：精簡 Journey preview row。
-- `JourneySection.vue` — **Experience page-specific**：永遠可見的 Experience header、logo、summary、metadata、More/Less toggle；不知道 Timeline。
-- `JourneyDetail.vue` — **Experience page-specific**：展開後的 description、responsibilities、highlights、projects、skills/technologies、additional details；不知道 Timeline 或 expanded state。
-- `Timeline.vue` — **Experience page-specific**：擁有 props/computed presentation mapping、Experience periods、date labels、nodes、active segments、connectors、static Timeline Events、interaction 與 accessibility；接收 View 計算的 row mapping，不 render Journey content，底層日期／位置公式委派給純 utility。
+- `JourneySection.vue` — **Journey page-specific**：永遠可見的 Journey header、logo、summary、metadata、More/Less toggle；不知道 Timeline。
+- `JourneyDetail.vue` — **Journey page-specific**：展開後的 description、responsibilities、highlights、projects、skills/technologies、additional details；不知道 Timeline 或 expanded state。
+- `Timeline.vue` — **Journey page-specific**：擁有 props/computed presentation mapping、Journey periods、date labels、nodes、active segments、connectors、static Timeline Events、interaction 與 accessibility；接收 View 計算的 row mapping，不 render Journey content，底層日期／位置公式委派給純 utility。
 
 #### `components/projects/`
 
@@ -279,7 +279,7 @@ frontend/
 
 #### `components/layout/`
 
-- `DetailPageHeader.vue` — **detail-page shared**：About、Experience、Project 共用 breadcrumb、唯一 page `h1` 與 description。
+- `DetailPageHeader.vue` — **detail-page shared**：About、Journey、Project 共用 breadcrumb、唯一 page `h1` 與 description。
 - `HomeSidebar.vue` — **Home shell-specific**：profile header、三個 section RouterLinks、desktop SocialLinks 與 Last updated；presentation-only，接收 `updatedTime`。
 - `MobileFooter.vue` — **Home shell-specific**：mobile SocialLinks 與 Last updated；presentation-only，接收 `updatedTime`。
 - `SocialLinks.vue` — **Home shell shared renderer**：以單一 anchor template render desktop/mobile social 與 Resume links，依 `variant` 保留既有 classes、labels 與 tooltip attributes。
@@ -292,7 +292,7 @@ frontend/
 
 - `api/client.js`：
   - `requestRaw(path)` 組合 `VITE_API_BASE`、執行 Fetch、解析 JSON、正規化 API errors。
-- `api/contentApi.js`：About、Experience、Timeline Events、Projects 的 feature-facing functions；將 v1 envelope 轉為 `{content, updatedAt}`。
+- `api/contentApi.js`：About、Journey、Timeline Events、Projects 的 feature-facing functions；將 v1 envelope 轉為 `{content, updatedAt}`。
 
 ### Composables and utilities
 
@@ -301,14 +301,14 @@ frontend/
 - `composables/shell/useMouseGlow.js`：全域 mousemove cursor glow；由 `App.vue` 使用。
 - `composables/shell/useScrollProxy.js`：接收 main content template ref與 Home-layout `enabled` computed；mounted時註冊 non-passive window wheel listener，只在啟用時轉送相同 `deltaY` 並呼叫 `preventDefault()`，unmount時解除 listener，不使用 DOM selectors。
 - `ProjectCard.vue` 的 `safeArray` 是其 detail template 專用 local helper；沒有建立只有單一 consumer 的 composable 或 utility。
-- `utils/journey/experienceLogos.js`：backend logo filename 到 Vite image imports 的固定 mapping。
-- `utils/journey/timelineMath.js`：不依賴 Vue、DOM 或 module-level mutable state的 Timeline 純函式；負責年月索引、Experience bounds、Event 是否完整落在單一 Experience，以及日期在 period 內的百分比位置。`Timeline.vue` 是目前唯一 consumer。
+- `utils/journey/journeyLogos.js`：backend logo filename 到 Vite image imports 的固定 mapping。
+- `utils/journey/timelineMath.js`：不依賴 Vue、DOM 或 module-level mutable state的 Timeline 純函式；負責年月索引、Journey bounds、Event 是否完整落在單一 Journey，以及日期在 period 內的百分比位置。`Timeline.vue` 是目前唯一 consumer。
 - `utils/projects/projectSearch.js`：Project public text collection、whole-token search、exact filters、dynamic option sorting。
 
 ### Frontend data and assets
 
 - `data/home/*.json` — **runtime local preview data**：首頁 About、Journey、Projects；不經 backend。
-- `assets/images/exp/*.png` — **bundled runtime assets**：Journey logos。
+- `assets/images/journey/*.png` — **bundled runtime assets**：Journey logos。
 - `public/files/Adam_Tseng_Resume.pdf` — **copied static asset**：首頁 Resume link。
 - `public/favicon*` — **copied static assets**：browser favicon。
 - Project cover paths 預定在 `public/images/projects/covers/`，目前 tracked tree 尚無 cover files。
@@ -342,19 +342,19 @@ backend/data/portfolio/about/about.json
 
 `App.vue` 也呼叫同一 API，但只使用 `meta.updated_at` 顯示首頁 Last updated。
 
-### Experience
+### Journey
 
 ```text
-backend/data/portfolio/experience/*.json
-  → experience_repository.read_experiences_with_timestamps()
-  → experience_service ExperienceItem validation + response aggregation
-  → GET /api/v1/experience
-  → frontend api/contentApi.getExperience()
-  → ExperienceView.vue
+backend/data/portfolio/journey/*.json
+  → journey_repository.read_journey_items_with_timestamps()
+  → journey_service JourneyItem validation + response aggregation
+  → GET /api/v1/journey
+  → frontend api/contentApi.getJourney()
+  → JourneyView.vue
   → JourneySection.vue + JourneyDetail.vue + Timeline.vue
 ```
 
-Experience service 依 `start_date` descending 確保 response order；repository 目前也維持相同既有讀取順序。Logo 圖片由 frontend `utils/journey/experienceLogos.js` 另行映射。
+Journey service 依 `start_date` descending 確保 response order；repository 目前也維持相同既有讀取順序。Logo 圖片由 frontend `utils/journey/journeyLogos.js` 另行映射。
 
 ### Timeline Events
 
@@ -364,11 +364,11 @@ backend/data/portfolio/timeline/events.json
   → timeline_service TimelineEventsData discriminated-union validation
   → GET /api/v1/timeline-events
   → frontend api/contentApi.getTimelineEvents()
-  → ExperienceView.vue
+  → JourneyView.vue
   → Timeline.vue
 ```
 
-Timeline Events 不建立 Journey Section/Detail；位置由 Timeline 依 Experience date bounds 計算。
+Timeline Events 不建立 Journey Section/Detail；位置由 Timeline 依 Journey date bounds 計算。
 
 ### Projects
 
@@ -387,15 +387,15 @@ backend/data/portfolio/projects/*.json
 
 ## API Structure
 
-Backend resource routes 分別定義在 `backend/routers/v1/` 的 `about.py`、`experience.py`、`projects.py`、`timeline.py` 與 `health.py`；content HTTP API 僅保留 v1 surface。
+Backend resource routes 分別定義在 `backend/routers/v1/` 的 `about.py`、`journey.py`、`projects.py`、`timeline.py` 與 `health.py`；content HTTP API 僅保留 v1 surface。
 
 ### Versioned endpoints
 
 | Endpoint | Response model | Frontend usage |
 |---|---|---|
 | `GET /api/v1/about` | `AboutResponse` | `AboutView.vue`；`App.vue` Last updated |
-| `GET /api/v1/experience` | `ExperienceResponse` | `ExperienceView.vue` |
-| `GET /api/v1/timeline-events` | `TimelineEventsResponse` | `ExperienceView.vue` |
+| `GET /api/v1/journey` | `JourneyResponse` | `JourneyView.vue` |
+| `GET /api/v1/timeline-events` | `TimelineEventsResponse` | `JourneyView.vue` |
 | `GET /api/v1/projects` | `ProjectsResponse` | `ProjectView.vue` |
 | `GET /api/v1/projects/{slug}` | `ProjectItem` | 無目前 frontend consumer；可供單筆查詢 |
 | `GET /api/v1/health` | plain status object | 無 frontend consumer；service probe |
@@ -417,8 +417,8 @@ Backend resource routes 分別定義在 `backend/routers/v1/` 的 `about.py`、`
 | `main-rwd.css` | Main layout Desktop/Laptop/Tablet/Mobile rules、Home Sidebar/footer behavior |
 | `about.css` | Home Profile typography + `/about` sections、paragraphs、items |
 | `about-rwd.css` | About/Home Profile responsive typography and spacing |
-| `exp.css` | Home Journey preview + `/experience` Timeline、events、Section、Detail、transitions |
-| `exp-rwd.css` | Journey/Timeline/Home preview responsive behavior；Mobile hides Timeline |
+| `journey.css` | Home Journey preview + `/journey` Timeline、events、Section、Detail、transitions |
+| `journey-rwd.css` | Journey/Timeline/Home preview responsive behavior；Mobile hides Timeline |
 | `projects.css` | Home Project preview + `/project` cards、cover/action、details、search/filter toolbar |
 | `projects-rwd.css` | Project preview/cards/tools responsive layouts |
 
@@ -442,14 +442,14 @@ CSS import order is part of current behavior. Feature files contain both Home an
 以下皆為目前程式或 tracked structure 可直接確認的狀態；本文件只記錄，不執行修正。
 
 - **Global CSS coupling**：八個 custom CSS 全域載入，約 2,200 行；Home/detail feature styles 混在同一檔案並依 cascade/import order 生效。
-- **Large orchestration files**：`ExperienceView.vue`、`Timeline.vue`、`ProjectCard.vue` 都超過 200 行，同時負責多種狀態、rendering 或 transition concerns。
+- **Large orchestration files**：`JourneyView.vue`、`Timeline.vue`、`ProjectCard.vue` 都超過 200 行，同時負責多種狀態、rendering 或 transition concerns。
 - **App shell coupling**：Sidebar、Mobile Footer、重複 link data、viewport resize lifecycle、Home section scroll implementation與 scroll proxy selector coupling已抽離；`App.vue` 仍同時管理 route-aware layout、Last updated、route watcher、global effects 與 RouterView。
 - **No frontend stores/types/tests**：沒有 store、TypeScript types、unit/component/E2E test directories；資料 shape 主要由 backend schema、JSON 與 runtime property access約束。
 - **API naming**：frontend 沒有 `services/`；`contentApi.js` 實際扮演 service layer，而 `client.js` 保留唯一使用中的 low-level `requestRaw()` transport。
 - **Synchronous JSON I/O**：每個 content request 都同步開檔、parse JSON、validate；沒有 cache。
 - **Duplicated content responsibility**：首頁三份 local preview JSON 與 backend detail summary 需人工同步，可能產生文案、links、tags 漂移。
-- **Rich HTML handling**：首頁 About preview 與 Experience detail 使用 `v-html`；沒有 frontend sanitization layer。
-- **Router gaps**：沒有 catch-all 404 route；route URLs 使用既有 singular `/experience`、`/project` naming。
+- **Rich HTML handling**：首頁 About preview 與 Journey detail 使用 `v-html`；沒有 frontend sanitization layer。
+- **Router gaps**：沒有 catch-all 404 route；route URLs 使用既有 singular `/journey`、`/project` naming。
 - **Build/deployment debt**：images 只推 mutable `latest` tag；Node build image 仍使用未固定 patch 的 `node:20`。
 - **Environment configuration**：frontend environment files被 tracked，API base 在 build time寫入 bundle；任何環境切換都需 rebuild。
 - **Documentation duplication**：root 有多份中英文 architecture/features/system-design/TODO 文件，內容可能彼此或與 runtime code不同步。

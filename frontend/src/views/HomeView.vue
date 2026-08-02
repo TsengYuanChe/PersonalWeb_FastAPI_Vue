@@ -1,9 +1,9 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import aboutData from '@/data/home/about.json'
-import homeExperiences from '@/data/home/experiences.json'
+import homeJourney from '@/data/home/journey.json'
 import homeProjects from '@/data/home/projects.json'
-import HomeJourneyItem from '@/components/experience/HomeJourneyItem.vue'
+import HomeJourneyItem from '@/components/journey/HomeJourneyItem.vue'
 import HomeProjectPreview from '@/components/projects/HomeProjectPreview.vue'
 </script>
 
@@ -27,19 +27,19 @@ import HomeProjectPreview from '@/components/projects/HomeProjectPreview.vue'
       </div>
     </section>
 
-    <section id="experiences" class="exp-section home-section">
+    <section id="journey" class="journey-page-section home-section">
       <div class="section-heading">
         <h2 class="fw-bold">Journey</h2>
-        <RouterLink to="/experience" class="home-journey-link">
+        <RouterLink to="/journey" class="home-journey-link">
           View full journey <span aria-hidden="true">→</span>
         </RouterLink>
       </div>
 
       <div class="home-journey-list">
         <HomeJourneyItem
-          v-for="experience in homeExperiences.experiences"
-          :key="`${experience.name}-${experience.position}`"
-          :experience="experience"
+          v-for="journey in homeJourney.journey"
+          :key="`${journey.name}-${journey.position}`"
+          :journey="journey"
         />
       </div>
     </section>

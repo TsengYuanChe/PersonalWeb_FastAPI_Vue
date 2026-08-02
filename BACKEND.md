@@ -4,7 +4,7 @@
 
 The backend is a small, read-only FastAPI service for portfolio content. JSON files are the content source of truth; Pydantic models validate them before FastAPI serializes a response. The application does not use a database, authentication, write endpoint, or administration UI.
 
-The architecture is intentionally resource-oriented. About, Experience, Projects, and Timeline Events each have their own router, service, repository, and schema module. This keeps routine content updates separate from application code changes.
+The architecture is intentionally resource-oriented. About, Journey, Projects, and Timeline Events each have their own router, service, repository, and schema module. This keeps routine content updates separate from application code changes.
 
 ## Architecture
 
@@ -40,7 +40,7 @@ Files in `backend/repositories/` own filesystem paths and raw JSON access. They 
 
 ### Schema
 
-Files in `backend/schemas/` define the data contract. Resource schemas validate About, Experience, Project, and Timeline Event structures. `schemas/common.py` contains the shared `Meta` and `ApiResponse` models.
+Files in `backend/schemas/` define the data contract. Resource schemas validate About, Journey, Project, and Timeline Event structures. `schemas/common.py` contains the shared `Meta` and `ApiResponse` models.
 
 ## Directory Structure
 
@@ -65,7 +65,7 @@ backend/
 | Endpoint | Purpose | Data source |
 |---|---|---|
 | `GET /api/v1/about` | Complete About sections | `backend/data/portfolio/about/about.json` |
-| `GET /api/v1/experience` | Complete Journey entries | `backend/data/portfolio/experience/*.json` |
+| `GET /api/v1/journey` | Complete Journey entries | `backend/data/portfolio/journey/*.json` |
 | `GET /api/v1/projects` | Ordered complete Project list | `backend/data/portfolio/projects/*.json` through the Project mapping |
 | `GET /api/v1/projects/{slug}` | One complete Project or 404 | Project slug mapping in `project_repository.py` |
 | `GET /api/v1/timeline-events` | Point and duration Timeline Events | `backend/data/portfolio/timeline/events.json` |
@@ -79,8 +79,8 @@ The backend also exposes `GET /` as a basic running message and FastAPI's defaul
 backend/data/portfolio/
 ├── about/
 │   └── about.json
-├── experience/
-│   └── {experience-slug}.json
+├── journey/
+│   └── {journey-slug}.json
 ├── projects/
 │   └── {project-slug}.json
 └── timeline/
@@ -91,9 +91,9 @@ backend/data/portfolio/
 
 Edit `about/about.json` and preserve the current section-based schema. The About repository uses this fixed path.
 
-### Adding or Updating Experience
+### Adding or Updating Journey
 
-Edit an existing file or add one JSON file per Experience under `experience/`. The Experience repository scans `*.json` automatically, and the response is ordered by `start_date` descending.
+Edit an existing file or add one JSON file per Journey under `journey/`. The Journey repository scans `*.json` automatically, and the response is ordered by `start_date` descending.
 
 ### Adding or Updating a Project
 
@@ -120,7 +120,7 @@ python scripts/validate_content_schema.py
 
 The validator:
 
-- validates About, Experience, Project, and Timeline JSON with their resource schemas;
+- validates About, Journey, Project, and Timeline JSON with their resource schemas;
 - rejects missing expected files;
 - rejects JSON files without an explicit schema mapping;
 - verifies nested structures and Timeline Event discriminator rules;
@@ -156,7 +156,7 @@ The backend is deployed as a separate Cloud Run service. The current container a
 Most future maintenance should only change `backend/data/portfolio/`:
 
 - revise About paragraphs or items;
-- update Experience details;
+- update Journey details;
 - update Project descriptions and metadata;
 - add public Timeline Events.
 

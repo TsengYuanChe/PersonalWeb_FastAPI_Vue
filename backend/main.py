@@ -5,7 +5,7 @@ from fastapi import HTTPException
 from fastapi import Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from routers.v1 import about, experience, health, projects, timeline
+from routers.v1 import about, health, journey, projects, timeline
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 app = FastAPI()
@@ -22,7 +22,7 @@ app.add_middleware(
 
 # 載入 API 路由
 app.include_router(about.router)
-app.include_router(experience.router)
+app.include_router(journey.router)
 app.include_router(projects.router)
 app.include_router(timeline.router)
 app.include_router(health.router)

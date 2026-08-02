@@ -2,13 +2,13 @@
 import { computed } from 'vue'
 import {
   datePosition,
-  eventFitsExperience,
+  eventFitsJourney,
 } from '@/utils/journey/timelineMath'
 
 defineOptions({ name: 'JourneyTimeline' })
 
 const props = defineProps({
-  experiences: {
+  journeyItems: {
     type: Array,
     required: true,
   },
@@ -35,31 +35,31 @@ const emit = defineEmits(['activate', 'deactivate'])
 const currentDate = new Date()
 const currentMonthIndex = currentDate.getUTCFullYear() * 12 + currentDate.getUTCMonth()
 
-const eventsByExperience = computed(() => {
+const eventsByJourney = computed(() => {
   const groupedEvents = Object.fromEntries(
-    props.experiences.map((experience) => [experience.slug, []]),
+    props.journeyItems.map((journeyItem) => [journeyItem.slug, []]),
   )
 
   props.events.forEach((event) => {
     const startDate = event.type === 'point' ? event.date : event.start_date
     const endDate = event.type === 'point' ? event.date : event.end_date
-    const experience = props.experiences.find((item) =>
-      eventFitsExperience(startDate, endDate, item, currentMonthIndex),
+    const journeyItem = props.journeyItems.find((item) =>
+      eventFitsJourney(startDate, endDate, item, currentMonthIndex),
     )
 
-    if (!experience) {
+    if (!journeyItem) {
       return
     }
 
     const placement =
       event.type === 'point'
-        ? { top: `${datePosition(event.date, experience, currentMonthIndex)}%` }
+        ? { top: `${datePosition(event.date, journeyItem, currentMonthIndex)}%` }
         : {
-            top: `${datePosition(event.end_date, experience, currentMonthIndex)}%`,
-            bottom: `${100 - datePosition(event.start_date, experience, currentMonthIndex)}%`,
+            top: `${datePosition(event.end_date, journeyItem, currentMonthIndex)}%`,
+            bottom: `${100 - datePosition(event.start_date, journeyItem, currentMonthIndex)}%`,
           }
 
-    groupedEvents[experience.slug].push({ ...event, placement })
+    groupedEvents[journeyItem.slug].push({ ...event, placement })
   })
 
   return groupedEvents
@@ -86,13 +86,13 @@ function formatTimelineDate(date, boundary) {
   return monthFormatter.format(new Date(Date.UTC(Number(year), Number(month) - 1, 1)))
 }
 
-function eventLabel(experience, boundary) {
+function eventLabel(journeyItem, boundary) {
   const date = formatTimelineDate(
-    boundary === 'end' ? experience.end_date : experience.start_date,
+    boundary === 'end' ? journeyItem.end_date : journeyItem.start_date,
     boundary,
   )
   const event = boundary === 'end' ? 'end' : 'start'
-  return `${experience.organization} ${event}: ${date}`
+  return `${journeyItem.organization} ${event}: ${date}`
 }
 
 function handlePeriodFocusOut(event, slug) {
@@ -116,52 +116,52 @@ function handlePeriodMouseLeave(event, slug) {
   <aside class="journey-timeline" aria-label="Journey timeline">
     <ol class="journey-timeline__periods">
       <li
-        v-for="(experience, index) in experiences"
-        :key="experience.slug"
+        v-for="(journeyItem, index) in journeyItems"
+        :key="journeyItem.slug"
         class="journey-timeline__period"
         :class="{
-          'has-detail-row': detailSlugs.includes(experience.slug),
-          'is-last': index === experiences.length - 1,
+          'has-detail-row': detailSlugs.includes(journeyItem.slug),
+          'is-last': index === journeyItems.length - 1,
         }"
-        :style="{ gridRow: rowBySlug[experience.slug] }"
-        @mouseenter="emit('activate', experience.slug)"
-        @mouseleave="handlePeriodMouseLeave($event, experience.slug)"
-        @focusin="emit('activate', experience.slug)"
-        @focusout="handlePeriodFocusOut($event, experience.slug)"
+        :style="{ gridRow: rowBySlug[journeyItem.slug] }"
+        @mouseenter="emit('activate', journeyItem.slug)"
+        @mouseleave="handlePeriodMouseLeave($event, journeyItem.slug)"
+        @focusin="emit('activate', journeyItem.slug)"
+        @focusout="handlePeriodFocusOut($event, journeyItem.slug)"
       >
         <div
           class="journey-timeline__segment"
-          :class="{ 'is-active': activeSlug === experience.slug }"
+          :class="{ 'is-active': activeSlug === journeyItem.slug }"
           aria-hidden="true"
         ></div>
         <span
           class="journey-timeline__label journey-timeline__label--end"
           aria-hidden="true"
         >
-          {{ formatTimelineDate(experience.end_date, 'end') }}
+          {{ formatTimelineDate(journeyItem.end_date, 'end') }}
         </span>
         <button
           type="button"
           class="journey-timeline__node journey-timeline__node--end"
-          :class="{ 'is-active': activeSlug === experience.slug }"
-          :aria-label="eventLabel(experience, 'end')"
+          :class="{ 'is-active': activeSlug === journeyItem.slug }"
+          :aria-label="eventLabel(journeyItem, 'end')"
         ></button>
         <span
           class="journey-timeline__label journey-timeline__label--start"
           aria-hidden="true"
         >
-          {{ formatTimelineDate(experience.start_date, 'start') }}
+          {{ formatTimelineDate(journeyItem.start_date, 'start') }}
         </span>
         <button
           type="button"
           class="journey-timeline__node journey-timeline__node--start"
-          :class="{ 'is-active': activeSlug === experience.slug }"
-          :aria-label="eventLabel(experience, 'start')"
+          :class="{ 'is-active': activeSlug === journeyItem.slug }"
+          :aria-label="eventLabel(journeyItem, 'start')"
         ></button>
 
         <div class="journey-timeline-events">
           <div
-            v-for="event in eventsByExperience[experience.slug]"
+            v-for="event in eventsByJourney[journeyItem.slug]"
             :key="event.id"
             class="journey-timeline-event"
             :class="`journey-timeline-event--${event.type}`"

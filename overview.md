@@ -36,7 +36,7 @@
 
 1. `/`：首頁 Preview，包含 Profile、Journey、Projects。
 2. `/about`：About 詳細頁，從 FastAPI 動態載入六個結構化 sections。
-3. `/experience`：完整 Journey，從 FastAPI 載入。
+3. `/journey`：完整 Journey，從 FastAPI 載入。
 4. `/project`：完整 Projects，從 FastAPI 載入。
 
 首頁另提供：
@@ -109,35 +109,35 @@ PersonalWeb_Flask_Vue/
 │   ├── main.py                    # FastAPI app、CORS、全域 error envelope
 │   ├── routers/v1/
 │   │   ├── about.py               # /api/v1/about
-│   │   ├── experience.py          # /api/v1/experience
+│   │   ├── journey.py          # /api/v1/journey
 │   │   ├── projects.py            # /api/v1/projects 與 /{slug}
 │   │   ├── timeline.py            # /api/v1/timeline-events
 │   │   └── health.py              # /api/v1/health
 │   ├── services/
 │   │   ├── about_service.py       # About validation 與 v1 response
-│   │   ├── experience_service.py  # Experience validation 與 aggregation
+│   │   ├── journey_service.py  # Journey validation 與 aggregation
 │   │   ├── project_service.py     # Project list、slug lookup 與 404
 │   │   └── timeline_service.py    # Timeline Events validation 與 response
 │   ├── repositories/
 │   │   ├── common.py              # Shared JSON read 與 mtime helper
 │   │   ├── about_repository.py    # About JSON path 與讀取
-│   │   ├── experience_repository.py # Experience scan 與 ordering
+│   │   ├── journey_repository.py # Journey scan 與 ordering
 │   │   ├── project_repository.py  # Project mapping、ordering 與 slug lookup
 │   │   └── timeline_repository.py # Timeline Events path 與讀取
 │   ├── schemas/
 │   │   ├── common.py              # Meta / ApiResponse
 │   │   ├── about.py               # About section/data/response models
-│   │   ├── experience.py          # Experience item/data/response models
+│   │   ├── journey.py          # Journey item/data/response models
 │   │   ├── project.py             # Project nested/item/data/response models
 │   │   └── timeline.py            # Timeline union/data/response models
 │   ├── data/
 │   │   └── portfolio/              # 依 Portfolio page 分組的 backend content
 │   │       ├── about/about.json
-│   │       ├── experience/         # 每段完整 Journey 各一份 slug JSON
+│   │       ├── journey/         # 每段完整 Journey 各一份 slug JSON
 │   │       │   ├── ezoom.json
 │   │       │   ├── nycu-master.json
 │   │       │   └── nchu-bachelor.json
-│   │       ├── timeline/events.json # Journey Timeline 的非 Experience 事件
+│   │       ├── timeline/events.json # Journey Timeline 的非 Journey 事件
 │   │       └── projects/           # 每個完整 Project 各一份 slug JSON
 │   │           ├── mris.json
 │   │           ├── personal-portfolio.json
@@ -154,24 +154,24 @@ PersonalWeb_Flask_Vue/
 │   │   ├── views/
 │   │   │   ├── HomeView.vue
 │   │   │   ├── AboutView.vue
-│   │   │   ├── ExperienceView.vue
+│   │   │   ├── JourneyView.vue
 │   │   │   └── ProjectView.vue
 │   │   ├── components/
 │   │   │   ├── about/AboutSection.vue
 │   │   │   ├── layout/{DetailPageHeader,HomeSidebar,MobileFooter,SocialLinks}.vue
-│   │   │   ├── experience/{HomeJourneyItem,JourneySection,JourneyDetail,Timeline}.vue
+│   │   │   ├── journey/{HomeJourneyItem,JourneySection,JourneyDetail,Timeline}.vue
 │   │   │   └── projects/{ProjectCover,ProjectAction,HomeProjectPreview,ProjectCard}.vue
 │   │   ├── config/siteLinks.js    # Social／Resume URL single source of truth
 │   │   ├── data/home/             # 首頁三份 local Preview JSON
 │   │   ├── api/
 │   │   │   ├── client.js          # fetch wrapper / error normalization
-│   │   │   └── contentApi.js      # About / Experience / Projects service functions
+│   │   │   └── contentApi.js      # About / Journey / Projects service functions
 │   │   ├── composables/shell/     # Application shell lifecycle／navigation helpers
-│   │   ├── utils/journey/         # Experience logos 與 Timeline 純計算
+│   │   ├── utils/journey/         # Journey logos 與 Timeline 純計算
 │   │   ├── utils/projects/        # Project search／filter 純計算
 │   │   └── assets/
 │   │       ├── css/               # global + feature + RWD CSS
-│   │       └── images/exp/         # 經歷 logo
+│   │       └── images/journey/         # 經歷 logo
 │   ├── public/
 │   │   ├── files/Adam_Tseng_Resume.pdf
 │   │   └── favicon files
@@ -205,7 +205,7 @@ PersonalWeb_Flask_Vue/
 |---|---|---|---|
 | `/` | `home` | `home` | `HomeView.vue` |
 | `/about` | `about` | `detail` | `AboutView.vue` |
-| `/experience` | `experience` | `detail` | `ExperienceView.vue` |
+| `/journey` | `journey` | `detail` | `JourneyView.vue` |
 | `/project` | `project` | `detail` | `ProjectView.vue` |
 
 `createWebHistory(import.meta.env.BASE_URL)` 配合 Nginx `try_files $uri /index.html`，因此部署後直接開啟或重新整理 route 可回到 SPA。Router `scrollBehavior()` 對 route change 回傳 `{ top: 0 }`。目前沒有 catch-all 404 route。
@@ -234,7 +234,7 @@ Home main scroll與 hash section定位由 `useHomeSectionNavigation({ route, mai
 - Journey 與 Projects 使用一致的低裝飾 list-style rows、內容間距與淡分隔線。
 - 首頁保持精簡，避免完整履歷、完整專案工程細節或長篇個人故事造成資訊過載。
 - 首頁主要展示 Software Engineer 定位、核心工程能力、工作／學習 Journey 與代表作品。
-- About、Journey、Projects 的完整資訊分別由 `/about`、`/experience`、`/project` 承接。
+- About、Journey、Projects 的完整資訊分別由 `/about`、`/journey`、`/project` 承接。
 
 ## 6. 各頁面與主要元件
 
@@ -245,11 +245,11 @@ Home main scroll與 hash section定位由 `useHomeSectionNavigation({ route, mai
 | Section | 元件 | 資料來源 | Backend dependency |
 |---|---|---|---|
 | Profile (`#about`) | HomeView template | `src/data/home/about.json` | 內容不依賴 API |
-| Journey (`#experiences`) | `HomeJourneyItem.vue` | `src/data/home/experiences.json` | 不依賴 API |
+| Journey (`#journey`) | `HomeJourneyItem.vue` | `src/data/home/journey.json` | 不依賴 API |
 | Projects (`#projects`) | `HomeProjectPreview.vue` | `src/data/home/projects.json` | 不依賴 API |
 | Last updated | App Sidebar/footer | `GET /api/v1/about` 的 `meta.updated_at` | **依賴 API** |
 
-Sidebar navigation 使用 Vue Router hash links回到首頁的 `#about`、`#experiences`、`#projects`。`useHomeSectionNavigation()` 以 imperative `scrollTo()` 對齊相同頂部空間。
+Sidebar navigation 使用 Vue Router hash links回到首頁的 `#about`、`#journey`、`#projects`。`useHomeSectionNavigation()` 以 imperative `scrollTo()` 對齊相同頂部空間。
 
 Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避免 Cloud Run backend cold start 阻塞首頁主要內容。首頁仍會為 Last updated 呼叫 About API，但該請求失敗時只顯示 `—`，不會阻止三個 Preview sections render。
 
@@ -262,7 +262,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 
 - 三筆本地資料：logo、position、name、duration、short description。
 - Desktop 為 92px logo + content row；Mobile 為 60px logo + content。
-- `View full journey →` 前往 `/experience`。
+- `View full journey →` 前往 `/journey`。
 
 #### Projects Preview
 
@@ -286,30 +286,30 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - `AboutSection.vue` 負責單一 section 的 title、paragraphs 與 optional items；不包含 API request、layout 或互動邏輯。
 - Backend 保留 legacy `paragraphs` 並提供 `sections[{id,title,paragraphs,items}]`；詳細頁只消費結構化 sections。
 
-### 6.3 `/experience`
+### 6.3 `/journey`
 
-位置：`frontend/src/views/ExperienceView.vue`
+位置：`frontend/src/views/JourneyView.vue`
 
 - Breadcrumb：`HOME > JOURNEY`，主標題 `Journey`。
-- mount 後呼叫 `GET /api/v1/experience`。
+- mount 後呼叫 `GET /api/v1/journey`。
 - 提供 loading、error、empty、success 四種狀態。
-- `JourneySection.vue` 完全由 backend Experience object 建立，且只負責永遠顯示的 Summary Header：logo、title、organization、summary、role、period 與 More／Less Detail toggle。
+- `JourneySection.vue` 完全由 backend Journey object 建立，且只負責永遠顯示的 Summary Header：logo、title、organization、summary、role、period 與 More／Less Detail toggle。
 - `JourneyDetail.vue` 負責 Description、Responsibilities、Highlights、Projects、Skills／Technologies 與 Additional Details；空欄位不 render 標題或容器。
-- Journey Sections 預設全部收合；展開狀態由 `ExperienceView.vue` 以單一 `expandedExperienceSlug` 管理，因此同一時間最多只有一段展開。整個 Summary Header 可點擊，More/Less Detail button 提供鍵盤操作、`aria-expanded` 與 `aria-controls`。
+- Journey Sections 預設全部收合；展開狀態由 `JourneyView.vue` 以單一 `expandedJourneySlug` 管理，因此同一時間最多只有一段展開。整個 Summary Header 可點擊，More/Less Detail button 提供鍵盤操作、`aria-expanded` 與 `aria-controls`。
 - Detail 使用與 Project Card 一致的 Vue `Transition` hooks，依實際 `scrollHeight` 執行 320ms 高度、透明度與輕微位移動畫，完成後恢復 `height: auto`，並支援 `prefers-reduced-motion`。
-- 每段 Experience 來自 `backend/data/portfolio/experience/` 下的獨立 slug JSON，由 repository 動態掃描並依 `start_date` 新到舊排序；新增經歷不需修改既有 JSON。
-- Logo filename 經 `utils/journey/experienceLogos.js` 映射到 Vite-imported assets。
-- Timeline 第一版由獨立 `Timeline.vue` 實作，不屬於 `JourneySection.vue`。它依 API Experience 的 `start_date`／`end_date` 自動建立 nodes，並以單一連續垂直線串接；新增 Experience JSON 時會跟隨 API list 自動增加。
-- `ExperienceView.vue` 同時管理 `expandedExperienceSlug` 與 hover 用的 `activeExperienceSlug`，負責同步 Section 與 Timeline node；`JourneySection.vue` 不知道 Timeline 的存在。
-- Timeline period 與 Journey Sections 由 `ExperienceView.vue` 放入對應的 CSS Grid header rows；收合狀態下，每段 Timeline 的上下 node 由 row 實際高度對齊對應 Section 的上下邊界。
-- 展開時 `ExperienceView.vue` 在 Header 後插入獨立的 Journey Detail row；Detail 左側沒有 Timeline period，上一段 segment 高度保持不變，後續 Timeline 與 Section 一起下移，收合完成後恢復原位。同一時間仍只有一段正式展開。
+- 每段 Journey 來自 `backend/data/portfolio/journey/` 下的獨立 slug JSON，由 repository 動態掃描並依 `start_date` 新到舊排序；新增經歷不需修改既有 JSON。
+- Logo filename 經 `utils/journey/journeyLogos.js` 映射到 Vite-imported assets。
+- Timeline 第一版由獨立 `Timeline.vue` 實作，不屬於 `JourneySection.vue`。它依 API Journey 的 `start_date`／`end_date` 自動建立 nodes，並以單一連續垂直線串接；新增 Journey JSON 時會跟隨 API list 自動增加。
+- `JourneyView.vue` 同時管理 `expandedJourneySlug` 與 hover 用的 `activeJourneySlug`，負責同步 Section 與 Timeline node；`JourneySection.vue` 不知道 Timeline 的存在。
+- Timeline period 與 Journey Sections 由 `JourneyView.vue` 放入對應的 CSS Grid header rows；收合狀態下，每段 Timeline 的上下 node 由 row 實際高度對齊對應 Section 的上下邊界。
+- 展開時 `JourneyView.vue` 在 Header 後插入獨立的 Journey Detail row；Detail 左側沒有 Timeline period，上一段 segment 高度保持不變，後續 Timeline 與 Section 一起下移，收合完成後恢復原位。同一時間仍只有一段正式展開。
 - Timeline base segment 以每個 Header row 為單位，收合時由 connector 串接相鄰 periods；Detail row 存在時對應 connector 暫停，因此主線不穿越不具時間語意的 Detail。
-- Timeline Events 來自獨立的 `timeline-events.json` 與 API，不屬於 Experience、Section 或 Detail。第一版支援單節點 Point Event 與雙節點／segment Duration Event，由 `Timeline.vue` 依年月在既有 Experience period 內換算位置並統一 render。
-- Timeline 的年月索引、Experience 日期邊界、Event period containment 與百分比位置公式集中於純 JavaScript `utils/journey/timelineMath.js`；目前月份由 `Timeline.vue` 計算一次後明確傳入，因此核心計算不依賴 Vue、DOM 或隱含時間狀態。`Timeline.vue` 保留 reactive grouping、display formatting、DOM rendering、interaction 與 accessibility。
-- Timeline Events 第一版只有靜態 label、node 與 duration segment，沒有 hover、highlight、animation、focus 或 click interaction；不會建立額外 Timeline column 或改變 Experience rows。
+- Timeline Events 來自獨立的 `timeline-events.json` 與 API，不屬於 Journey、Section 或 Detail。第一版支援單節點 Point Event 與雙節點／segment Duration Event，由 `Timeline.vue` 依年月在既有 Journey period 內換算位置並統一 render。
+- Timeline 的年月索引、Journey 日期邊界、Event period containment 與百分比位置公式集中於純 JavaScript `utils/journey/timelineMath.js`；目前月份由 `Timeline.vue` 計算一次後明確傳入，因此核心計算不依賴 Vue、DOM 或隱含時間狀態。`Timeline.vue` 保留 reactive grouping、display formatting、DOM rendering、interaction 與 accessibility。
+- Timeline Events 第一版只有靜態 label、node 與 duration segment，沒有 hover、highlight、animation、focus 或 click interaction；不會建立額外 Timeline column 或改變 Journey rows。
 - Timeline 不再以 Desktop `160px`／Tablet `150px` 固定 period height 推算位置。Desktop 顯示於 Sections 左側、Tablet 縮小、Mobile（≤768px）暫時隱藏。
 - Journey 詳細頁採用 **Timeline + Sections**，不沿用 Project Page 的 Card design language。每段 Journey 以極低對比 surface 輔助閱讀，移除外框、陰影、浮起與 hover border，主要透過 spacing 與淡 divider 區隔；Timeline 是頁面的主要視覺結構。
-- Hover 或 keyboard focus Journey Section，以及 hover 或 focus 該 period 任一 Timeline node 時，`ExperienceView.vue` 以同一個 `activeExperienceSlug` 同步高亮上下 nodes 與中間 period segment。Timeline 保留完整低對比 base line，active segment 只覆蓋 Experience row，Experience 間的 connector gap 不高亮。
+- Hover 或 keyboard focus Journey Section，以及 hover 或 focus 該 period 任一 Timeline node 時，`JourneyView.vue` 以同一個 `activeJourneySlug` 同步高亮上下 nodes 與中間 period segment。Timeline 保留完整低對比 base line，active segment 只覆蓋 Journey row，Journey 間的 connector gap 不高亮。
 - Segment interaction 只有 220ms 顏色與克制 glow transition，支援 `prefers-reduced-motion`；目前沒有掃光、stretch、scroll animation 或與 expanded state 同步。
 - 目前是詳細頁初版：分檔資料、完整 API、單段收合／展開與 Timeline Prototype 已接通，但內容校稿、Timeline 動態 segment 與更完整的可用性驗證仍待後續處理。
 
@@ -317,8 +317,8 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 
 目前保留第一版的最簡單實作，以下特殊情況尚未提前實作，待後續另行設計最佳視覺方案：
 
-1. **Cross-section Duration Event**：例如 Freelance 從 `2024-01` 延續至 `2025-10`，跨越多個 Experience Sections。未來需定義 segment 如何跨越 periods、Journey Detail 展開時如何切割，並確保線段不穿過 Detail row。
-2. **Event 與 Experience 邊界重疊**：例如 Military start 與 Software Engineer start 同為 `2025-07`，或 Event end 與 Master end 同為 `2024-12`。未來需評估 nodes 是否重疊、labels 如何避碰、是否合併 node 或使用小幅偏移，同時維持 Timeline 可讀性。
+1. **Cross-section Duration Event**：例如 Freelance 從 `2024-01` 延續至 `2025-10`，跨越多個 Journey Sections。未來需定義 segment 如何跨越 periods、Journey Detail 展開時如何切割，並確保線段不穿過 Detail row。
+2. **Event 與 Journey 邊界重疊**：例如 Military start 與 Software Engineer start 同為 `2025-07`，或 Event end 與 Master end 同為 `2024-12`。未來需評估 nodes 是否重疊、labels 如何避碰、是否合併 node 或使用小幅偏移，同時維持 Timeline 可讀性。
 
 ### 6.4 `/project`
 
@@ -388,8 +388,8 @@ Desktop social links 位於 `HomeSidebar` 底部；Mobile 則由 fixed `MobileFo
 4. `projects-rwd.css`
 5. `about.css`
 6. `about-rwd.css`
-7. `exp.css`
-8. `exp-rwd.css`
+7. `journey.css`
+8. `journey-rwd.css`
 
 全部是 global CSS；沒有 scoped styles、CSS Modules 或 Sass。Cascade 與 import order 是實際 design system 的一部分。
 
@@ -444,13 +444,13 @@ Desktop social links 位於 `HomeSidebar` 底部；Mobile 則由 fixed `MobileFo
 | 類型 | 位置 | 使用者 |
 |---|---|---|
 | 首頁 About Preview | `frontend/src/data/home/about.json` | HomeView |
-| 首頁 Journey Preview | `frontend/src/data/home/experiences.json` | HomeJourneyItem |
+| 首頁 Journey Preview | `frontend/src/data/home/journey.json` | HomeJourneyItem |
 | 首頁 Projects Preview | `frontend/src/data/home/projects.json` | HomeProjectPreview |
 | 完整 About JSON | `backend/data/portfolio/about/about.json` | About API；目前頁面內容未使用 |
-| 完整 Experience JSON | `backend/data/portfolio/experience/{ezoom,nycu-master,nchu-bachelor}.json` | Experience API/detail page |
+| 完整 Journey JSON | `backend/data/portfolio/journey/{ezoom,nycu-master,nchu-bachelor}.json` | Journey API/detail page |
 | Timeline Events JSON | `backend/data/portfolio/timeline/events.json` | Timeline Events API／Timeline.vue |
 | 完整 Projects JSON | `backend/data/portfolio/projects/{mris,personal-portfolio,mamatoya}.json` | Projects API/detail page |
-| Experience logos | `frontend/src/assets/images/exp/*.png` | Vite asset imports |
+| Journey logos | `frontend/src/assets/images/journey/*.png` | Vite asset imports |
 | Future project screenshots | 預定 `frontend/public/images/projects/covers/*.webp` | 目前檔案尚不存在 |
 | Resume | `frontend/public/files/Adam_Tseng_Resume.pdf` | 首頁 social area |
 | Favicons | `frontend/public/favicon*` | `index.html` |
@@ -489,8 +489,8 @@ Desktop social links 位於 `HomeSidebar` 底部；Mobile 則由 fixed `MobileFo
 Backend Portfolio content 統一以頁面為單位放在 `backend/data/portfolio/`：
 
 - About：`portfolio/about/`，管理個人介紹 paragraphs 與結構化 sections。
-- Experience：`portfolio/experience/`，管理 Journey Sections 與 Detail 的獨立 slug JSON。
-- Timeline：`portfolio/timeline/`，管理屬於 Journey 時間軸、但不屬於 Experience 的 events。
+- Journey：`portfolio/journey/`，管理 Journey Sections 與 Detail 的獨立 slug JSON。
+- Timeline：`portfolio/timeline/`，管理屬於 Journey 時間軸、但不屬於 Journey 的 events。
 - Projects：`portfolio/projects/`，管理 Project summary 與 detail JSON。
 
 舊的 `backend/data/profile/` 分類已移除；未來新增 Portfolio page data 時應建立對應 page folder，不把頁面資料放回 portfolio root。
@@ -505,7 +505,7 @@ Backend Portfolio content 統一以頁面為單位放在 `backend/data/portfolio
 |---|---|---|
 | GET | `/` | `{ "msg": "FastAPI backend running!" }` |
 | GET | `/api/v1/about` | `AboutResponse` |
-| GET | `/api/v1/experience` | `ExperienceResponse` |
+| GET | `/api/v1/journey` | `JourneyResponse` |
 | GET | `/api/v1/timeline-events` | `TimelineEventsResponse` |
 | GET | `/api/v1/projects` | `ProjectsResponse` |
 | GET | `/api/v1/projects/{slug}` | 指定 slug 的完整 `ProjectItem`；不存在時回傳標準 404 error envelope |
@@ -536,8 +536,8 @@ AboutData
     ├── paragraphs: string[]
     └── items: string[]
 
-ExperienceData
-└── experience: ExperienceItem[]
+JourneyData
+└── journey: JourneyItem[]
     ├── slug / category: string
     ├── title / organization / role: string
     ├── location: string
@@ -578,9 +578,9 @@ ProjectData
 
 `GET /api/v1/projects` 會依 repository 的固定順序讀取並逐筆以 `ProjectItem` 驗證；`GET /api/v1/projects/{slug}` 使用相同 repository 與 schema，不建立第二套 loader。三個 Project 的 `showcase` 目前都是空陣列，但 `ShowcaseItem` 已定義 image、image_alt 與選填 caption，供後續加入公開素材。
 
-`GET /api/v1/experience` 透過 repository/service aggregation：repository 動態讀取 `portfolio/experience/*.json`，service 逐筆以 `ExperienceItem` 驗證並組成 Experience list。現況沒有 Experience slug endpoint。
+`GET /api/v1/journey` 透過 repository/service aggregation：repository 動態讀取 `portfolio/journey/*.json`，service 逐筆以 `JourneyItem` 驗證並組成 Journey list。現況沒有 Journey slug endpoint。
 
-`GET /api/v1/timeline-events` 讀取獨立的 `portfolio/timeline/events.json`，並以 discriminated union schema 驗證 point／duration 所需欄位；Experience objects 不包含 Timeline Events。
+`GET /api/v1/timeline-events` 讀取獨立的 `portfolio/timeline/events.json`，並以 discriminated union schema 驗證 point／duration 所需欄位；Journey objects 不包含 Timeline Events。
 
 首頁 Projects Preview schema 是獨立的前端 schema，不應與 backend `ProjectItem` 混用。
 
@@ -721,7 +721,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - Mobile 首頁高度依 DOM measurement 與三個 runtime CSS variables，受 orientation、browser chrome、內容高度影響。
 - `useMouseGlow` 每次 mousemove 查 DOM 並讀取尺寸；詳細頁 Desktop 仍會啟用。
 - `requestRaw()` 無 timeout/abort/retry，且先呼叫 `res.json()`；非 JSON error response 會變成 parse error。
-- 首頁 Profile 本地 JSON與詳細 Experience API內容使用 `v-html`；沒有 frontend sanitization。
+- 首頁 Profile 本地 JSON與詳細 Journey API內容使用 `v-html`；沒有 frontend sanitization。
 - 沒有 catch-all 404 route。
 - `index.html` 的 `lang` 為空，且缺少 description、canonical、Open Graph、Twitter card 與 structured data。
 
@@ -749,11 +749,11 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 |---|---|---|
 | `App.vue` + Home composables + `main-rwd.css` | route meta、template refs、section offsets 與 mobile measurements | 首頁 scrolling、detail layout、mobile viewport |
 | `.main-content` | 首頁是內層 scroll；詳細頁是 document flow | wheel proxy、route scroll、anchor spacing |
-| Global CSS | Home/detail selectors共存在同一 cascade | 修改 `.project-card`、`.exp-card` 或 Bootstrap class可能跨頁影響 |
+| Global CSS | Home/detail selectors共存在同一 cascade | 修改 `.project-card`、`.journey-section` 或 Bootstrap class可能跨頁影響 |
 | Home/Detail summary duplication | 首頁小型 Preview JSON 與 backend Project summary 需人工同步；完整 detail 僅存在 backend | 文案、tags、links 漂移 |
 | JSON → Pydantic → Vue | 詳細頁 contract跨三層 | 欄位 rename、optional semantics、HTML rendering |
-| Experience logo mapping | Backend只給 filename，frontend hard-code imports | 新增 logo需同時改 JSON、檔案與 mapping |
-| Experience folder aggregation | Repository 會自動發現新 slug JSON，但 logo 仍由 frontend mapping，排序依 `start_date` 字串 | 新增資料需使用一致日期格式並補 logo mapping |
+| Journey logo mapping | Backend只給 filename，frontend hard-code imports | 新增 logo需同時改 JSON、檔案與 mapping |
+| Journey folder aggregation | Repository 會自動發現新 slug JSON，但 logo 仍由 frontend mapping，排序依 `start_date` 字串 | 新增資料需使用一致日期格式並補 logo mapping |
 | Project images | JSON path + `image_ready` + public asset | 檔名或 flag錯誤會顯示 placeholder |
 | Deploy-time API base | URL baked into frontend bundle | backend service/domain/region更名需重建 frontend |
 
@@ -762,7 +762,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 ### 16.1 目前內容 Roadmap
 
 - **About 內容校稿**：六個 sections 與 API 串接已完成；後續需確認公開範圍、英文文案與 items 的資訊密度。
-- **Experience 詳細內容**：三份 slug JSON、聚合 API、單段收合／展開、shared-row Timeline 與 active segment glow 已存在；仍需內容校稿、公開資訊確認、Timeline stretch 與詳細頁視覺整理。
+- **Journey 詳細內容**：三份 slug JSON、聚合 API、單段收合／展開、shared-row Timeline 與 active segment glow 已存在；仍需內容校稿、公開資訊確認、Timeline stretch 與詳細頁視覺整理。
 - **Project 詳細內容**：三份 slug JSON、API、完整欄位與單卡收合／展開互動已存在；仍需內容校稿、公開資訊確認、Showcase、架構圖與詳細頁視覺整理。
 - **Homepage Project screenshots**：三張 future paths 已設定，但實體 `.webp` 尚未加入，`image_ready` 仍為 false。
 - **Homepage Project 資料挑選**：目前固定維護三筆 local JSON，尚無自動排序／選取規則；需人工確認哪些作品最適合 recruiter-first 首頁。
@@ -802,7 +802,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - `npm run build`
 - `./node_modules/.bin/eslint .`（不帶 `--fix`）
 - `python backend/scripts/validate_content_schema.py`
-- `/`、`/about`、`/experience`、`/project` 直接開啟與重新整理
+- `/`、`/about`、`/journey`、`/project` 直接開啟與重新整理
 - FastAPI success/error/empty response states
 - Desktop/Tablet/Mobile、keyboard-only、reduced-motion、200% zoom
 - Social links、Resume、external project links、logo與image fallback

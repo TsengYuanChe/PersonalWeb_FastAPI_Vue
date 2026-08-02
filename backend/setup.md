@@ -50,7 +50,7 @@ The script discovers the current JSON files, selects the appropriate Pydantic re
 ## API
 
 - `GET /api/v1/about`
-- `GET /api/v1/experience`
+- `GET /api/v1/journey`
 - `GET /api/v1/projects`
 - `GET /api/v1/projects/{slug}`
 - `GET /api/v1/timeline-events`
@@ -61,7 +61,7 @@ The content APIs are public, read-only endpoints. Collection responses use the e
 ## Data Update Workflow
 
 1. Update the relevant JSON under `data/portfolio/`.
-2. When adding an Experience, add a new JSON file under `data/portfolio/experience/`; the repository scans this directory automatically.
+2. When adding a Journey, add a new JSON file under `data/portfolio/journey/`; the repository scans this directory automatically.
 3. When adding a Project, add its JSON under `data/portfolio/projects/`, then register its slug/path in `repositories/project_repository.py` and its validation mapping in `scripts/validate_content_schema.py`.
 4. Run `python scripts/validate_content_schema.py`.
 5. Start the API and verify the affected endpoint response.

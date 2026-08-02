@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from schemas.common import ApiResponse
 
 
-class ExperienceItem(BaseModel):
+class JourneyItem(BaseModel):
     slug: str
     category: str
     title: str
@@ -26,9 +26,9 @@ class ExperienceItem(BaseModel):
     gpa: Optional[str] = None
 
 
-class ExperienceData(BaseModel):
-    experience: list[ExperienceItem]
+class JourneyData(BaseModel):
+    journey: list[JourneyItem]
 
 
-class ExperienceResponse(ApiResponse):
-    data: ExperienceData
+class JourneyResponse(ApiResponse):
+    data: JourneyData

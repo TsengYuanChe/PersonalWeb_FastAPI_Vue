@@ -4,6 +4,7 @@
 > 依據：`frontend/` 的 tracked files、實際 imports、routes、component consumers、runtime state、API calls、local JSON、CSS selectors/import order、package lock、Vite、Docker 與 Nginx 設定。  
 > Review scope：Vue 3 SPA architecture、ownership、coupling、build/deployment boundaries 與分階段 refactor candidates。  
 > 本次只新增此 review 文件，沒有修改任何 frontend runtime code、content、style、dependency 或 deployment file。
+> 後續現況同步：Journey domain rename 已更新本文件中的 runtime paths、symbols 與 route names；原始 review 的判斷與階段性建議語氣仍保留。
 
 ## Current Architecture
 
@@ -15,7 +16,7 @@ index.html
   → createApp(App) + Vue Router
   → App.vue route-aware application shell
   → RouterView
-  → HomeView / AboutView / ExperienceView / ProjectView
+  → HomeView / AboutView / JourneyView / ProjectView
   → local Home JSON or contentApi.js
   → feature components
 ```
@@ -27,16 +28,16 @@ index.html
 | Location | Current responsibility | Coupling/change boundary |
 |---|---|---|
 | `src/api/` | Fetch transport and the four v1 content calls | Shared by App and detail Views; no component performs fetch directly |
-| `src/views/` | Route-level loading, state, empty/error handling and feature orchestration | Correct page boundary; Experience has materially more orchestration than other Views |
+| `src/views/` | Route-level loading, state, empty/error handling and feature orchestration | Correct page boundary; Journey has materially more orchestration than other Views |
 | `src/components/about/` | Rendering one backend About section | About-specific and stateless |
-| `src/components/experience/` | Home Journey row, detail Journey header/detail, Timeline rendering | Home and detail components are separated; Timeline owns both rendering and date/event calculations |
+| `src/components/journey/` | Home Journey row, detail Journey header/detail, Timeline rendering | Home and detail components are separated; Timeline owns both rendering and date/event calculations |
 | `src/components/projects/` | Shared cover/action, Home preview and detail Project card | `ProjectCover` and `ProjectAction` are genuinely cross-page; other components are page-specific |
 | `src/components/layout/` | Shared detail page heading/breadcrumb | Cross-detail-page shared component |
 | `src/composables/` | Global DOM side effects plus one misclassified pure helper collection | Only `useMouseGlow` and `useScrollProxy` are lifecycle composables |
-| `src/utils/` | Experience logo lookup and pure Project search/filter helpers | Pure, deterministic logic with high unit-test value |
+| `src/utils/` | Journey logo lookup and pure Project search/filter helpers | Pure, deterministic logic with high unit-test value |
 | `src/data/home/` | Bundle-time Home preview content | Intentionally independent from backend runtime availability |
 | `src/assets/css/` | Global tokens, layouts, feature styles and responsive overrides | All eight files are global; ownership is conventional rather than enforced |
-| `src/assets/images/` | Imported Experience logos | Vite fingerprints these assets |
+| `src/assets/images/` | Imported Journey logos | Vite fingerprints these assets |
 | `public/` | Resume and favicon files served with stable public paths | No bundler import or hashing |
 | `src/router/` | Four routes, layout meta and document scroll reset | Home inner scrolling is additionally handled by App |
 | Build/deploy files | Vite, ESLint, aliases, tracked env config, Docker/Nginx | API base is build-time; Nginx provides SPA fallback |
@@ -47,14 +48,14 @@ index.html
 |---|---|---|---|
 | `/` | `HomeView.vue` | Static imports from `src/data/home/*.json` | No runtime page state |
 | `/about` | `AboutView.vue` | `GET /api/v1/about` | `AboutView` |
-| `/experience` | `ExperienceView.vue` | Experience + Timeline Events APIs | `ExperienceView` |
+| `/journey` | `JourneyView.vue` | Journey + Timeline Events APIs | `JourneyView` |
 | `/project` | `ProjectView.vue` | Projects API | `ProjectView` |
 
 ## Intentional Architecture Decisions
 
 ### Home Preview data is a performance boundary
 
-`src/data/home/about.json`, `experiences.json`, and `projects.json` are intentionally imported into the Home bundle. This means:
+`src/data/home/about.json`, `journey.json`, and `projects.json` are intentionally imported into the Home bundle. This means:
 
 - Home preview content renders without waiting for the backend.
 - A Cloud Run backend cold start does not leave Profile, Journey, or Projects blank.
@@ -134,10 +135,10 @@ After a minimal shell refactor, `App.vue` should own route/layout selection, sha
 - **Assessment:** responsibility is cohesive and small. A generic page-loader composable would abstract only a few lines while obscuring page-specific messages and shapes.
 - **Recommendation:** keep as-is; prioritize tests over decomposition.
 
-### ExperienceView.vue
+### JourneyView.vue
 
-- **Data loading:** concurrently loads Experience and Timeline Events, then owns both arrays and the combined error/loading state.
-- **Interaction state:** `expandedExperienceSlug`, `leavingDetailSlugs`, and `activeExperienceSlug`.
+- **Data loading:** concurrently loads Journey and Timeline Events, then owns both arrays and the combined error/loading state.
+- **Interaction state:** `expandedJourneySlug`, `leavingDetailSlugs`, and `activeJourneySlug`.
 - **Row calculation:** `detailRowSlugs`, `journeyRows`, and `timelineRows` keep Timeline and content on shared CSS Grid rows while preserving a leaving detail row.
 - **Coordination:** maps section hover/focus to Timeline active slug and coordinates one-expanded behavior.
 - **DOM/animation:** owns dynamic-height enter/leave hooks, `scrollHeight`, inline height/opacity/transform, `inert`, and `aria-hidden`.
@@ -145,18 +146,18 @@ After a minimal shell refactor, `App.vue` should own route/layout selection, sha
 
 The View correctly owns cross-component orchestration; moving all of it into `JourneySection` or `Timeline` would recreate coupling. Two boundaries are still valuable:
 
-1. `useJourneyRows(experiences)` — pure/reactive row-state coordination.
-   - **Input:** `experiences` ref.
-   - **Owns:** `expandedExperienceSlug`, `leavingDetailSlugs`.
-   - **Outputs:** `detailRowSlugs`, `journeyRows`, `rowBySlug`, `toggleExperience(slug)`, `finishDetailLeave(slug)`.
+1. `useJourneyRows(journeyItems)` — pure/reactive row-state coordination.
+   - **Input:** `journeyItems` ref.
+   - **Owns:** `expandedJourneySlug`, `leavingDetailSlugs`.
+   - **Outputs:** `detailRowSlugs`, `journeyRows`, `rowBySlug`, `toggleJourney(slug)`, `finishDetailLeave(slug)`.
    - **DOM dependency:** none.
    - **Benefit:** row lifecycle can be tested without rendering Timeline.
 2. `useAutoHeightTransition()` — shared DOM transition hooks.
    - **Outputs:** `beforeEnter`, `enter`, `afterEnter`, `beforeLeave`, `leave`.
-   - **Consumers:** `ExperienceView` and `ProjectCard`.
+   - **Consumers:** `JourneyView` and `ProjectCard`.
    - **Benefit:** removes duplicated height/inert behavior and creates one reduced-motion/animation contract.
 
-`activeExperienceSlug` and activate/deactivate focus coordination should stay in the View because they synchronize sibling components. API loading should also stay at the route boundary.
+`activeJourneySlug` and activate/deactivate focus coordination should stay in the View because they synchronize sibling components. API loading should also stay at the route boundary.
 
 ### ProjectView.vue
 
@@ -173,10 +174,10 @@ The View correctly owns cross-component orchestration; moving all of it into `Jo
 | Component | Consumers | Props / emits | Owned behavior | Assessment |
 |---|---|---|---|---|
 | `AboutSection.vue` | `AboutView` | `section`; no emits | Semantic section/paragraph/list rendering | Correct, page-specific, stateless; no split needed |
-| `HomeJourneyItem.vue` | `HomeView` | `experience`; no emits | Logo lookup + compact row | Name matches responsibility; Home-specific |
-| `JourneySection.vue` | `ExperienceView` | `experience`, `expanded`; emits `toggle(slug)` | Header, toggle semantics, logo mapping | Correct boundary: does not know Timeline or detail rendering |
-| `JourneyDetail.vue` | `ExperienceView` | `experience`; no emits | Conditional detail sections and skill/technology dedupe | Cohesive page-specific renderer; no further split needed at three records |
-| `Timeline.vue` | `ExperienceView` | experiences/events/active slug/detail slugs/row map; emits activate/deactivate | Timeline DOM, event placement, dates, focus/hover | Rendering boundary is correct; pure date/placement math is extractable |
+| `HomeJourneyItem.vue` | `HomeView` | `journey`; no emits | Logo lookup + compact row | Name matches responsibility; Home-specific |
+| `JourneySection.vue` | `JourneyView` | `journey`, `expanded`; emits `toggle(slug)` | Header, toggle semantics, logo mapping | Correct boundary: does not know Timeline or detail rendering |
+| `JourneyDetail.vue` | `JourneyView` | `journey`; no emits | Conditional detail sections and skill/technology dedupe | Cohesive page-specific renderer; no further split needed at three records |
+| `Timeline.vue` | `JourneyView` | journeyItems/events/active slug/detail slugs/row map; emits activate/deactivate | Timeline DOM, event placement, dates, focus/hover | Rendering boundary is correct; pure date/placement math is extractable |
 | `HomeProjectPreview.vue` | `HomeView` | `project`; no emits | Compact summary using shared cover/action | Correct Home-specific component |
 | `ProjectAction.vue` | Home preview + Project card | `project`, `name`; no emits | Link precedence and accessibility labels | Genuinely shared; name matches behavior |
 | `ProjectCard.vue` | `ProjectView` | `project`, `expanded`; emits `toggle(slug)` | Summary, details, interaction and dynamic-height transition | Multiple responsibilities; a measured split can improve tests |
@@ -194,13 +195,13 @@ Keep in `Timeline.vue`:
 - accessible node labels;
 - connector and detail-row rendering semantics.
 
-Extract to `src/utils/timelineMath.js`:
+Extract to `src/utils/journey/timelineMath.js`:
 
 - `monthIndex(value)`;
-- experience bounds from start/end/current month;
-- `eventFitsExperience()`;
+- journey bounds from start/end/current month;
+- `eventFitsJourney()`;
 - `datePosition()`;
-- optionally `groupTimelineEvents(experiences, events, currentMonthIndex)`.
+- optionally `groupTimelineEvents(journeyItems, events, currentMonthIndex)`.
 
 The utility should receive the current month as input rather than reading `new Date()` internally, making Present positioning deterministic in tests. Formatting can remain in the component unless it is also tested independently.
 
@@ -247,7 +248,7 @@ Answers to the requested architecture questions:
 | `useMouseGlow.js` | `App.vue` | Vue lifecycle + global DOM side effect | Correct composable category; queries `.cursor-glow` and reads dimensions on every mousemove. Later accept an element ref and consider reduced-motion/coarse-pointer enablement |
 | `useScrollProxy.js` | `App.vue` | Vue lifecycle + global wheel interception | Correct category but strongly selector-coupled. Accept the content ref/enabled state; review nested scroll and keyboard behavior before changing |
 | `useProjectHelpers.js` | `ProjectCard` | Pure helper factory, no Vue API | Misclassified as composable. Only `safeArray` is consumed; `isFeaturedProject`, `previewEngineering`, `getGithubLink`, and `getDemoLink` are dead exports based on the complete import scan |
-| `experienceLogos.js` | Home Journey + Journey Section | Pure asset mapping | Correct utility and shared consumer boundary |
+| `journeyLogos.js` | Home Journey + Journey Section | Pure asset mapping | Correct utility and shared consumer boundary |
 | `projectSearch.js` | `ProjectView` | Pure domain utility | Correct location; strongest immediate unit-test target |
 
 `safeArray` does not require a dedicated composable. The lowest-cost cleanup is a local helper in `ProjectDetail.vue` if that component is extracted, or a named pure export in a general utility only when a second consumer exists.
@@ -273,16 +274,16 @@ There is no cross-route writable domain state, shared cache, authentication stat
 main.css → main-rwd.css
 projects.css → projects-rwd.css
 about.css → about-rwd.css
-exp.css → exp-rwd.css
+journey.css → journey-rwd.css
 ```
 
 - Global tokens (`--site-bg`, text colors, layout widths) live in `main.css`.
 - Project cover tokens live in a second `:root` block in `projects.css`.
 - Shared shell, breadcrumb and page states live in `main.css`.
-- Home and detail feature rules share the same About/Experience/Projects files.
+- Home and detail feature rules share the same About/Journey/Projects files.
 - Breakpoints are consistently centered on 1024px and 768px, but rule ordering varies. For example, some mobile blocks precede tablet blocks and rely on `!important` or later duplicate mobile blocks.
 - Shared `.tag` styles live in `projects.css` but are consumed by `JourneyDetail`, so actual ownership is broader than the filename suggests.
-- `.home-journey-link` is defined in `exp.css` but used by Profile and Projects section headers as well.
+- `.home-journey-link` is defined in `journey.css` but used by Profile and Projects section headers as well.
 - `.project-category` is in `main.css`, while its only current consumer is ProjectCard.
 - Component-specific styles are not colocated; correctness depends on global import order and selector uniqueness.
 
@@ -296,7 +297,7 @@ Static template/import scan found no runtime consumers for these selectors:
 - `.see-more-btn`
 - `.section-footer-link`
 - `.exp-gpa`
-- mobile `#exp` (the current Home id is `#experiences`)
+- mobile `#exp` (the current Home id is `#journey`)
 
 They should be rechecked against any runtime-generated content before removal, but no Vue/JS consumer exists today.
 
@@ -325,10 +326,10 @@ If the site grows, introduce `tokens.css` first, imported before `main.css`, the
 | Home file | Home fields | Backend equivalents / notes |
 |---|---|---|
 | `about.json` | `paragraphs` | Deliberately shorter copy than backend structured sections; not expected to be identical |
-| `experiences.json` | logo, position, name, duration, short_description | logo, title, organization, period, summary |
+| `journey.json` | logo, position, name, duration, short_description | logo, title, organization, period, summary |
 | `projects.json` | name, image, image_alt, image_ready, introduction, tags, URLs | title, cover, cover_alt, cover_ready, summary, technologies, URLs |
 
-Experience and Project previews currently match backend summary content semantically. Likely drift points are dates/period, title/organization, summary wording, cover path/readiness, technologies/tags and external URLs. MRIS uses an empty `website_url` in Home JSON while backend uses `null`; rendering is equivalent, but it demonstrates schema-convention drift.
+Journey and Project previews currently match backend summary content semantically. Likely drift points are dates/period, title/organization, summary wording, cover path/readiness, technologies/tags and external URLs. MRIS uses an empty `website_url` in Home JSON while backend uses `null`; rendering is equivalent, but it demonstrates schema-convention drift.
 
 Home-only concerns should stay local: preview wording, `short_description`/`introduction`, preview selection/order, and whether a preview image is ready. Full detail sections must remain backend-only.
 
@@ -345,11 +346,11 @@ Do not switch Home to runtime API loading or add SWR in the current architecture
 
 ## Routing and Page Metadata Review
 
-- Four routes are valid and stable: `/`, `/about`, `/experience`, `/project`.
+- Four routes are valid and stable: `/`, `/about`, `/journey`, `/project`.
 - `meta.layout` is the only route metadata and is correctly consumed by App.
 - Router `scrollBehavior()` resets document scroll; App separately manages Home's inner `.main-content` and hash offsets. This split should be consolidated during the shell refactor, not patched independently.
 - There is no catch-all 404 route. A small Not Found View is a high-value, low-risk quality task after shell ownership is clearer.
-- Singular `/experience` and `/project` naming is established and does not justify breaking links.
+- Singular `/journey` and `/project` naming is established and does not justify breaking links.
 - All Views are eagerly imported. The production bundle is currently small; route-level lazy loading is optional, not urgent.
 - `index.html` has an empty `lang`, a generic title, and no description/canonical/Open Graph/Twitter/structured metadata.
 - Document title and metadata have no route owner.
@@ -441,12 +442,12 @@ frontend/src/
 ├── config/
 │   └── siteLinks.js                  # social/resume data source
 └── utils/
-    ├── experienceLogos.js
+    ├── journeyLogos.js
     ├── projectSearch.js
     └── timelineMath.js                # pure date/placement logic
 ```
 
-No `store/`, `services/`, API resource files, layout framework or empty directory is proposed. `useJourneyRows` should be added only if row-state tests demonstrate value; it can remain in `ExperienceView` until then.
+No `store/`, `services/`, API resource files, layout framework or empty directory is proposed. `useJourneyRows` should be added only if row-state tests demonstrate value; it can remain in `JourneyView` until then.
 
 ### Long-term Target
 
@@ -474,13 +475,13 @@ Layouts become valuable only if more shells/routes appear. A separate tokens fil
 | Phase | Candidate | Risk | Value | Main files | Immediate? / expected benefit |
 |---|---|---|---|---|---|
 | 0 — Cleanup | Remove Axios and unused `request()`/Project helper exports | Low | Medium | package files, `client.js`, `useProjectHelpers.js`, `ProjectCard.vue` | Yes; removes dead alternatives and misleading ownership |
-| 0 — Cleanup | Remove verified dead CSS selectors | Low–Medium | Medium | main/exp/projects CSS + RWD | Yes, in small reviewed batches; reduces cascade noise |
+| 0 — Cleanup | Remove verified dead CSS selectors | Low–Medium | Medium | main/journey/projects CSS + RWD | Yes, in small reviewed batches; reduces cascade noise |
 | 0 — Cleanup | Gate Vue DevTools by mode; add frontend `.dockerignore`; use `npm ci` | Low–Medium | Medium | Vite config, Dockerfile, new `.dockerignore` | Yes as a separate build cleanup |
 | 1 — Application Shell | Extract Sidebar/SocialLinks/MobileFooter and link config | Medium | High | `App.vue`, new layout components/config | Yes; removes duplicate URLs and shell markup from root |
 | 1 — Application Shell | Extract Home navigation and viewport metric composables with element refs | Medium | High | `App.vue`, current composables, new composables | Yes after shell components; reduces selector/lifecycle coupling |
 | 1 — Application Shell | Introduce full Home/Detail layout components | Medium | Low–Medium | App/router/new layouts | Defer; only valuable if shells/routes grow |
 | 2 — Complex Feature | Extract/test Timeline date and event-placement math | Medium | High | `Timeline.vue`, new `timelineMath.js` | Yes; deterministic domain logic and highest Timeline regression value |
-| 2 — Complex Feature | Share dynamic-height transition hooks | Medium | Medium–High | `ExperienceView`, `ProjectCard`, new composable | Yes with component regression checks; one animation/a11y contract |
+| 2 — Complex Feature | Share dynamic-height transition hooks | Medium | Medium–High | `JourneyView`, `ProjectCard`, new composable | Yes with component regression checks; one animation/a11y contract |
 | 2 — Complex Feature | Extract `ProjectDetail.vue` | Medium | Medium | `ProjectCard`, new component | After transition extraction; isolates detail rendering |
 | 2 — Complex Feature | Extract all Project filters to composable | Low | Low | `ProjectView` | No; current View is already cohesive |
 | 3 — CSS Ownership | Inventory tokens/shared primitives and normalize breakpoint ordering | Medium | High | all eight CSS files, `main.js` | Yes incrementally; reduces import-order surprises |

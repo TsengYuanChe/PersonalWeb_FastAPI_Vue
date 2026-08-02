@@ -26,7 +26,7 @@ defineProps({
         <RouterLink :to="{ path: '/', hash: '#about' }" class="nav-link px-0 py-1">
           -- Home
         </RouterLink>
-        <RouterLink :to="{ path: '/', hash: '#experiences' }" class="nav-link px-0 py-1">
+        <RouterLink :to="{ path: '/', hash: '#journey' }" class="nav-link px-0 py-1">
           -- Journey
         </RouterLink>
         <RouterLink :to="{ path: '/', hash: '#projects' }" class="nav-link px-0 py-1">

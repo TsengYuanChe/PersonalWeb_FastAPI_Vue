@@ -8,17 +8,17 @@ export function monthIndex(date) {
   return Number(match[1]) * 12 + Number(match[2]) - 1
 }
 
-export function experienceBounds(experience, currentMonthIndex) {
+export function journeyBounds(journeyItem, currentMonthIndex) {
   return {
-    start: monthIndex(experience.start_date),
-    end: experience.end_date ? monthIndex(experience.end_date) : currentMonthIndex,
+    start: monthIndex(journeyItem.start_date),
+    end: journeyItem.end_date ? monthIndex(journeyItem.end_date) : currentMonthIndex,
   }
 }
 
-export function eventFitsExperience(startDate, endDate, experience, currentMonthIndex) {
+export function eventFitsJourney(startDate, endDate, journeyItem, currentMonthIndex) {
   const eventStart = monthIndex(startDate)
   const eventEnd = monthIndex(endDate)
-  const bounds = experienceBounds(experience, currentMonthIndex)
+  const bounds = journeyBounds(journeyItem, currentMonthIndex)
 
   return (
     eventStart !== null &&
@@ -30,9 +30,9 @@ export function eventFitsExperience(startDate, endDate, experience, currentMonth
   )
 }
 
-export function datePosition(date, experience, currentMonthIndex) {
+export function datePosition(date, journeyItem, currentMonthIndex) {
   const dateValue = monthIndex(date)
-  const bounds = experienceBounds(experience, currentMonthIndex)
+  const bounds = journeyBounds(journeyItem, currentMonthIndex)
 
   if (dateValue === null || bounds.start === null || bounds.end === null) {
     return 0

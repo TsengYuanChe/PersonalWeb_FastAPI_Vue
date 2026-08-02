@@ -8,8 +8,8 @@ export async function getAbout() {
   }
 }
 
-export async function getExperience() {
-  const res = await requestRaw("/api/v1/experience")
+export async function getJourney() {
+  const res = await requestRaw("/api/v1/journey")
   return {
     content: res.data,
     updatedAt: res.meta?.updated_at ?? null,

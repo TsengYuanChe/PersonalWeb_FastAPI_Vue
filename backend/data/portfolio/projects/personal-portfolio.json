@@ -37,7 +37,7 @@
       "The application separates a Vue single-page frontend from a lightweight FastAPI content service. Structured JSON files are validated with Pydantic before their data is returned to the frontend."
     ],
     "highlights": [
-      "Vue Router provides Home, About, Experience, and Project routes.",
+      "Vue Router provides Home, About, Journey, and Project routes.",
       "Homepage previews use small local datasets to avoid backend cold-start delays.",
       "Detail pages consume versioned FastAPI responses through a shared API client.",
       "Docker images package the services for deployment to Google Cloud Run."
@@ -56,7 +56,7 @@
       },
       {
         "title": "Scalable content updates",
-        "description": "Data schemas and reusable components reduce the amount of template code required when projects or experience entries change."
+        "description": "Data schemas and reusable components reduce the amount of template code required when projects or journey entries change."
       }
     ]
   },

@@ -1,9 +1,9 @@
 <script setup>
 import { computed } from 'vue'
-import { getExperienceLogo } from '@/utils/journey/experienceLogos'
+import { getJourneyLogo } from '@/utils/journey/journeyLogos'
 
 const props = defineProps({
-  experience: {
+  journey: {
     type: Object,
     required: true,
   },
@@ -14,11 +14,11 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['toggle'])
-const logoUrl = computed(() => getExperienceLogo(props.experience.logo))
-const detailsId = computed(() => `journey-details-${props.experience.slug}`)
+const logoUrl = computed(() => getJourneyLogo(props.journey.logo))
+const detailsId = computed(() => `journey-details-${props.journey.slug}`)
 
 function toggleDetails() {
-  emit('toggle', props.experience.slug)
+  emit('toggle', props.journey.slug)
 }
 
 function handleHeaderClick(event) {
@@ -40,28 +40,28 @@ function handleHeaderClick(event) {
             v-if="logoUrl"
             class="journey-section__logo"
             :src="logoUrl"
-            :alt="`${experience.organization} logo`"
+            :alt="`${journey.organization} logo`"
           />
         </div>
       </div>
 
       <div class="journey-section__main">
         <div class="journey-section__heading">
-          <h2 class="h4 text-info mb-0">{{ experience.title }}</h2>
+          <h2 class="h4 text-info mb-0">{{ journey.title }}</h2>
           <p class="journey-section__organization text-light mb-0 mt-1">
-            {{ experience.organization }}
+            {{ journey.organization }}
           </p>
         </div>
 
         <p class="journey-section__summary text-secondary mt-2 mb-0">
-          {{ experience.summary }}
+          {{ journey.summary }}
         </p>
       </div>
 
       <aside class="journey-section__meta" aria-label="Journey metadata">
         <div class="journey-section__meta-group">
-          <p v-if="experience.role" class="journey-section__meta-item">{{ experience.role }}</p>
-          <p v-if="experience.period" class="journey-section__meta-item">{{ experience.period }}</p>
+          <p v-if="journey.role" class="journey-section__meta-item">{{ journey.role }}</p>
+          <p v-if="journey.period" class="journey-section__meta-item">{{ journey.period }}</p>
         </div>
 
         <div class="journey-section__toggle-group">

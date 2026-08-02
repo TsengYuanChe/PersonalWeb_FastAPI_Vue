@@ -12,8 +12,8 @@ import './assets/css/projects.css'
 import './assets/css/projects-rwd.css'
 import './assets/css/about.css'
 import './assets/css/about-rwd.css'
-import './assets/css/exp.css'
-import './assets/css/exp-rwd.css'
+import './assets/css/journey.css'
+import './assets/css/journey-rwd.css'
 
 const app = createApp(App)
 
