@@ -10,6 +10,12 @@
 - **【推測／建議】**：由現有實作推導，仍需產品負責人或外部環境確認。
 - 本文件不記錄任何 secret、憑證或密碼實際內容。
 
+### 0.1 文件索引
+
+- `overview.md`：網站定位、頁面狀態、資料流、部署方式、修改風險與 roadmap。
+- `structure.md`：repository 當前實際檔案結構、逐層責任、API/CSS ownership、技術債與 refactor candidates。
+- 其他 root architecture、features、system-design 與 TODO 文件屬補充或歷史資料；與程式衝突時仍以目前可執行程式碼為準。
+
 ## 1. 網站定位與目前功能
 
 ### 1.1 產品定位
