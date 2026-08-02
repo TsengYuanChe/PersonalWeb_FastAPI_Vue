@@ -1,5 +1,9 @@
 <script setup>
 import { computed } from 'vue'
+import {
+  datePosition,
+  eventFitsExperience,
+} from '@/utils/timelineMath'
 
 defineOptions({ name: 'JourneyTimeline' })
 
@@ -39,7 +43,9 @@ const eventsByExperience = computed(() => {
   props.events.forEach((event) => {
     const startDate = event.type === 'point' ? event.date : event.start_date
     const endDate = event.type === 'point' ? event.date : event.end_date
-    const experience = props.experiences.find((item) => eventFitsExperience(startDate, endDate, item))
+    const experience = props.experiences.find((item) =>
+      eventFitsExperience(startDate, endDate, item, currentMonthIndex),
+    )
 
     if (!experience) {
       return
@@ -47,10 +53,10 @@ const eventsByExperience = computed(() => {
 
     const placement =
       event.type === 'point'
-        ? { top: `${datePosition(event.date, experience)}%` }
+        ? { top: `${datePosition(event.date, experience, currentMonthIndex)}%` }
         : {
-            top: `${datePosition(event.end_date, experience)}%`,
-            bottom: `${100 - datePosition(event.start_date, experience)}%`,
+            top: `${datePosition(event.end_date, experience, currentMonthIndex)}%`,
+            bottom: `${100 - datePosition(event.start_date, experience, currentMonthIndex)}%`,
           }
 
     groupedEvents[experience.slug].push({ ...event, placement })
@@ -58,55 +64,6 @@ const eventsByExperience = computed(() => {
 
   return groupedEvents
 })
-
-function monthIndex(date) {
-  const match = /^(\d{4})-(\d{2})$/.exec(date ?? '')
-
-  if (!match) {
-    return null
-  }
-
-  return Number(match[1]) * 12 + Number(match[2]) - 1
-}
-
-function experienceBounds(experience) {
-  return {
-    start: monthIndex(experience.start_date),
-    end: experience.end_date ? monthIndex(experience.end_date) : currentMonthIndex,
-  }
-}
-
-function eventFitsExperience(startDate, endDate, experience) {
-  const eventStart = monthIndex(startDate)
-  const eventEnd = monthIndex(endDate)
-  const bounds = experienceBounds(experience)
-
-  return (
-    eventStart !== null &&
-    eventEnd !== null &&
-    bounds.start !== null &&
-    bounds.end !== null &&
-    eventStart >= bounds.start &&
-    eventEnd <= bounds.end
-  )
-}
-
-function datePosition(date, experience) {
-  const dateValue = monthIndex(date)
-  const bounds = experienceBounds(experience)
-
-  if (dateValue === null || bounds.start === null || bounds.end === null) {
-    return 0
-  }
-
-  const duration = bounds.end - bounds.start
-
-  if (duration <= 0) {
-    return 0
-  }
-
-  return ((bounds.end - dateValue) / duration) * 100
-}
 
 const monthFormatter = new Intl.DateTimeFormat('en', {
   month: 'short',

@@ -304,6 +304,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - 展開時 `ExperienceView.vue` 在 Header 後插入獨立的 Journey Detail row；Detail 左側沒有 Timeline period，上一段 segment 高度保持不變，後續 Timeline 與 Section 一起下移，收合完成後恢復原位。同一時間仍只有一段正式展開。
 - Timeline base segment 以每個 Header row 為單位，收合時由 connector 串接相鄰 periods；Detail row 存在時對應 connector 暫停，因此主線不穿越不具時間語意的 Detail。
 - Timeline Events 來自獨立的 `timeline-events.json` 與 API，不屬於 Experience、Section 或 Detail。第一版支援單節點 Point Event 與雙節點／segment Duration Event，由 `Timeline.vue` 依年月在既有 Experience period 內換算位置並統一 render。
+- Timeline 的年月索引、Experience 日期邊界、Event period containment 與百分比位置公式集中於純 JavaScript `utils/timelineMath.js`；目前月份由 `Timeline.vue` 計算一次後明確傳入，因此核心計算不依賴 Vue、DOM 或隱含時間狀態。`Timeline.vue` 保留 reactive grouping、display formatting、DOM rendering、interaction 與 accessibility。
 - Timeline Events 第一版只有靜態 label、node 與 duration segment，沒有 hover、highlight、animation、focus 或 click interaction；不會建立額外 Timeline column 或改變 Experience rows。
 - Timeline 不再以 Desktop `160px`／Tablet `150px` 固定 period height 推算位置。Desktop 顯示於 Sections 左側、Tablet 縮小、Mobile（≤768px）暫時隱藏。
 - Journey 詳細頁採用 **Timeline + Sections**，不沿用 Project Page 的 Card design language。每段 Journey 以極低對比 surface 輔助閱讀，移除外框、陰影、浮起與 hover border，主要透過 spacing 與淡 divider 區隔；Timeline 是頁面的主要視覺結構。
@@ -348,7 +349,8 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - `DetailPageHeader.vue`：三個詳細頁共用 Breadcrumb、唯一 `h1` 與 description。
 - `AboutSection.vue`：About 詳細頁的 data-driven section renderer，顯示 title、paragraphs 與 optional items。
 - `HomeJourneyItem.vue` / `JourneySection.vue` / `JourneyDetail.vue`：首頁 Preview、詳細頁 Summary Header 與展開 Detail 分離。
-- `Timeline.vue`：詳細 Journey 專用的 data-driven Timeline Prototype；只 render line/nodes 並 emit hover/focus state，不包含 Section 或展開邏輯。
+- `Timeline.vue`：詳細 Journey 專用的 data-driven Timeline Prototype；負責 reactive presentation mapping、line/nodes/events rendering、日期 labels、hover/focus state 與 accessibility，不包含 Section、展開邏輯或底層日期位置公式。
+- `utils/timelineMath.js`：Timeline 專用的純日期、期間 containment 與事件位置計算；目前仍與既有 utilities 平放，尚未進行 utility/composable 資料夾分類。
 - `ProjectCover.vue`：首頁與詳細 Projects 共用的 160×100、16:10 cover／placeholder。
 - `ProjectAction.vue`：首頁與詳細 Projects 共用 Live／Source／Internal 判斷與外部連結語意。
 - `HomeProjectPreview.vue` / `ProjectCard.vue`：首頁與詳細 Projects 分離，並共用 `ProjectCover.vue`。

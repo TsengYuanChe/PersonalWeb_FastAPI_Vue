@@ -198,7 +198,8 @@ frontend/
 │   │   └── siteLinks.js
 │   ├── utils/
 │   │   ├── experienceLogos.js
-│   │   └── projectSearch.js
+│   │   ├── projectSearch.js
+│   │   └── timelineMath.js
 │   ├── data/home/
 │   │   ├── about.json
 │   │   ├── experiences.json
@@ -264,7 +265,7 @@ frontend/
 - `HomeJourneyItem.vue` — **Home-specific**：精簡 Journey preview row。
 - `JourneySection.vue` — **Experience page-specific**：永遠可見的 Experience header、logo、summary、metadata、More/Less toggle；不知道 Timeline。
 - `JourneyDetail.vue` — **Experience page-specific**：展開後的 description、responsibilities、highlights、projects、skills/technologies、additional details；不知道 Timeline 或 expanded state。
-- `Timeline.vue` — **Experience page-specific**：render Experience periods、date labels、nodes、active segments、connectors 與 static Timeline Events；接收 View 計算的 row mapping，不 render Journey content。
+- `Timeline.vue` — **Experience page-specific**：擁有 props/computed presentation mapping、Experience periods、date labels、nodes、active segments、connectors、static Timeline Events、interaction 與 accessibility；接收 View 計算的 row mapping，不 render Journey content，底層日期／位置公式委派給純 utility。
 
 #### `components/projects/`
 
@@ -299,6 +300,7 @@ frontend/
 - `ProjectCard.vue` 的 `safeArray` 是其 detail template 專用 local helper；沒有建立只有單一 consumer 的 composable 或 utility。
 - `experienceLogos.js`：backend logo filename 到 Vite image imports 的固定 mapping。
 - `projectSearch.js`：Project public text collection、whole-token search、exact filters、dynamic option sorting。
+- `timelineMath.js`：不依賴 Vue、DOM 或 module-level mutable state的 Timeline 純函式；負責年月索引、Experience bounds、Event 是否完整落在單一 Experience，以及日期在 period 內的百分比位置。`Timeline.vue` 是目前唯一 consumer；本階段未進行 utility/composable 資料夾分類。
 
 ### Frontend data and assets
 
