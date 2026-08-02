@@ -30,7 +30,6 @@ This design keeps presentation and content delivery decoupled while preserving a
 - `services/about_service.py`, `experience_service.py`, `project_service.py`, `timeline_service.py`: resource-specific validation and v1 response shaping.
 - `repositories/about_repository.py`, `experience_repository.py`, `project_repository.py`, `timeline_repository.py`: resource-specific filesystem data access.
 - `repositories/common.py`: shared JSON read and timestamp extraction utility.
-- `core/config.py`, `core/logging.py`: backend core placeholders for settings/logging.
 - `schemas/about.py`, `experience.py`, `project.py`, `timeline.py`: resource-specific Pydantic content and response models.
 - `schemas/common.py`: shared `Meta` and `ApiResponse` models.
 - API model: read-only HTTP endpoints returning JSON plus `updated_at`.

@@ -145,8 +145,6 @@ PersonalWeb_Flask_Vue/
 │   │           ├── personal-portfolio.json
 │   │           └── mamatoya.json
 │   ├── scripts/validate_content_schema.py
-│   ├── core/config.py             # placeholder
-│   ├── core/logging.py            # placeholder
 │   ├── requirements.txt
 │   └── Dockerfile
 ├── frontend/
@@ -717,9 +715,8 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - CORS 同時使用 `allow_origins=["*"]` 與 `allow_credentials=True`，production policy 過寬且語意不清。
 - JSON rich text 含外部 `<a target="_blank">`，部分內容未包含 `rel="noopener noreferrer"`，並由 `v-html` render。
 - 每個 request 都同步開檔與解析 JSON，沒有 cache。
-- HTTP route 與 service 均已依 Portfolio resource 分離；schema 與 repository 仍維持共用模組。
+- HTTP route、service、repository 與 schema 均已依 Portfolio resource 分離；只有明確的跨 resource utility/model 保留在各 layer 的 `common.py`。
 - Project visibility、hide、featured、public、archived 與分類篩選尚未設計或實作；目前固定依 repository mapping 顯示三筆。
-- `core/config.py` 與 `core/logging.py` 只是 placeholder。
 - `python-multipart` 已安裝但未使用。
 - 沒有 authentication、rate limiting、explicit cache headers 或 security headers。
 

@@ -105,14 +105,11 @@ class ApiResponse(BaseModel):
 
 ### 2.2 ✅ Reorganize backend modules for domain clarity
 - Short explanation: group code by responsibility and version.
-- Current state: ✅ Implemented. Resource routes are organized under `backend/routers/v1/` (`about.py`, `experience.py`, `projects.py`, `timeline.py`, `health.py`) and placeholders exist for `backend/core/` and `backend/schemas/` modules.
+- Current state: ✅ Implemented. Resource routes, services, repositories, and schemas are organized by Portfolio resource; unused `backend/core/` placeholders have been removed.
 - Suggested structure or code example:
 ```text
 backend/
   main.py
-  core/
-    config.py
-    logging.py
   routers/
     v1/
       about.py
@@ -318,7 +315,7 @@ VITE_API_BASE=https://fastapi-backend-xxxx.run.app
 - Current state: config values mainly in code.
 - Suggested structure or code example:
 ```python
-# backend/core/config.py
+# future settings module (location to be decided when implemented)
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):

@@ -42,13 +42,7 @@ backend/
 ├── requirements.txt
 ├── Dockerfile
 ├── setup.md
-├── core/
-│   ├── __init__.py
-│   ├── config.py
-│   └── logging.py
 ├── data/
-│   ├── content/
-│   │   └── .gitkeep
 │   └── portfolio/
 │       ├── about/
 │       │   └── about.json
@@ -102,12 +96,6 @@ backend/
 - `Dockerfile` — **deployment build**：以 Python 3.13.9 建置，安裝 requirements，使用 Uvicorn 在 8080 啟動。
 - `setup.md` — **documentation**：backend local setup notes，不參與 runtime。
 
-### `backend/core/`
-
-- 預期承擔共用 configuration 與 logging。
-- `config.py`、`logging.py` 目前只有 placeholder comments，**沒有 runtime consumer**。
-- `__init__.py` 只標記 Python package。
-
 ### `backend/data/portfolio/`
 
 所有檔案均為 **runtime content source**，同時由 validation script 檢查：
@@ -116,7 +104,6 @@ backend/
 - `experience/*.json`：每段 Journey 一份 slug JSON；repository 動態掃描並以 `start_date` 新到舊排序。
 - `projects/*.json`：每個 Project 一份 summary + detail JSON；目前 repository 以固定 mapping 控制三筆順序及 slug lookup。
 - `timeline/events.json`：不屬於 Experience 的 point/duration Timeline Events。
-- `data/content/.gitkeep`：tracked empty placeholder；目前 repository、service 與 validation 都不使用該資料夾。
 
 ### `backend/repositories/`
 
@@ -437,7 +424,6 @@ CSS import order is part of current behavior. Feature files contain both Home an
 - **Partially unused helper**：`useProjectHelpers.js` 只有 `safeArray` 被使用；featured/preview/link helpers 沒有 consumer，且格式與其他 source files 不一致。
 - **Unused dependency**：`axios` 存在於 dependencies，但 source code 使用 native Fetch，沒有 Axios imports。
 - **Synchronous JSON I/O**：每個 content request 都同步開檔、parse JSON、validate；沒有 cache。
-- **Placeholder backend packages**：`core/config.py`、`core/logging.py` 未實作；`data/content/.gitkeep` 沒有 runtime用途。
 - **Duplicated content responsibility**：首頁三份 local preview JSON 與 backend detail summary 需人工同步，可能產生文案、links、tags 漂移。
 - **Rich HTML handling**：首頁 About preview 與 Experience detail 使用 `v-html`；沒有 frontend sanitization layer。
 - **Router gaps**：沒有 catch-all 404 route；route URLs 使用既有 singular `/experience`、`/project` naming。
