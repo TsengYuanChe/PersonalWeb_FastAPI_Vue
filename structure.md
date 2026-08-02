@@ -428,6 +428,8 @@ Backend resource routes 分別定義在 `backend/routers/v1/` 的 `about.py`、`
 
 CSS import order remains `main → main-rwd → projects → projects-rwd → about → about-rwd → journey → journey-rwd` and is part of current behavior. Styles remain global；ownership 由 actual consumers、feature boundary 與 selector convention 維持，而不是 module/scoped isolation。`.project-category` 已歸 Projects；`.tag`／`.tag-tool` 因 JourneyDetail 與 ProjectDetail 共用而歸 main；`.home-section`、`.section-heading`、`.home-journey-link` 因跨 Home About／Journey／Projects 使用而歸 main。
 
+第一輪 consumer scan 已移除 verified dead `.code-btn`、`.tag-lang`、`.see-more-wrapper`、`.see-more-btn`、`.section-footer-link`、`.exp-gpa` 與 mobile `#exp` rules，包含其 hover 與 responsive variants；Transition、Vue Router 與 Timeline dynamic modifier selectors均保留。這次沒有搬移 ownership、改 declaration 或調整 import order。
+
 ## Deployment and Automation Structure
 
 ```text
@@ -446,7 +448,7 @@ CSS import order remains `main → main-rwd → projects → projects-rwd → ab
 以下皆為目前程式或 tracked structure 可直接確認的狀態；本文件只記錄，不執行修正。
 
 - **Global CSS coupling**：八個 custom CSS 仍全域載入並依 cascade/import order 生效；ownership 已建立，但 selector convention 無法提供 scoped isolation。
-- **Deferred CSS cleanup**：仍有已知或疑似 dead selectors（例如 `.code-btn`、`.tag-lang`、`.see-more-*`、`.section-footer-link`、`.exp-gpa`、mobile `#exp`）、重複 media query、`!important`、hardcoded accent/surface/motion values 與 `.home-journey-link` naming debt；本階段未刪除或改名。
+- **Deferred CSS cleanup**：第一輪 verified dead selectors已移除；仍待處理重複 media query、`!important`、breakpoint normalization、hardcoded accent/surface/motion values、token inventory 與 `.home-journey-link` naming debt。
 - **Large orchestration files**：`JourneyView.vue` 與 `Timeline.vue` 仍超過 200 行並負責多種狀態、rendering 或 transition concerns；Project detail rendering 已從 ProjectCard 分離。
 - **App shell coupling**：Sidebar、Mobile Footer、重複 link data、viewport resize lifecycle、Home section scroll implementation與 scroll proxy selector coupling已抽離；`App.vue` 仍同時管理 route-aware layout、Last updated、route watcher、global effects 與 RouterView。
 - **No frontend stores/types/tests**：沒有 store、TypeScript types、unit/component/E2E test directories；資料 shape 主要由 backend schema、JSON 與 runtime property access約束。
@@ -468,7 +470,7 @@ CSS import order remains `main → main-rwd → projects → projects-rwd → ab
 
 1. 建立 frontend/backend contract tests，覆蓋四組 v1 responses、404/error envelope 與 JSON validation。
 2. 為 About、Journey、Projects 建立最小 component/E2E regression tests，保護 loading/error/empty/expanded/filter states。
-3. 在既有 ownership 基礎上分批驗證並移除 dead selectors，再盤點可安全 token 化的重複 accent、surface 與 motion values。
+3. 在既有 ownership 與第一輪 dead selector cleanup 基礎上，盤點可安全 token 化的重複 accent、surface 與 motion values，並另案處理 media query／breakpoint normalization。
 4. 為 `v-html` content 建立可信來源規範與 sanitization policy。
 
 ### Priority Medium

@@ -323,27 +323,6 @@
 }
 
 /* ---------------------------
-   Code Button
----------------------------- */
-.code-btn {
-  background-color: #1e88ff;
-  color: white !important;
-  padding: 6px 14px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  transition: 0.2s ease;
-}
-
-.code-btn:hover {
-  background-color: #4da4ff;
-  transform: translateY(-2px);
-}
-
-/* ---------------------------
    Tag Container
 ---------------------------- */
 .tag-group {
@@ -353,51 +332,6 @@
   max-width: 500px;
 }
   
-/* Language Tag (Blue) */
-.tag-lang {
-  padding: 8px 18px;
-  border-radius: 14px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  letter-spacing: 0.3px;
-
-  background: rgba(80, 180, 255, 0.12);
-  border: 1px solid rgba(120, 200, 255, 0.38);
-  color: #d8f0ff;
-
-  backdrop-filter: blur(6px);
-  transition: 0.25s ease;
-  box-shadow: 0 2px 6px rgba(50, 100, 150, 0.25);
-}
-
-.tag-lang:hover {
-  transform: translateY(-3px);
-  background: rgba(120, 200, 255, 0.22);
-  border-color: rgba(160, 230, 255, 0.55);
-  box-shadow: 0 4px 14px rgba(100, 180, 255, 0.45);
-}
-
-/* ---------------------------
-   See More Button
----------------------------- */
-
-/* Wrapper → align left */
-.see-more-wrapper {
-  text-align: left;
-}
-
-/* Minimal text-style button */
-.see-more-btn {
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.7);
-  text-decoration: none;
-  transition: 0.2s ease;
-}
-
-.see-more-btn:hover {
-  color: rgba(255, 255, 255, 1);
-}
-
 .home-project-list {
   width: 100%;
 }

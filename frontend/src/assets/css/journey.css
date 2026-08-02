@@ -428,11 +428,6 @@
   gap: 8px;
 }
 
-.section-footer-link {
-  display: inline-block;
-  margin-top: 0.25rem;
-}
-
 /* Compact Journey rows used only on the home route */
 .home-journey-list {
   width: 100%;

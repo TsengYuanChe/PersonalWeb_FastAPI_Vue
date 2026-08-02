@@ -401,6 +401,8 @@ Desktop social links 位於 `HomeSidebar` 底部；Mobile 則由 fixed `MobileFo
 
 CSS 仍由 `main.js` 全域載入，ownership 依 feature boundary 與 selector convention 維持，並未模組化。這次保持既有 import order；`.project-category` 歸 Projects，跨 Journey／Project 的 `.tag`／`.tag-tool` 與跨 Home sections 的 `.home-section`、`.section-heading`、`.home-journey-link` 歸 shared main styles。
 
+第一輪 dead CSS cleanup 已完成：只移除重新掃描後確認沒有 template、script、dynamic class、Transition、router state 或 responsive consumer 的 selectors。CSS ownership 與 import order沒有改變；tokens、breakpoint/media-query整理、`!important` cleanup、命名與任何 visual refinement仍屬後續工作。
+
 ### 8.2 核心 tokens 與 typography
 
 `main.css :root`：
@@ -723,7 +725,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 
 ### 14.2 Frontend debt
 
-- Global CSS 共 8 個檔案且依載入順序生效；feature ownership 已依實際 consumers 整理，但仍有 Bootstrap utility、`!important`、散落顏色、重複數值與待確認後刪除的 dead selectors。
+- Global CSS 共 8 個檔案且依載入順序生效；feature ownership與第一輪 verified dead selector cleanup已完成，但仍有 Bootstrap utility、`!important`、散落顏色、重複數值與 media-query／breakpoint整理工作。
 - `App.vue` 仍負責 route-aware layout、Last updated loading、route watcher、全域 effects 與 RouterView；Home Sidebar／Mobile Footer markup、viewport resize lifecycle與 Home hash scroll implementation已抽離。
 - `useScrollProxy` 已移除 DOM selector coupling，但啟用時仍攔截首頁所有 wheel events；nested scrolling、鍵盤與觸控行為需要持續驗證。
 - Mobile 首頁高度依 DOM measurement 與三個 runtime CSS variables，受 orientation、browser chrome、內容高度影響。

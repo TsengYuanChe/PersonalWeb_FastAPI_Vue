@@ -28,12 +28,6 @@
     max-width: 100%;
   }
 
-  /* Code Button 調整大小與間距 */
-  .code-btn {
-    padding: 5px 12px !important;
-    font-size: 0.75rem !important;
-  }
-
   /* Description 字體縮小，行距調整 */
   .project-card p {
     font-size: 0.9rem !important;
@@ -44,13 +38,6 @@
   /* Tag 外觀縮小，圓角保留 (pill-style) */
   .tag-group {
     gap: 6px !important;
-  }
-
-  /* Blue tag 在小螢幕降低透明度，增強可讀性 */
-  .tag-lang {
-    background: rgba(80, 180, 255, 0.22) !important;
-    border-color: rgba(80, 180, 255, 0.45) !important;
-    color: #d2ecff !important;
   }
 
   .project-card:hover {
