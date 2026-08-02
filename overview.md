@@ -166,8 +166,9 @@ PersonalWeb_Flask_Vue/
 │   │   ├── api/
 │   │   │   ├── client.js          # fetch wrapper / error normalization
 │   │   │   └── contentApi.js      # About / Experience / Projects service functions
-│   │   ├── composables/           # mouse、scroll 與 viewport lifecycle helpers
-│   │   ├── utils/experienceLogos.js
+│   │   ├── composables/shell/     # Application shell lifecycle／navigation helpers
+│   │   ├── utils/journey/         # Experience logos 與 Timeline 純計算
+│   │   ├── utils/projects/        # Project search／filter 純計算
 │   │   └── assets/
 │   │       ├── css/               # global + feature + RWD CSS
 │   │       └── images/exp/         # 經歷 logo
@@ -297,14 +298,14 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - Journey Sections 預設全部收合；展開狀態由 `ExperienceView.vue` 以單一 `expandedExperienceSlug` 管理，因此同一時間最多只有一段展開。整個 Summary Header 可點擊，More/Less Detail button 提供鍵盤操作、`aria-expanded` 與 `aria-controls`。
 - Detail 使用與 Project Card 一致的 Vue `Transition` hooks，依實際 `scrollHeight` 執行 320ms 高度、透明度與輕微位移動畫，完成後恢復 `height: auto`，並支援 `prefers-reduced-motion`。
 - 每段 Experience 來自 `backend/data/portfolio/experience/` 下的獨立 slug JSON，由 repository 動態掃描並依 `start_date` 新到舊排序；新增經歷不需修改既有 JSON。
-- Logo filename 經 `utils/experienceLogos.js` 映射到 Vite-imported assets。
+- Logo filename 經 `utils/journey/experienceLogos.js` 映射到 Vite-imported assets。
 - Timeline 第一版由獨立 `Timeline.vue` 實作，不屬於 `JourneySection.vue`。它依 API Experience 的 `start_date`／`end_date` 自動建立 nodes，並以單一連續垂直線串接；新增 Experience JSON 時會跟隨 API list 自動增加。
 - `ExperienceView.vue` 同時管理 `expandedExperienceSlug` 與 hover 用的 `activeExperienceSlug`，負責同步 Section 與 Timeline node；`JourneySection.vue` 不知道 Timeline 的存在。
 - Timeline period 與 Journey Sections 由 `ExperienceView.vue` 放入對應的 CSS Grid header rows；收合狀態下，每段 Timeline 的上下 node 由 row 實際高度對齊對應 Section 的上下邊界。
 - 展開時 `ExperienceView.vue` 在 Header 後插入獨立的 Journey Detail row；Detail 左側沒有 Timeline period，上一段 segment 高度保持不變，後續 Timeline 與 Section 一起下移，收合完成後恢復原位。同一時間仍只有一段正式展開。
 - Timeline base segment 以每個 Header row 為單位，收合時由 connector 串接相鄰 periods；Detail row 存在時對應 connector 暫停，因此主線不穿越不具時間語意的 Detail。
 - Timeline Events 來自獨立的 `timeline-events.json` 與 API，不屬於 Experience、Section 或 Detail。第一版支援單節點 Point Event 與雙節點／segment Duration Event，由 `Timeline.vue` 依年月在既有 Experience period 內換算位置並統一 render。
-- Timeline 的年月索引、Experience 日期邊界、Event period containment 與百分比位置公式集中於純 JavaScript `utils/timelineMath.js`；目前月份由 `Timeline.vue` 計算一次後明確傳入，因此核心計算不依賴 Vue、DOM 或隱含時間狀態。`Timeline.vue` 保留 reactive grouping、display formatting、DOM rendering、interaction 與 accessibility。
+- Timeline 的年月索引、Experience 日期邊界、Event period containment 與百分比位置公式集中於純 JavaScript `utils/journey/timelineMath.js`；目前月份由 `Timeline.vue` 計算一次後明確傳入，因此核心計算不依賴 Vue、DOM 或隱含時間狀態。`Timeline.vue` 保留 reactive grouping、display formatting、DOM rendering、interaction 與 accessibility。
 - Timeline Events 第一版只有靜態 label、node 與 duration segment，沒有 hover、highlight、animation、focus 或 click interaction；不會建立額外 Timeline column 或改變 Experience rows。
 - Timeline 不再以 Desktop `160px`／Tablet `150px` 固定 period height 推算位置。Desktop 顯示於 Sections 左側、Tablet 縮小、Mobile（≤768px）暫時隱藏。
 - Journey 詳細頁採用 **Timeline + Sections**，不沿用 Project Page 的 Card design language。每段 Journey 以極低對比 surface 輔助閱讀，移除外框、陰影、浮起與 hover border，主要透過 spacing 與淡 divider 區隔；Timeline 是頁面的主要視覺結構。
@@ -350,7 +351,9 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - `AboutSection.vue`：About 詳細頁的 data-driven section renderer，顯示 title、paragraphs 與 optional items。
 - `HomeJourneyItem.vue` / `JourneySection.vue` / `JourneyDetail.vue`：首頁 Preview、詳細頁 Summary Header 與展開 Detail 分離。
 - `Timeline.vue`：詳細 Journey 專用的 data-driven Timeline Prototype；負責 reactive presentation mapping、line/nodes/events rendering、日期 labels、hover/focus state 與 accessibility，不包含 Section、展開邏輯或底層日期位置公式。
-- `utils/timelineMath.js`：Timeline 專用的純日期、期間 containment 與事件位置計算；目前仍與既有 utilities 平放，尚未進行 utility/composable 資料夾分類。
+- `composables/shell/`：集中 Application Shell 專用的 mouse glow、wheel proxy、Home section navigation 與 viewport measurement composables。
+- `utils/journey/`：集中 Journey domain 的 logo mapping 與 Timeline 純日期／位置計算。
+- `utils/projects/`：集中 Projects domain 的 search／filter 純計算。
 - `ProjectCover.vue`：首頁與詳細 Projects 共用的 160×100、16:10 cover／placeholder。
 - `ProjectAction.vue`：首頁與詳細 Projects 共用 Live／Source／Internal 判斷與外部連結語意。
 - `HomeProjectPreview.vue` / `ProjectCard.vue`：首頁與詳細 Projects 分離，並共用 `ProjectCover.vue`。

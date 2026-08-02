@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { getProjects } from '@/api/contentApi'
 import ProjectCard from '@/components/projects/ProjectCard.vue'
 import DetailPageHeader from '@/components/layout/DetailPageHeader.vue'
-import { matchesExactValue, matchesProjectSearch, uniqueSortedValues } from '@/utils/projectSearch'
+import { matchesExactValue, matchesProjectSearch, uniqueSortedValues } from '@/utils/projects/projectSearch'
 
 const projects = ref([])
 const loading = ref(true)

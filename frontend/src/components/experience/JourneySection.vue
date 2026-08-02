@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { getExperienceLogo } from '@/utils/experienceLogos'
+import { getExperienceLogo } from '@/utils/journey/experienceLogos'
 
 const props = defineProps({
   experience: {

@@ -3,7 +3,7 @@ import { computed } from 'vue'
 import {
   datePosition,
   eventFitsExperience,
-} from '@/utils/timelineMath'
+} from '@/utils/journey/timelineMath'
 
 defineOptions({ name: 'JourneyTimeline' })
 

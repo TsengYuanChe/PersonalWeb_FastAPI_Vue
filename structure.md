@@ -190,16 +190,19 @@ frontend/
 │   │       ├── ProjectCard.vue
 │   │       └── ProjectCover.vue
 │   ├── composables/
-│   │   ├── useHomeSectionNavigation.js
-│   │   ├── useHomeViewportMetrics.js
-│   │   ├── useMouseGlow.js
-│   │   └── useScrollProxy.js
+│   │   └── shell/
+│   │       ├── useHomeSectionNavigation.js
+│   │       ├── useHomeViewportMetrics.js
+│   │       ├── useMouseGlow.js
+│   │       └── useScrollProxy.js
 │   ├── config/
 │   │   └── siteLinks.js
 │   ├── utils/
-│   │   ├── experienceLogos.js
-│   │   ├── projectSearch.js
-│   │   └── timelineMath.js
+│   │   ├── journey/
+│   │   │   ├── experienceLogos.js
+│   │   │   └── timelineMath.js
+│   │   └── projects/
+│   │       └── projectSearch.js
 │   ├── data/home/
 │   │   ├── about.json
 │   │   ├── experiences.json
@@ -293,14 +296,14 @@ frontend/
 
 ### Composables and utilities
 
-- `useHomeSectionNavigation.js`：接收 reactive route與 Home main DOM ref，依既有 `#about` top spacing計算 Home／Journey／Projects hash位置，公開 `scrollToCurrentSection()`；不擁有 watcher、router instance或其他 shell state。
-- `useHomeViewportMetrics.js`：接收 HomeSidebar／MobileFooter template refs，更新 `--header-height`、`--footer-height`、`--real-vh`，並擁有 mounted 初次量測與 resize listener cleanup；不使用 DOM selectors。
-- `useMouseGlow.js`：全域 mousemove cursor glow；由 `App.vue` 使用。
-- `useScrollProxy.js`：接收 main content template ref與 Home-layout `enabled` computed；mounted時註冊 non-passive window wheel listener，只在啟用時轉送相同 `deltaY` 並呼叫 `preventDefault()`，unmount時解除 listener，不使用 DOM selectors。
+- `composables/shell/useHomeSectionNavigation.js`：接收 reactive route與 Home main DOM ref，依既有 `#about` top spacing計算 Home／Journey／Projects hash位置，公開 `scrollToCurrentSection()`；不擁有 watcher、router instance或其他 shell state。
+- `composables/shell/useHomeViewportMetrics.js`：接收 HomeSidebar／MobileFooter template refs，更新 `--header-height`、`--footer-height`、`--real-vh`，並擁有 mounted 初次量測與 resize listener cleanup；不使用 DOM selectors。
+- `composables/shell/useMouseGlow.js`：全域 mousemove cursor glow；由 `App.vue` 使用。
+- `composables/shell/useScrollProxy.js`：接收 main content template ref與 Home-layout `enabled` computed；mounted時註冊 non-passive window wheel listener，只在啟用時轉送相同 `deltaY` 並呼叫 `preventDefault()`，unmount時解除 listener，不使用 DOM selectors。
 - `ProjectCard.vue` 的 `safeArray` 是其 detail template 專用 local helper；沒有建立只有單一 consumer 的 composable 或 utility。
-- `experienceLogos.js`：backend logo filename 到 Vite image imports 的固定 mapping。
-- `projectSearch.js`：Project public text collection、whole-token search、exact filters、dynamic option sorting。
-- `timelineMath.js`：不依賴 Vue、DOM 或 module-level mutable state的 Timeline 純函式；負責年月索引、Experience bounds、Event 是否完整落在單一 Experience，以及日期在 period 內的百分比位置。`Timeline.vue` 是目前唯一 consumer；本階段未進行 utility/composable 資料夾分類。
+- `utils/journey/experienceLogos.js`：backend logo filename 到 Vite image imports 的固定 mapping。
+- `utils/journey/timelineMath.js`：不依賴 Vue、DOM 或 module-level mutable state的 Timeline 純函式；負責年月索引、Experience bounds、Event 是否完整落在單一 Experience，以及日期在 period 內的百分比位置。`Timeline.vue` 是目前唯一 consumer。
+- `utils/projects/projectSearch.js`：Project public text collection、whole-token search、exact filters、dynamic option sorting。
 
 ### Frontend data and assets
 
@@ -351,7 +354,7 @@ backend/data/portfolio/experience/*.json
   → JourneySection.vue + JourneyDetail.vue + Timeline.vue
 ```
 
-Experience service 依 `start_date` descending 確保 response order；repository 目前也維持相同既有讀取順序。Logo 圖片由 frontend `experienceLogos.js` 另行映射。
+Experience service 依 `start_date` descending 確保 response order；repository 目前也維持相同既有讀取順序。Logo 圖片由 frontend `utils/journey/experienceLogos.js` 另行映射。
 
 ### Timeline Events
 

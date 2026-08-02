@@ -4,10 +4,10 @@ import { RouterView, useRoute } from 'vue-router'
 import { getAbout } from '@/api/contentApi'
 import HomeSidebar from '@/components/layout/HomeSidebar.vue'
 import MobileFooter from '@/components/layout/MobileFooter.vue'
-import { useHomeSectionNavigation } from '@/composables/useHomeSectionNavigation'
-import { useHomeViewportMetrics } from '@/composables/useHomeViewportMetrics'
-import { useMouseGlow } from '@/composables/useMouseGlow'
-import { useScrollProxy } from '@/composables/useScrollProxy'
+import { useHomeSectionNavigation } from '@/composables/shell/useHomeSectionNavigation'
+import { useHomeViewportMetrics } from '@/composables/shell/useHomeViewportMetrics'
+import { useMouseGlow } from '@/composables/shell/useMouseGlow'
+import { useScrollProxy } from '@/composables/shell/useScrollProxy'
 
 const route = useRoute()
 const isHomeLayout = computed(() => route.meta.layout === 'home')
