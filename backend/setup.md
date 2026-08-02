@@ -1,51 +1,81 @@
-conda create -n fastapi-env python=3.11
+# Backend Setup
 
-conda activate fastapi-env
+## Requirements
 
-uvicorn main:app --reload --host 127.0.0.1 --port 8000
+- Python 3.13 (the container currently uses Python 3.13.9)
+- `venv` and `pip`
 
-# Create requirements.txt
+Run all commands in this guide from the `backend/` directory.
 
+## Local Development
+
+Create and activate a virtual environment:
+
+```bash
+python -m venv venv
 source venv/bin/activate
+```
 
-pip freeze > requirements.txt
+On Windows PowerShell, activate it with:
 
-# Test docker file
+```powershell
+venv\Scripts\Activate.ps1
+```
 
-docker build --platform linux/amd64 -t fastapi-backend .
+Install dependencies:
 
-docker run -p 8080:8080 fastapi-backend
+```bash
+python -m pip install --upgrade pip
+pip install -r requirements.txt
+```
 
-## 建立 Artifact Registry repository
+Start the API locally:
 
-Artifact Registry → Repositories → 建立 repository
+```bash
+uvicorn main:app --reload --host 127.0.0.1 --port 8080
+```
 
-Repository name：backend
+The local API is available at `http://127.0.0.1:8080`. FastAPI documentation is available at `/docs`, `/redoc`, and `/openapi.json`.
 
-Format：Docker
+## Content Validation
 
-Location type：Region
+Validate all Portfolio JSON files before starting or deploying the backend:
 
-Region：asia-east1
+```bash
+python scripts/validate_content_schema.py
+```
 
-Mode：Standard
+The script discovers the current JSON files, selects the appropriate Pydantic resource schema, and fails when content is missing, unknown, or structurally invalid.
 
-按 Create
+## API
 
-## Push to google cloud
+- `GET /api/v1/about`
+- `GET /api/v1/experience`
+- `GET /api/v1/projects`
+- `GET /api/v1/projects/{slug}`
+- `GET /api/v1/timeline-events`
+- `GET /api/v1/health`
 
-gcloud auth login
+The content APIs are public, read-only endpoints. Collection responses use the existing `data` and `meta` envelope.
 
-gcloud config set project personal-website-479501
+## Data Update Workflow
 
-gcloud auth configure-docker asia-east1-docker.pkg.dev
+1. Update the relevant JSON under `data/portfolio/`.
+2. When adding an Experience, add a new JSON file under `data/portfolio/experience/`; the repository scans this directory automatically.
+3. When adding a Project, add its JSON under `data/portfolio/projects/`, then register its slug/path in `repositories/project_repository.py` and its validation mapping in `scripts/validate_content_schema.py`.
+4. Run `python scripts/validate_content_schema.py`.
+5. Start the API and verify the affected endpoint response.
+6. Deploy through the existing backend workflow after review.
 
-docker tag fastapi-backend asia-east1-docker.pkg.dev/personal-website-479501/backend/fastapi-backend
+Do not place secrets, credentials, private URLs, customer data, or confidential infrastructure details in Portfolio JSON.
 
-docker push asia-east1-docker.pkg.dev/personal-website-479501/backend/fastapi-backend
+## Container Check
 
-# Deploy steps
+From the `backend/` directory:
 
-https://console.cloud.google.com/run/overview?project=personal-website-479501
+```bash
+docker build -t fastapi-backend .
+docker run --rm -p 8080:8080 fastapi-backend
+```
 
-->部署容器（Deploy container）
+The container runs Uvicorn on `0.0.0.0:8080`, matching the current Cloud Run port configuration.

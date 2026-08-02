@@ -98,7 +98,6 @@ backend/data/**/*.json
 | Uvicorn | `0.38.0` | ASGI server |
 | Pydantic | `2.12.5` | v1 response validation 與 content validation script |
 | Starlette | `0.50.0` | FastAPI foundation / HTTP exceptions |
-| python-multipart | `0.0.20` | 已安裝，但目前沒有 upload/form endpoint |
 
 ## 4. 目錄結構
 
@@ -182,6 +181,7 @@ PersonalWeb_Flask_Vue/
 │   ├── .env.development / .env.production
 │   └── Dockerfile
 ├── AGENTS.md                       # agent 與 recruiter-first 產品方向
+├── BACKEND.md                      # Backend architecture and maintenance guide
 ├── ARCHITECTURE*.md / FEATURES*.md / SYSTEM_DESIGN*.md
 ├── TODO.md / TODO_Layout.md / RWD_LAYOUT.md
 └── overview.md
@@ -648,7 +648,8 @@ cd backend
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
-uvicorn main:app --reload
+python scripts/validate_content_schema.py
+uvicorn main:app --reload --host 127.0.0.1 --port 8080
 ```
 
 內容 schema 驗證（repository root 執行）：
@@ -718,7 +719,6 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - 每個 request 都同步開檔與解析 JSON，沒有 cache。
 - HTTP route、service、repository 與 schema 均已依 Portfolio resource 分離；只有明確的跨 resource utility/model 保留在各 layer 的 `common.py`。
 - Project visibility、hide、featured、public、archived 與分類篩選尚未設計或實作；目前固定依 repository mapping 顯示三筆。
-- `python-multipart` 已安裝但未使用。
 - 沒有 authentication、rate limiting、explicit cache headers 或 security headers。
 - FastAPI 使用預設 OpenAPI title/version metadata；不影響 runtime，但尚未提供 portfolio API 專屬描述。
 

@@ -12,6 +12,7 @@ PersonalWeb_Flask_Vue/
 ├── backend/                 # FastAPI content API、schema validation、JSON content
 ├── frontend/                # Vue 3 SPA、static assets、Nginx runtime image
 ├── AGENTS.md                # AI coding agent product/coding instructions
+├── BACKEND.md               # Backend architecture and maintenance guide
 ├── overview.md              # Product、architecture、data flow、risk overview
 ├── structure.md             # Current tracked file structure and responsibilities
 ├── README.md                # Repository-level introduction（部分內容可能落後現況）
@@ -32,6 +33,7 @@ PersonalWeb_Flask_Vue/
 - `frontend/`：獨立 Cloud Run Vue/Nginx service 的 build context。
 - `overview.md`：產品定位、頁面行為、資料契約、部署與風險的主要現況文件。
 - `structure.md`：以實際檔案為中心的責任地圖，供技術債盤點與 refactor 規劃。
+- `BACKEND.md`：Backend architecture、content workflow、local development、validation 與 maintenance guide。
 - 其他 root Markdown：歷史設計、功能、TODO 與 setup 文件；內容不一定與執行中程式完全同步。
 
 ## Backend Structure
@@ -96,7 +98,7 @@ backend/
 - `requirements.txt` — **build/runtime dependency manifest**：FastAPI、Uvicorn、Pydantic 等 pinned dependencies。
 - `Dockerfile` — **deployment build/runtime**：以 Python 3.13.9 建置；先複製並安裝 requirements，再複製 backend source；使用 Uvicorn 綁定 `0.0.0.0:8080`。
 - `.dockerignore` — **deployment build context filter**：排除 local virtual environments、Python bytecode/cache、tool caches、logs 與 `.DS_Store`，避免 `COPY . .` 納入非 runtime artifacts。
-- `setup.md` — **documentation**：backend local setup notes，不參與 runtime。
+- `setup.md` — **documentation**：backend environment、local server、validation、content update 與 container commands；不參與 runtime。
 
 ### `backend/data/portfolio/`
 
