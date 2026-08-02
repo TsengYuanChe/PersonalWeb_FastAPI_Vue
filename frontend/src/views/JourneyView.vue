@@ -5,6 +5,7 @@ import JourneyDetail from '@/components/journey/JourneyDetail.vue'
 import JourneySection from '@/components/journey/JourneySection.vue'
 import Timeline from '@/components/journey/Timeline.vue'
 import DetailPageHeader from '@/components/layout/DetailPageHeader.vue'
+import { useAutoHeightTransition } from '@/composables/useAutoHeightTransition'
 
 const journeyItems = ref([])
 const timelineEvents = ref([])
@@ -13,6 +14,13 @@ const error = ref('')
 const expandedJourneySlug = ref(null)
 const leavingDetailSlugs = ref([])
 const activeJourneySlug = ref(null)
+const {
+  beforeEnter: beforeDetailEnter,
+  enter: enterDetail,
+  afterEnter: afterDetailEnter,
+  beforeLeave: beforeDetailLeave,
+  leave: leaveDetail,
+} = useAutoHeightTransition()
 
 const detailRowSlugs = computed(() => {
   const slugs = new Set(leavingDetailSlugs.value)
@@ -96,46 +104,6 @@ function handleJourneyMouseLeave(event, slug) {
   }
 
   deactivateJourney(slug)
-}
-
-function beforeDetailEnter(element) {
-  element.style.height = '0'
-  element.style.opacity = '0'
-  element.style.transform = 'translateY(-4px)'
-  element.inert = false
-  element.removeAttribute('aria-hidden')
-}
-
-function enterDetail(element) {
-  requestAnimationFrame(() => {
-    element.style.height = `${element.scrollHeight}px`
-    element.style.opacity = '1'
-    element.style.transform = 'translateY(0)'
-  })
-}
-
-function afterDetailEnter(element) {
-  element.style.height = 'auto'
-  element.style.opacity = ''
-  element.style.transform = ''
-}
-
-function beforeDetailLeave(element) {
-  element.style.height = `${element.scrollHeight}px`
-  element.style.opacity = '1'
-  element.style.transform = 'translateY(0)'
-  element.inert = true
-  element.setAttribute('aria-hidden', 'true')
-}
-
-function leaveDetail(element) {
-  void element.offsetHeight
-
-  requestAnimationFrame(() => {
-    element.style.height = '0'
-    element.style.opacity = '0'
-    element.style.transform = 'translateY(-4px)'
-  })
 }
 
 onMounted(async () => {

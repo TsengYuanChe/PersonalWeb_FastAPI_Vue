@@ -190,6 +190,7 @@ frontend/
 │   │       ├── ProjectCard.vue
 │   │       └── ProjectCover.vue
 │   ├── composables/
+│   │   ├── useAutoHeightTransition.js
 │   │   └── shell/
 │   │       ├── useHomeSectionNavigation.js
 │   │       ├── useHomeViewportMetrics.js
@@ -254,7 +255,7 @@ frontend/
 
 - `HomeView.vue` — **Home-only**：直接 import 三份 frontend local preview JSON，組裝 Profile、Journey、Projects previews。
 - `AboutView.vue` — **About-only**：透過 `getAbout()` 載入 sections，處理 loading/error/empty/success，交給 `AboutSection` render。
-- `JourneyView.vue` — **Journey-only orchestration**：載入 Journey + Timeline Events、管理 active/expanded/leaving states、計算 Grid rows、協調 Timeline、JourneySection、JourneyDetail 與 dynamic-height transition。
+- `JourneyView.vue` — **Journey-only orchestration**：載入 Journey + Timeline Events、管理 active/expanded/leaving states、計算 Grid rows，並協調 Timeline、JourneySection、JourneyDetail 與共用 dynamic-height transition hooks。
 - `ProjectView.vue` — **Projects-only orchestration**：載入 Projects、管理 search/filter/empty state 與單一 expanded slug，render ProjectCard list。
 
 ### Components
@@ -273,7 +274,7 @@ frontend/
 #### `components/projects/`
 
 - `HomeProjectPreview.vue` — **Home-specific**：精簡 Project preview row，組合 ProjectCover、ProjectAction。
-- `ProjectCard.vue` — **Project page-specific**：Project summary header、detail sections、dynamic-height transition 與 toggle events。
+- `ProjectCard.vue` — **Project page-specific**：Project summary header、detail sections、共用 dynamic-height transition hooks 與 toggle events。
 - `ProjectCover.vue` — **cross-page shared**：Home／Project Page 共用 160×100、16:10 image/placeholder/error fallback。
 - `ProjectAction.vue` — **cross-page shared**：依 website/source URLs render Live、Source 或 non-clickable Internal。
 
@@ -296,6 +297,7 @@ frontend/
 
 ### Composables and utilities
 
+- `composables/useAutoHeightTransition.js`：JourneyView 與 ProjectCard 共用的 domain-agnostic DOM transition；提供 `beforeEnter`、`enter`、`afterEnter`、`beforeLeave`、`leave`，集中處理實際 `scrollHeight`、height、opacity、translateY、`inert` 與 `aria-hidden`。
 - `composables/shell/useHomeSectionNavigation.js`：接收 reactive route與 Home main DOM ref，依既有 `#about` top spacing計算 Home／Journey／Projects hash位置，公開 `scrollToCurrentSection()`；不擁有 watcher、router instance或其他 shell state。
 - `composables/shell/useHomeViewportMetrics.js`：接收 HomeSidebar／MobileFooter template refs，更新 `--header-height`、`--footer-height`、`--real-vh`，並擁有 mounted 初次量測與 resize listener cleanup；不使用 DOM selectors。
 - `composables/shell/useMouseGlow.js`：全域 mousemove cursor glow；由 `App.vue` 使用。

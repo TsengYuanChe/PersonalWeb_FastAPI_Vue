@@ -166,7 +166,9 @@ PersonalWeb_Flask_Vue/
 │   │   ├── api/
 │   │   │   ├── client.js          # fetch wrapper / error normalization
 │   │   │   └── contentApi.js      # About / Journey / Projects service functions
-│   │   ├── composables/shell/     # Application shell lifecycle／navigation helpers
+│   │   ├── composables/
+│   │   │   ├── useAutoHeightTransition.js # Journey／Project shared DOM transition
+│   │   │   └── shell/             # Application shell lifecycle／navigation helpers
 │   │   ├── utils/journey/         # Journey logos 與 Timeline 純計算
 │   │   ├── utils/projects/        # Project search／filter 純計算
 │   │   └── assets/
@@ -296,7 +298,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - `JourneySection.vue` 完全由 backend Journey object 建立，且只負責永遠顯示的 Summary Header：logo、title、organization、summary、role、period 與 More／Less Detail toggle。
 - `JourneyDetail.vue` 負責 Description、Responsibilities、Highlights、Projects、Skills／Technologies 與 Additional Details；空欄位不 render 標題或容器。
 - Journey Sections 預設全部收合；展開狀態由 `JourneyView.vue` 以單一 `expandedJourneySlug` 管理，因此同一時間最多只有一段展開。整個 Summary Header 可點擊，More/Less Detail button 提供鍵盤操作、`aria-expanded` 與 `aria-controls`。
-- Detail 使用與 Project Card 一致的 Vue `Transition` hooks，依實際 `scrollHeight` 執行 320ms 高度、透明度與輕微位移動畫，完成後恢復 `height: auto`，並支援 `prefers-reduced-motion`。
+- Detail 使用共用 `useAutoHeightTransition()` 提供的 Vue `Transition` hooks，依實際 `scrollHeight` 執行既有高度、透明度與輕微位移動畫，完成後恢復 `height: auto`；動畫 timing 與 `prefers-reduced-motion` 仍由既有 feature CSS 管理。
 - 每段 Journey 來自 `backend/data/portfolio/journey/` 下的獨立 slug JSON，由 repository 動態掃描並依 `start_date` 新到舊排序；新增經歷不需修改既有 JSON。
 - Logo filename 經 `utils/journey/journeyLogos.js` 映射到 Vite-imported assets。
 - Timeline 第一版由獨立 `Timeline.vue` 實作，不屬於 `JourneySection.vue`。它依 API Journey 的 `start_date`／`end_date` 自動建立 nodes，並以單一連續垂直線串接；新增 Journey JSON 時會跟隨 API list 自動增加。
@@ -334,7 +336,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - Project Card 預設全部收合並永遠顯示 Summary Header；Overview 起的 detail sections 只有展開時才 render。
 - Summary Header 可用滑鼠點擊切換，Meta 中的語意化 More/Less Detail button 提供鍵盤操作、`aria-expanded` 與 `aria-controls`。Live／Source links 不觸發 toggle。
 - 展開狀態由 `ProjectView.vue` 以單一 `expandedProjectSlug` 管理，因此同一時間最多只有一個 Project 展開；狀態不寫入 URL 或 localStorage。
-- Detail 使用 Vue `Transition` hooks 依實際 `scrollHeight` 執行 320ms 高度、透明度與輕微位移動畫，完成後恢復 `height: auto`，並支援 `prefers-reduced-motion`。
+- Detail 與 Journey 共用 `useAutoHeightTransition()` 的 Vue `Transition` hooks，依實際 `scrollHeight` 執行既有高度、透明度與輕微位移動畫，完成後恢復 `height: auto`；動畫 timing 與 `prefers-reduced-motion` 仍由既有 feature CSS 管理。
 - `/project` 的 Search、Category 與 Technology filters 都是純前端 computed 行為，只處理首次 API response，不會因條件變更重新呼叫 backend。Search 對 summary 與 detail 的公開文字做不分大小寫的完整 token 比對，不使用任意 substring；多個搜尋詞採 AND 邏輯。
 - Category 與 Technology options 分別由 API projects 的 `category` 與 `technologies` 動態去重、排序產生，並以完整值比對；Search、Category、Technology 三者亦採 AND 邏輯且保留 backend 原始排序。
 - 若已展開 Project 被條件排除，`expandedProjectSlug` 會清除。搜尋／篩選沒有使用 server-side parameters、URL query、localStorage 或 visibility fields。
@@ -351,6 +353,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - `AboutSection.vue`：About 詳細頁的 data-driven section renderer，顯示 title、paragraphs 與 optional items。
 - `HomeJourneyItem.vue` / `JourneySection.vue` / `JourneyDetail.vue`：首頁 Preview、詳細頁 Summary Header 與展開 Detail 分離。
 - `Timeline.vue`：詳細 Journey 專用的 data-driven Timeline Prototype；負責 reactive presentation mapping、line/nodes/events rendering、日期 labels、hover/focus state 與 accessibility，不包含 Section、展開邏輯或底層日期位置公式。
+- `useAutoHeightTransition.js`：Journey Detail 與 Project Detail 共用的 DOM height transition hooks；集中管理 `scrollHeight`、height、opacity、translateY、`inert` 與 `aria-hidden`，不依賴 domain state。
 - `composables/shell/`：集中 Application Shell 專用的 mouse glow、wheel proxy、Home section navigation 與 viewport measurement composables。
 - `utils/journey/`：集中 Journey domain 的 logo mapping 與 Timeline 純日期／位置計算。
 - `utils/projects/`：集中 Projects domain 的 search／filter 純計算。
