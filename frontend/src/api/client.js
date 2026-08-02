@@ -10,8 +10,3 @@ export async function requestRaw(path) {
 
   return json
 }
-
-export async function request(path) {
-  const json = await requestRaw(path)
-  return json.data
-}

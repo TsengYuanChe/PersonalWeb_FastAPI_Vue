@@ -166,7 +166,7 @@ PersonalWeb_Flask_Vue/
 │   │   ├── api/
 │   │   │   ├── client.js          # fetch wrapper / error normalization
 │   │   │   └── contentApi.js      # About / Experience / Projects service functions
-│   │   ├── composables/           # mouse、scroll、project helpers
+│   │   ├── composables/           # mouse 與 scroll lifecycle helpers
 │   │   ├── utils/experienceLogos.js
 │   │   └── assets/
 │   │       ├── css/               # global + feature + RWD CSS
@@ -707,7 +707,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - `useMouseGlow` 每次 mousemove 查 DOM 並讀取尺寸；詳細頁 Desktop 仍會啟用。
 - `requestRaw()` 無 timeout/abort/retry，且先呼叫 `res.json()`；非 JSON error response 會變成 parse error。
 - 首頁 Profile 本地 JSON與詳細 Experience API內容使用 `v-html`；沒有 frontend sanitization。
-- Axios、`request()`、`isFeaturedProject()`、`previewEngineering()` 目前沒有 consumer。
+- Axios 目前沒有 consumer；dependency cleanup 留待後續獨立 phase。
 - 沒有 catch-all 404 route。
 - `index.html` 的 `lang` 為空，且缺少 description、canonical、Open Graph、Twitter card 與 structured data。
 - Vue DevTools plugin 沒有明確限制只在 development 使用。

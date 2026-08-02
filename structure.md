@@ -188,7 +188,6 @@ frontend/
 │   │       └── ProjectCover.vue
 │   ├── composables/
 │   │   ├── useMouseGlow.js
-│   │   ├── useProjectHelpers.js
 │   │   └── useScrollProxy.js
 │   ├── utils/
 │   │   ├── experienceLogos.js
@@ -274,14 +273,13 @@ frontend/
 
 - `api/client.js`：
   - `requestRaw(path)` 組合 `VITE_API_BASE`、執行 Fetch、解析 JSON、正規化 API errors。
-  - `request(path)` 只回傳 `json.data`，目前沒有 consumer。
 - `api/contentApi.js`：About、Experience、Timeline Events、Projects 的 feature-facing functions；將 v1 envelope 轉為 `{content, updatedAt}`。
 
 ### Composables and utilities
 
 - `useMouseGlow.js`：全域 mousemove cursor glow；由 `App.vue` 使用。
 - `useScrollProxy.js`：首頁 wheel event 轉送到 `.main-content`；由 `App.vue` 使用。
-- `useProjectHelpers.js`：Project helper collection；目前 `ProjectCard` 只使用 `safeArray`，其餘 exports 沒有 consumer。
+- `ProjectCard.vue` 的 `safeArray` 是其 detail template 專用 local helper；沒有建立只有單一 consumer 的 composable 或 utility。
 - `experienceLogos.js`：backend logo filename 到 Vite image imports 的固定 mapping。
 - `projectSearch.js`：Project public text collection、whole-token search、exact filters、dynamic option sorting。
 
@@ -424,8 +422,7 @@ CSS import order is part of current behavior. Feature files contain both Home an
 - **Large orchestration files**：`ExperienceView.vue`、`Timeline.vue`、`ProjectCard.vue` 都超過 200 行，同時負責多種狀態、rendering 或 transition concerns。
 - **App shell coupling**：`App.vue` 同時管理 layout、Sidebar、navigation、social links、Last updated、DOM measurements、hash scrolling 與 RouterView。
 - **No frontend stores/types/tests**：沒有 store、TypeScript types、unit/component/E2E test directories；資料 shape 主要由 backend schema、JSON 與 runtime property access約束。
-- **API naming**：frontend 沒有 `services/`；`contentApi.js` 實際扮演 service layer。`client.js` 的 `request()` 沒有 consumer。
-- **Partially unused helper**：`useProjectHelpers.js` 只有 `safeArray` 被使用；featured/preview/link helpers 沒有 consumer，且格式與其他 source files 不一致。
+- **API naming**：frontend 沒有 `services/`；`contentApi.js` 實際扮演 service layer，而 `client.js` 保留唯一使用中的 low-level `requestRaw()` transport。
 - **Unused dependency**：`axios` 存在於 dependencies，但 source code 使用 native Fetch，沒有 Axios imports。
 - **Synchronous JSON I/O**：每個 content request 都同步開檔、parse JSON、validate；沒有 cache。
 - **Duplicated content responsibility**：首頁三份 local preview JSON 與 backend detail summary 需人工同步，可能產生文案、links、tags 漂移。
@@ -452,8 +449,8 @@ CSS import order is part of current behavior. Feature files contain both Home an
 1. 拆分大型 Journey Timeline 計算、row orchestration 與 transition concerns，保留目前元件責任邊界。
 2. 將 Project detail section rendering與 transition hooks從 `ProjectCard.vue` 適度拆分，但維持 card API。
 3. 決定首頁 preview 與 backend summary 的 single-source-of-truth 或產生流程。
-4. 補齊 request timeout、abort、non-JSON error handling；移除未使用的 `request()` 或明確採用。
-5. 清理 `useProjectHelpers.js` 未使用 exports、Axios dependency與 placeholder directories/files。
+4. 補齊 request timeout、abort 與 non-JSON error handling。
+5. 清理 Axios dependency 與 placeholder directories/files。
 
 ### Priority Low
 

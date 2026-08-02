@@ -1,6 +1,5 @@
 <script setup>
 import { computed } from 'vue'
-import { useProjectHelpers } from '@/composables/useProjectHelpers'
 import ProjectAction from '@/components/projects/ProjectAction.vue'
 import ProjectCover from '@/components/projects/ProjectCover.vue'
 
@@ -16,8 +15,11 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['toggle'])
-const { safeArray } = useProjectHelpers()
 const detailsId = computed(() => `project-details-${props.project.slug}`)
+
+function safeArray(value) {
+  return Array.isArray(value) ? value : []
+}
 
 function toggleDetails() {
   emit('toggle', props.project.slug)
