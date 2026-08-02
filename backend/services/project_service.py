@@ -1,6 +1,6 @@
 from fastapi import HTTPException
 
-from repositories.content_repository import (
+from repositories.project_repository import (
     read_project_with_timestamp,
     read_projects_with_timestamps,
 )

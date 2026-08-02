@@ -1,4 +1,4 @@
-from repositories.content_repository import read_experiences_with_timestamps
+from repositories.experience_repository import read_experiences_with_timestamps
 from schemas.content import ExperienceItem
 
 

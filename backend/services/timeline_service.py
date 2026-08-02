@@ -1,4 +1,4 @@
-from repositories.content_repository import read_timeline_events_with_timestamp
+from repositories.timeline_repository import read_timeline_events_with_timestamp
 from schemas.content import TimelineEventsData
 
 

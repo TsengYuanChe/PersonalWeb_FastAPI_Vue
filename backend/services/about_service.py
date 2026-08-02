@@ -1,4 +1,4 @@
-from repositories.content_repository import read_about_with_timestamp
+from repositories.about_repository import read_about_with_timestamp
 from schemas.content import AboutData
 
 

@@ -36,7 +36,7 @@ def get_about():
 
 ### 1.2 ✅ Add backend layering (router -> service -> repository)
 - Short explanation: separate HTTP concerns from business logic and data access.
-- Current state: ✅ Implemented. Resource routers delegate to matching About, Experience, Project, and Timeline services, which share `repositories/content_repository.py` (router -> resource service -> repository -> filesystem JSON).
+- Current state: ✅ Implemented. Resource routers delegate to matching services and repositories; repositories share only the JSON/timestamp utility in `repositories/common.py` (router -> resource service -> resource repository -> filesystem JSON).
 - Suggested structure or code example:
 ```text
 backend/
@@ -47,7 +47,11 @@ backend/
     project_service.py
     timeline_service.py
   repositories/
-    content_repository.py
+    common.py
+    about_repository.py
+    experience_repository.py
+    project_repository.py
+    timeline_repository.py
 ```
 ```python
 # routers call their resource service, not filesystem
@@ -122,7 +126,11 @@ backend/
     project_service.py
     timeline_service.py
   repositories/
-    content_repository.py
+    common.py
+    about_repository.py
+    experience_repository.py
+    project_repository.py
+    timeline_repository.py
   schemas/
     content.py
     common.py

@@ -120,7 +120,12 @@ PersonalWeb_Flask_Vue/
 │   │   ├── experience_service.py  # Experience validation 與 aggregation
 │   │   ├── project_service.py     # Project list、slug lookup 與 404
 │   │   └── timeline_service.py    # Timeline Events validation 與 response
-│   ├── repositories/content_repository.py
+│   ├── repositories/
+│   │   ├── common.py              # Shared JSON read 與 mtime helper
+│   │   ├── about_repository.py    # About JSON path 與讀取
+│   │   ├── experience_repository.py # Experience scan 與 ordering
+│   │   ├── project_repository.py  # Project mapping、ordering 與 slug lookup
+│   │   └── timeline_repository.py # Timeline Events path 與讀取
 │   ├── schemas/
 │   │   ├── common.py              # Meta / ApiResponse
 │   │   └── content.py             # About / Experience / Project models
@@ -184,7 +189,7 @@ PersonalWeb_Flask_Vue/
 
 - Frontend 沒有 `src/types/`、TypeScript interface 或 TypeScript service；資料 shape 由 JSON、Vue runtime props 與使用端條件判斷共同約束。
 - Frontend service layer 是 `src/api/client.js` 與 `src/api/contentApi.js`。
-- Backend service layer 依 Portfolio resource 拆為 `about_service.py`、`experience_service.py`、`project_service.py` 與 `timeline_service.py`，共同由 `repositories/content_repository.py` 讀取 JSON。
+- Backend service 與 repository layer 都依 Portfolio resource 分離；各 service 呼叫對應 repository，resource repositories 共用 `repositories/common.py` 的 JSON／mtime helper。
 
 ## 5. Routes、Layout 與頁面資料流
 

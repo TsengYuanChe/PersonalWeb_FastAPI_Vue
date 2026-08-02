@@ -28,7 +28,8 @@ This design keeps presentation and content delivery decoupled while preserving a
 - `routers/v1/about.py`, `experience.py`, `projects.py`, `timeline.py`: resource-specific v1 content endpoints.
 - `routers/v1/health.py`: health endpoint (`GET /api/v1/health`).
 - `services/about_service.py`, `experience_service.py`, `project_service.py`, `timeline_service.py`: resource-specific validation and v1 response shaping.
-- `repositories/content_repository.py`: filesystem JSON reads + timestamp extraction.
+- `repositories/about_repository.py`, `experience_repository.py`, `project_repository.py`, `timeline_repository.py`: resource-specific filesystem data access.
+- `repositories/common.py`: shared JSON read and timestamp extraction utility.
 - `core/config.py`, `core/logging.py`: backend core placeholders for settings/logging.
 - `schemas/content.py`, `schemas/common.py`: Pydantic schemas for v1 response validation.
 - API model: read-only HTTP endpoints returning JSON plus `updated_at`.

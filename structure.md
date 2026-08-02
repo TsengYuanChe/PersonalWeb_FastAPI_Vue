@@ -64,7 +64,11 @@ backend/
 │           └── events.json
 ├── repositories/
 │   ├── __init__.py
-│   └── content_repository.py
+│   ├── common.py
+│   ├── about_repository.py
+│   ├── experience_repository.py
+│   ├── project_repository.py
+│   └── timeline_repository.py
 ├── services/
 │   ├── __init__.py
 │   ├── about_service.py
@@ -113,12 +117,12 @@ backend/
 
 ### `backend/repositories/`
 
-- `content_repository.py` — **runtime data access**：
-  - 以 `DATA_DIR` 與相對路徑同步讀取 JSON。
-  - 產生 filesystem mtime `updated_at`。
-  - About／Timeline 使用固定檔案常數。
-  - Experience 動態掃描資料夾。
-  - Projects 使用固定 slug/file mapping。
+- `common.py` — **runtime shared data access utility**：定義 backend data root、同步讀取 JSON，並將 filesystem mtime 格式化為 `updated_at`；不包含 resource logic。
+- `about_repository.py` — **runtime data access**：管理 About JSON path，回傳 raw About data 與 timestamp。
+- `experience_repository.py` — **runtime data access**：管理 Experience directory、動態掃描 `*.json`，並維持既有 `start_date` descending ordering 與最新 timestamp。
+- `project_repository.py` — **runtime data access**：管理 Project directory、固定 slug/file mapping、list ordering 與 single-project lookup。
+- `timeline_repository.py` — **runtime data access**：管理 Timeline Events JSON path，回傳 raw event data 與 timestamp。
+- `content_repository.py` 已移除；目前沒有 wrapper、dead function 或 runtime consumer。
 - Repository 不進行 Pydantic validation；validation 位於 service layer。
 
 ### `backend/services/`
@@ -312,7 +316,7 @@ frontend/
 
 ```text
 backend/data/portfolio/about/about.json
-  → content_repository.read_about_with_timestamp()
+  → about_repository.read_about_with_timestamp()
   → about_service.get_about_v1()
   → AboutData / AboutResponse
   → GET /api/v1/about
@@ -327,7 +331,7 @@ backend/data/portfolio/about/about.json
 
 ```text
 backend/data/portfolio/experience/*.json
-  → content_repository.read_experiences_with_timestamps()
+  → experience_repository.read_experiences_with_timestamps()
   → experience_service ExperienceItem validation + response aggregation
   → GET /api/v1/experience
   → frontend api/contentApi.getExperience()
@@ -341,7 +345,7 @@ Experience service 依 `start_date` descending 確保 response order；repositor
 
 ```text
 backend/data/portfolio/timeline/events.json
-  → content_repository.read_timeline_events_with_timestamp()
+  → timeline_repository.read_timeline_events_with_timestamp()
   → timeline_service TimelineEventsData discriminated-union validation
   → GET /api/v1/timeline-events
   → frontend api/contentApi.getTimelineEvents()
@@ -355,7 +359,7 @@ Timeline Events 不建立 Journey Section/Detail；位置由 Timeline 依 Experi
 
 ```text
 backend/data/portfolio/projects/*.json
-  → content_repository fixed PROJECT_FILES mapping
+  → project_repository fixed PROJECT_FILES mapping
   → project_service ProjectItem validation + list/slug response handling
   → GET /api/v1/projects
   → frontend api/contentApi.getProjects()
