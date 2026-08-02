@@ -1,15 +1,15 @@
 # adamtseng.com Portfolio
 
-Adam Tseng's personal software engineering portfolio presents professional experience, engineering projects, and system-design thinking for recruiters and engineering teams. The site prioritizes clear technical communication, fast access to summary content, and structured detail pages backed by a read-only content service.
+Adam Tseng's personal software engineering portfolio is implemented as a production-oriented full-stack application. It presents professional experience and engineering projects while demonstrating practical frontend, backend, deployment, and system-design practices.
 
 ## Features
 
-- Home landing page with bundled About, Journey, and Project previews
-- Structured About detail page
-- Journey sections with an interactive Timeline and expandable details
-- Project search, filters, summaries, and expandable engineering details
-- Responsive desktop, tablet, and mobile layouts
-- Read-only backend content API with validated portfolio JSON
+- Recruiter-focused Home overview with About, Journey, and Project previews
+- Structured About content and professional background
+- Journey Timeline with expandable work and education details
+- Searchable and filterable Projects with detailed engineering narratives
+- Responsive experience across desktop, tablet, and mobile
+- Content-driven preview and detail experiences
 - Resume and professional profile links
 
 ## Technology Stack
@@ -40,10 +40,10 @@ flowchart LR
     HomeJSON[Bundled Home Preview JSON] --> Frontend[Vue SPA]
     PortfolioJSON[Portfolio JSON] --> Backend[FastAPI Content Service]
     Backend --> Frontend
-    Frontend --> Browser
+    Frontend --> User
 ```
 
-Home previews are bundled with the frontend, while complete About, Journey, Timeline Event, and Project content is owned by the backend. See [DATAFLOW.md](DATAFLOW.md) for the canonical runtime flows.
+Home previews are bundled with the frontend, while complete About, Journey, Timeline Event, and Project content is owned by the backend. See [overview.md](overview.md) for the whole-project architecture and [DATAFLOW.md](DATAFLOW.md) for canonical runtime flows.
 
 ## Project Structure
 
@@ -52,12 +52,15 @@ Home previews are bundled with the frontend, while complete About, Journey, Time
 ├── frontend/             # Vue SPA and bundled Home preview content
 ├── backend/              # FastAPI service and portfolio JSON
 ├── .github/workflows/    # Frontend and backend deployment workflows
-└── *.md                  # Project and system design documentation
+├── docs/history/         # Archived reference documents
+└── *.md                  # Current project and system design documents
 ```
 
 See [structure.md](structure.md) for the tracked repository tree and file-level ownership.
 
 ## Documentation
+
+### Current documents
 
 | Document | Purpose |
 |---|---|
@@ -67,9 +70,26 @@ See [structure.md](structure.md) for the tracked repository tree and file-level 
 | [FRONTEND.md](FRONTEND.md) | Frontend system design and ownership philosophy |
 | [DATAFLOW.md](DATAFLOW.md) | Canonical runtime data movement and source-of-truth boundaries |
 | [backend/setup.md](backend/setup.md) | Backend setup, validation, and operational commands |
+
+### Historical documents
+
+Historical documents are reference-only and do not define the current architecture.
+
+| Document | Purpose |
+|---|---|
 | [FRONTEND_REVIEW.md](docs/history/FRONTEND_REVIEW.md) | Archived frontend stabilization review |
 
+## Documentation Reading Order
+
+1. **README.md** — repository entry point and local startup.
+2. **[overview.md](overview.md)** — whole-project architecture and context.
+3. **[structure.md](structure.md)** — repository structure and ownership.
+4. **[BACKEND.md](BACKEND.md) / [FRONTEND.md](FRONTEND.md)** — system design details for each application.
+5. **[DATAFLOW.md](DATAFLOW.md)** — runtime data movement and source-of-truth boundaries.
+
 ## Getting Started
+
+The frontend and backend run as independent local processes. Start them in separate terminals.
 
 ### Prerequisites
 
@@ -89,8 +109,6 @@ uvicorn main:app --reload --host 127.0.0.1 --port 8080
 
 ### Run the frontend
 
-In a second terminal:
-
 ```bash
 cd frontend
 npm ci
@@ -105,21 +123,22 @@ VITE_API_BASE=http://127.0.0.1:8080 npm run dev
 
 ## Build & Deployment
 
-- **Frontend:** `npm run build` produces the static SPA build, which Nginx serves from its own container.
-- **Backend:** FastAPI runs independently in a Uvicorn container and reads validated portfolio JSON.
-- **Production:** Separate GitHub Actions workflows build and deploy the frontend and backend services to Google Cloud Run.
+- Frontend and backend are built and deployed as separate Docker services.
+- `npm run build` produces the frontend SPA, which Nginx serves in production.
+- The backend runs independently with FastAPI and Uvicorn.
+- Separate GitHub Actions workflows deploy both services to Google Cloud Run.
 
 Operational details remain in [overview.md](overview.md), [structure.md](structure.md), and [backend/setup.md](backend/setup.md).
 
 ## Design Philosophy
 
-- Communicate engineering capability clearly to recruiters and engineering teams.
-- Keep Home immediately readable through small bundled previews.
-- Keep complete detail content backend-owned and schema-validated.
+- Maintain clear ownership boundaries across application layers.
 - Preserve one-way, read-only content flow.
-- Keep page state with its owning View and presentation components focused.
-- Share components and primitives only when real reuse exists.
-- Prefer readable, responsive design and restrained motion over decorative complexity.
+- Keep complete detail content backend-owned and schema-validated.
+- Keep Home previews local, small, and independently renderable.
+- Keep mutable frontend state with its local owner.
+- Introduce shared abstractions only when demonstrated reuse exists.
+- Favor maintainability, readability, and responsive behavior over unnecessary complexity.
 
 ## Contributing
 
@@ -131,4 +150,4 @@ Operational details remain in [overview.md](overview.md), [structure.md](structu
 
 ## License
 
-No license file is currently included. Licensing terms are to be determined.
+This repository currently does not include a license.
