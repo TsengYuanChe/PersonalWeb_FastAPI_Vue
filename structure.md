@@ -449,7 +449,7 @@ CSS import order remains `main → main-rwd → projects → projects-rwd → ab
 
 - **Global CSS coupling**：八個 custom CSS 仍全域載入並依 cascade/import order 生效；ownership 已建立，但 selector convention 無法提供 scoped isolation。
 - **Deferred CSS cleanup**：第一輪 verified dead selectors已移除；仍待處理重複 media query、`!important`、breakpoint normalization、hardcoded accent/surface/motion values、token inventory 與 `.home-journey-link` naming debt。
-- **Large orchestration files**：`JourneyView.vue` 與 `Timeline.vue` 仍超過 200 行並負責多種狀態、rendering 或 transition concerns；Project detail rendering 已從 ProjectCard 分離。
+- **Large orchestration files**：Timeline date／position math與共用 height transition已抽離，Project detail rendering亦已從 ProjectCard分離；`JourneyView.vue` 仍集中管理 row lifecycle與 sibling coordination，`Timeline.vue` 仍集中管理同軸 presentation rendering。後續只應在測試證明收益時再拆責任，不以行數作為依據。
 - **App shell coupling**：Sidebar、Mobile Footer、重複 link data、viewport resize lifecycle、Home section scroll implementation與 scroll proxy selector coupling已抽離；`App.vue` 仍同時管理 route-aware layout、Last updated、route watcher、global effects 與 RouterView。
 - **No frontend stores/types/tests**：沒有 store、TypeScript types、unit/component/E2E test directories；資料 shape 主要由 backend schema、JSON 與 runtime property access約束。
 - **API naming**：frontend 沒有 `services/`；`contentApi.js` 實際扮演 service layer，而 `client.js` 保留唯一使用中的 low-level `requestRaw()` transport。
@@ -475,9 +475,9 @@ CSS import order remains `main → main-rwd → projects → projects-rwd → ab
 
 ### Priority Medium
 
-1. 拆分大型 Journey Timeline 計算、row orchestration 與 transition concerns，保留目前元件責任邊界。
+1. 只有在 row lifecycle tests證明收益時，才將 `JourneyView.vue` 的 expanded／leaving row coordination抽成 `useJourneyRows`；active sibling sync與 API loading仍留在 View。
 2. 決定首頁 preview 與 backend summary 的 single-source-of-truth 或產生流程。
-3. 補齊 request timeout、abort 與 non-JSON error handling。
+3. 補齊 request timeout、abort、non-JSON error handling與缺少 API base時的明確錯誤邊界。
 4. 清理 placeholder directories/files。
 
 ### Priority Low
@@ -487,3 +487,5 @@ CSS import order remains `main → main-rwd → projects → projects-rwd → ab
 3. 評估 TypeScript 或 runtime prop/schema validation策略，不應與 UI refactor綁定一次完成。
 4. 收斂重複 root documentation，指定 `overview.md`、`structure.md` 與 feature specs的更新責任。
 5. 改善 Docker reproducibility、immutable image tags、rollback artifacts與 production observability。
+6. 測試層實際落地時再依 unit／component／E2E責任建立目錄，不預先建立空 test hierarchy。
+7. 完成 token inventory並具備 visual regression coverage後，再評估 `tokens.css`／`layout.css` 或 selective scoped styles；不進行一次性 global CSS migration。

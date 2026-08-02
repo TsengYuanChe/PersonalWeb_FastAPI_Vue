@@ -781,10 +781,12 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 
 ### 16.2 Phase 1：建立安全網
 
-1. 加 frontend component tests：Home preview conditional links、image fallback、loading/error states。
-2. 加 backend endpoint/contract tests。
-3. CI 加 `npm ci`、唯讀 lint、build、tests。
-4. 建立 320/375/768/1024/1300px visual baselines。
+1. 先保護高風險純邏輯與資料邊界：Project whole-token search／filters、Timeline date/event positioning，以及 API normalization／error handling。
+2. 加最小 frontend component tests：Home preview conditional links、image fallback、About loading/error/empty/success、Journey single-expanded state與 Project filter/expanded coordination。
+3. 加 backend endpoint/contract tests。
+4. 加小型 E2E smoke coverage，涵蓋直接 route navigation、Home hash navigation與 Journey／Project keyboard interaction。
+5. CI 加 `npm ci`、唯讀 lint、build、tests。
+6. 建立 320/375/768/1024/1300px visual baselines。
 
 ### 16.3 Phase 2：內容契約
 

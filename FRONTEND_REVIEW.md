@@ -1,5 +1,9 @@
 # Frontend Architecture Review
 
+> **Archived:** This document records the architecture review performed during the initial frontend stabilization. The implemented refactors are now part of the current codebase; the remaining deferred and future improvements have been moved into the living roadmap and ownership documentation. Current architecture is defined by `overview.md`, `structure.md`, and `FRONTEND.md`. Future work should be tracked in those living documents rather than by extending this review.
+>
+> **Disposition:** Completed recommendations remain below as historical context. Deferred work that depends on future growth or stronger evidence, and actionable future quality improvements, are tracked in `overview.md` or `structure.md` according to document responsibility. Conditional alternatives that the review explicitly did not recommend—such as adding a global store, splitting the Content API by resource, or performing a broad framework migration—remain historical decisions rather than active work items.
+
 > 盤點日期：2026-08-02  
 > 依據：`frontend/` 的 tracked files、實際 imports、routes、component consumers、runtime state、API calls、local JSON、CSS selectors/import order、package lock、Vite、Docker 與 Nginx 設定。  
 > Review scope：Vue 3 SPA architecture、ownership、coupling、build/deployment boundaries 與分階段 refactor candidates。  
