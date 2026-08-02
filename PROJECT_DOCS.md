@@ -62,9 +62,9 @@ Implemented backend features:
 
 - FastAPI app with CORS enabled.
 - Three content APIs:
-  - `GET /api/about`
-  - `GET /api/experience`
-  - `GET /api/projects`
+  - `GET /api/v1/about`
+  - `GET /api/v1/experience`
+  - `GET /api/v1/projects`
 - File-based content management via JSON in `backend/data/`.
 - `updated_at` added dynamically from file modified time.
 
@@ -103,9 +103,9 @@ Runtime data flow:
 
 1. Vue app starts (`frontend/src/main.js`) and mounts `App.vue`.
 2. `usePageData()` reads `VITE_API_BASE` and requests:
-   - `/api/about`
-   - `/api/experience`
-   - `/api/projects`
+   - `/api/v1/about`
+   - `/api/v1/experience`
+   - `/api/v1/projects`
 3. FastAPI router (`backend/routers/main_api.py`) loads corresponding JSON file from `backend/data/`.
 4. Backend appends `updated_at` from file modification timestamp and returns JSON.
 5. Frontend stores data in reactive refs and renders sections.

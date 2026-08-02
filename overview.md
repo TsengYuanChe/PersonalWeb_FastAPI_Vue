@@ -110,8 +110,11 @@ PersonalWeb_Flask_Vue/
 ├── backend/
 │   ├── main.py                    # FastAPI app、CORS、全域 error envelope
 │   ├── routers/v1/
-│   │   ├── content.py             # legacy + v1 content endpoints
-│   │   └── health.py              # /health
+│   │   ├── about.py               # /api/v1/about
+│   │   ├── experience.py          # /api/v1/experience
+│   │   ├── projects.py            # /api/v1/projects 與 /{slug}
+│   │   ├── timeline.py            # /api/v1/timeline-events
+│   │   └── health.py              # /api/v1/health
 │   ├── services/content_service.py
 │   ├── repositories/content_repository.py
 │   ├── schemas/
@@ -475,16 +478,12 @@ Backend Portfolio content 統一以頁面為單位放在 `backend/data/portfolio
 | Method | Path | Response |
 |---|---|---|
 | GET | `/` | `{ "msg": "FastAPI backend running!" }` |
-| GET | `/health` | `{ "status": "ok" }` |
-| GET | `/api/about` | About object + top-level `updated_at`（legacy） |
-| GET | `/api/experience` | Experience object + `updated_at`（legacy） |
-| GET | `/api/timeline-events` | Timeline Events list + `updated_at`（legacy） |
-| GET | `/api/projects` | 三個完整 Project objects + 最新檔案 `updated_at`（legacy shape） |
-| GET | `/api/projects/{slug}` | 指定 slug 的完整 `ProjectItem`；不存在時回傳標準 404 error envelope |
 | GET | `/api/v1/about` | `AboutResponse` |
 | GET | `/api/v1/experience` | `ExperienceResponse` |
 | GET | `/api/v1/timeline-events` | `TimelineEventsResponse` |
 | GET | `/api/v1/projects` | `ProjectsResponse` |
+| GET | `/api/v1/projects/{slug}` | 指定 slug 的完整 `ProjectItem`；不存在時回傳標準 404 error envelope |
+| GET | `/api/v1/health` | `{ "status": "ok" }` |
 | GET | `/docs`, `/redoc`, `/openapi.json` | FastAPI defaults |
 
 ### 10.2 v1 envelope
@@ -551,11 +550,11 @@ ProjectData
     └── showcase: ShowcaseItem[]
 ```
 
-`GET /api/projects` 與 `GET /api/v1/projects` 會依 repository 的固定順序讀取並逐筆以 `ProjectItem` 驗證；`GET /api/projects/{slug}` 使用相同 repository 與 schema，不建立第二套 loader。三個 Project 的 `showcase` 目前都是空陣列，但 `ShowcaseItem` 已定義 image、image_alt 與選填 caption，供後續加入公開素材。
+`GET /api/v1/projects` 會依 repository 的固定順序讀取並逐筆以 `ProjectItem` 驗證；`GET /api/v1/projects/{slug}` 使用相同 repository 與 schema，不建立第二套 loader。三個 Project 的 `showcase` 目前都是空陣列，但 `ShowcaseItem` 已定義 image、image_alt 與選填 caption，供後續加入公開素材。
 
-`GET /api/experience` 與 `GET /api/v1/experience` 共用相同 repository/service aggregation：repository 動態讀取 `portfolio/experience/*.json`，service 逐筆以 `ExperienceItem` 驗證並組成 Experience list。現況沒有 `GET /api/experience/{slug}` endpoint。
+`GET /api/v1/experience` 透過 repository/service aggregation：repository 動態讀取 `portfolio/experience/*.json`，service 逐筆以 `ExperienceItem` 驗證並組成 Experience list。現況沒有 Experience slug endpoint。
 
-`GET /api/timeline-events` 與 `GET /api/v1/timeline-events` 讀取獨立的 `portfolio/timeline/events.json`，並以 discriminated union schema 驗證 point／duration 所需欄位；Experience objects 不包含 Timeline Events。
+`GET /api/v1/timeline-events` 讀取獨立的 `portfolio/timeline/events.json`，並以 discriminated union schema 驗證 point／duration 所需欄位；Experience objects 不包含 Timeline Events。
 
 首頁 Projects Preview schema 是獨立的前端 schema，不應與 backend `ProjectItem` 混用。
 
@@ -706,7 +705,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - CORS 同時使用 `allow_origins=["*"]` 與 `allow_credentials=True`，production policy 過寬且語意不清。
 - JSON rich text 含外部 `<a target="_blank">`，部分內容未包含 `rel="noopener noreferrer"`，並由 `v-html` render。
 - 每個 request 都同步開檔與解析 JSON，沒有 cache。
-- Legacy `/api/*` endpoints仍保留，是否有外部 consumer 未知。
+- HTTP route 已統一為 `/api/v1/*`；`content_service.py` 仍保留未被 router 使用的 legacy response helper，後續可在確認無其他 Python consumer 後移除。
 - Project visibility、hide、featured、public、archived 與分類篩選尚未設計或實作；目前固定依 repository mapping 顯示三筆。
 - `core/config.py` 與 `core/logging.py` 只是 placeholder。
 - `python-multipart` 已安裝但未使用。
@@ -791,7 +790,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - 正式 custom domain、DNS 與 Cloud Run domain mapping現況。
 - Cloud Run IAM/public access、resource limits、autoscaling、health checks。
 - GitHub Secrets與service account最小權限。
-- Legacy endpoints是否仍有外部 consumer。
+- 已移除的 unversioned content endpoints 是否仍有 repository 外部 consumer。
 - Backend JSON是否為 production唯一內容來源。
 - Production logs、monitoring、alerts、billing與最近成功 revision。
 - Portfolio、工作內容與外部 links的公開／保密審查狀態。

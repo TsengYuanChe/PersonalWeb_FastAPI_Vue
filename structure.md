@@ -76,7 +76,10 @@ backend/
 │   ├── __init__.py
 │   └── v1/
 │       ├── __init__.py
-│       ├── content.py
+│       ├── about.py
+│       ├── experience.py
+│       ├── projects.py
+│       ├── timeline.py
 │       └── health.py
 └── scripts/
     └── validate_content_schema.py
@@ -120,7 +123,7 @@ backend/
 - `content_service.py` — **runtime application/content layer**：
   - 呼叫 repository。
   - 使用 Pydantic models 驗證 JSON。
-  - 組裝 legacy 或 v1 response shape。
+  - 組裝目前 router 使用的 v1 response shape；檔案內仍有未被 HTTP router 使用的 legacy response helpers。
   - 提供 Project slug 404 行為。
 - About、Experience、Projects、Timeline Events 目前共用同一個 service module，未依 feature 分檔。
 
@@ -136,8 +139,11 @@ backend/
 
 ### `backend/routers/`
 
-- `routers/v1/content.py` — **runtime HTTP routing**：同時定義 legacy `/api/*` 與 versioned `/api/v1/*` content endpoints；目錄名為 `v1`，但檔案本身不只包含 v1 routes。
-- `routers/v1/health.py` — **runtime HTTP routing**：`GET /health`。
+- `routers/v1/about.py` — **runtime HTTP routing**：只處理 `GET /api/v1/about`。
+- `routers/v1/experience.py` — **runtime HTTP routing**：只處理 `GET /api/v1/experience`。
+- `routers/v1/projects.py` — **runtime HTTP routing**：處理 Project collection 與 slug endpoints。
+- `routers/v1/timeline.py` — **runtime HTTP routing**：只處理 `GET /api/v1/timeline-events`。
+- `routers/v1/health.py` — **runtime HTTP routing**：只處理 `GET /api/v1/health`。
 - 各 `__init__.py` 只標記 Python package。
 
 ### `backend/scripts/`
@@ -360,19 +366,7 @@ backend/data/portfolio/projects/*.json
 
 ## API Structure
 
-Backend routes 全部定義在 `backend/routers/v1/content.py`，health route 在 `backend/routers/v1/health.py`。
-
-### Legacy endpoints
-
-| Endpoint | Data source | Frontend usage |
-|---|---|---|
-| `GET /api/about` | `portfolio/about/about.json` | 無目前 consumer；compatibility only |
-| `GET /api/experience` | `portfolio/experience/*.json` | 無目前 consumer；compatibility only |
-| `GET /api/timeline-events` | `portfolio/timeline/events.json` | 無目前 consumer；compatibility only |
-| `GET /api/projects` | `portfolio/projects/*.json` | 無目前 consumer；compatibility only |
-| `GET /api/projects/{slug}` | 固定 Project slug mapping | 無目前 frontend consumer；可供單筆查詢 |
-
-Legacy collection responses 使用 top-level content fields 與 `updated_at`，不使用 v1 envelope。
+Backend resource routes 分別定義在 `backend/routers/v1/` 的 `about.py`、`experience.py`、`projects.py`、`timeline.py` 與 `health.py`；content HTTP API 僅保留 v1 surface。
 
 ### Versioned endpoints
 
@@ -382,13 +376,14 @@ Legacy collection responses 使用 top-level content fields 與 `updated_at`，�
 | `GET /api/v1/experience` | `ExperienceResponse` | `ExperienceView.vue` |
 | `GET /api/v1/timeline-events` | `TimelineEventsResponse` | `ExperienceView.vue` |
 | `GET /api/v1/projects` | `ProjectsResponse` | `ProjectView.vue` |
+| `GET /api/v1/projects/{slug}` | `ProjectItem` | 無目前 frontend consumer；可供單筆查詢 |
+| `GET /api/v1/health` | plain status object | 無 frontend consumer；service probe |
 
-Versioned responses 使用 `{data, meta:{updated_at,version}}`。
+四個 content collection responses 使用 `{data, meta:{updated_at,version}}`；Project slug 回傳 `ProjectItem`，health 回傳 plain status object。
 
 ### Infrastructure endpoints
 
 - `GET /`：backend running message。
-- `GET /health`：`{"status":"ok"}`。
 - `/docs`、`/redoc`、`/openapi.json`：FastAPI defaults。
 
 ## CSS Structure
@@ -432,9 +427,9 @@ CSS import order is part of current behavior. Feature files contain both Home an
 - **API naming**：frontend 沒有 `services/`；`contentApi.js` 實際扮演 service layer。`client.js` 的 `request()` 沒有 consumer。
 - **Partially unused helper**：`useProjectHelpers.js` 只有 `safeArray` 被使用；featured/preview/link helpers 沒有 consumer，且格式與其他 source files 不一致。
 - **Unused dependency**：`axios` 存在於 dependencies，但 source code 使用 native Fetch，沒有 Axios imports。
-- **Legacy compatibility surface**：legacy `/api/*` 與 v1 endpoints 並存於 `routers/v1/content.py`；外部 consumer 未知。
+- **Unused compatibility helpers**：unversioned HTTP routes 已移除，但 `content_service.py` 仍保留未被 router 使用的 legacy response helpers。
 - **Synchronous JSON I/O**：每個 content request 都同步開檔、parse JSON、validate；沒有 cache。
-- **Centralized backend modules**：所有 content schemas、services、routes 集中於單一 feature-agnostic files；新增頁面會持續擴大這些 modules。
+- **Centralized backend service/schema modules**：resource routes 已拆分，但所有 content schemas 與 services 仍集中於單一 feature-agnostic files；新增頁面會持續擴大這兩個 modules。
 - **Placeholder backend packages**：`core/config.py`、`core/logging.py` 未實作；`data/content/.gitkeep` 沒有 runtime用途。
 - **Duplicated content responsibility**：首頁三份 local preview JSON 與 backend detail summary 需人工同步，可能產生文案、links、tags 漂移。
 - **Rich HTML handling**：首頁 About preview 與 Experience detail 使用 `v-html`；沒有 frontend sanitization layer。

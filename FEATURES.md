@@ -19,9 +19,9 @@ Core outcomes for reviewers:
 ### Rendering and Data
 - Vue 3 Composition API app with reactive state.
 - Runtime fetch of backend content from:
-  - `GET /api/about`
-  - `GET /api/experience`
-  - `GET /api/projects`
+  - `GET /api/v1/about`
+  - `GET /api/v1/experience`
+  - `GET /api/v1/projects`
 - Computed display of unified “Last updated” date from backend metadata.
 
 ### Responsiveness and Interaction
@@ -32,9 +32,9 @@ Core outcomes for reviewers:
 
 ## 3. Backend Features
 ### API Surface
-- `GET /api/about`
-- `GET /api/experience`
-- `GET /api/projects`
+- `GET /api/v1/about`
+- `GET /api/v1/experience`
+- `GET /api/v1/projects`
 - `GET /` (service status message)
 
 ### Content Serving Model

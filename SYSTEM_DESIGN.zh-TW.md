@@ -40,7 +40,7 @@
 ```mermaid
 flowchart LR
     U[User Browser] --> FE[Vue Frontend Service\nCloud Run + Nginx]
-    FE -->|GET /api/about\nGET /api/experience\nGET /api/projects| BE[FastAPI Backend Service\nCloud Run]
+    FE -->|GET /api/v1/about\nGET /api/v1/experience\nGET /api/v1/projects| BE[FastAPI Backend Service\nCloud Run]
     BE --> DATA[(JSON Content Files\nbackend/data/*.json)]
     DATA --> BE
     BE -->|JSON + updated_at| FE
@@ -71,7 +71,7 @@ flowchart LR
 ### Backend
 職責：
 - FastAPI 服務啟動與 middleware 設定（`backend/main.py`）。
-- Content APIs（`/api/about`, `/api/experience`, `/api/projects`）。
+- Content APIs（`/api/v1/about`, `/api/v1/experience`, `/api/v1/projects`）。
 - 自 filesystem 載入 JSON（`backend/routers/main_api.py`）。
 - 由檔案修改時間注入 timestamp（`updated_at`）。
 
@@ -95,7 +95,7 @@ flowchart LR
 端到端執行流程：
 1. User 請求 frontend URL。
 2. Frontend assets 被提供，並掛載 Vue app。
-3. Frontend 對 backend 發送 API 請求（`/api/about`, `/api/experience`, `/api/projects`）。
+3. Frontend 對 backend 發送 API 請求（`/api/v1/about`, `/api/v1/experience`, `/api/v1/projects`）。
 4. Backend endpoint 解析目標 JSON 檔案並讀取內容。
 5. Backend 在回應 payload 注入 `updated_at` timestamp。
 6. Backend 回傳結構化 JSON responses。

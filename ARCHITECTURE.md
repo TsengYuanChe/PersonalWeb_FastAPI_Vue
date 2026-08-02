@@ -25,9 +25,9 @@ This design keeps presentation and content delivery decoupled while preserving a
 
 ### Backend API Service (`backend/`)
 - `main.py`: FastAPI app bootstrap + CORS middleware + router mount.
-- `routers/v1/content.py`: content endpoints; delegates application logic.
-- `routers/v1/health.py`: health endpoint (`GET /health`).
-- `services/content_service.py`: business response shaping for legacy and v1 contracts.
+- `routers/v1/about.py`, `experience.py`, `projects.py`, `timeline.py`: resource-specific v1 content endpoints.
+- `routers/v1/health.py`: health endpoint (`GET /api/v1/health`).
+- `services/content_service.py`: business response shaping for the active v1 contracts.
 - `repositories/content_repository.py`: filesystem JSON reads + timestamp extraction.
 - `core/config.py`, `core/logging.py`: backend core placeholders for settings/logging.
 - `schemas/content.py`, `schemas/common.py`: Pydantic schemas for v1 response validation.
@@ -35,7 +35,7 @@ This design keeps presentation and content delivery decoupled while preserving a
 
 ### Backend Layer Responsibilities
 - `router` layer: owns HTTP route declarations and request/response entry points.
-- `service` layer: owns business logic and response contract shaping (`legacy` vs `v1` envelope).
+- `service` layer: owns business logic and v1 response envelope shaping.
 - `repository` layer: owns data access (`backend/data/*.json`) and file metadata reads.
 - Effective flow: `router -> service -> repository -> JSON files`.
 
@@ -102,22 +102,21 @@ flowchart LR
 
 ## 5. API Layer
 ### Endpoints
-- `GET /health` (health probe)
+- `GET /api/v1/health` (health probe)
 - `GET /api/v1/about`
 - `GET /api/v1/experience`
 - `GET /api/v1/projects`
-- `GET /api/about`
-- `GET /api/experience`
-- `GET /api/projects`
+- `GET /api/v1/projects/{slug}`
+- `GET /api/v1/timeline-events`
 - `GET /` (service health/message)
 
 ### Backend Design Characteristics
 - Flat REST-style endpoint surface for content domains.
-- Shared JSON timestamp loader (`read_json_with_timestamp`) and service response shapers (`get_v1_content` / `get_legacy_content`) keep endpoint logic thin.
+- Shared repository loaders and v1 service response shapers keep endpoint logic thin.
 - `/api/v1/*` endpoints use Pydantic `response_model` schemas for non-breaking response validation.
 - Centralized exception handlers provide consistent API error envelopes for `404`/`500` scenarios.
 - CORS enabled for cross-origin frontend calls.
-- API versioning is introduced via `/api/v1/...`; legacy unversioned endpoints are retained for compatibility.
+- The public content API uses a single `/api/v1/...` route surface.
 - No auth/pagination currently (appropriate for public portfolio content).
 
 ### Frontend Integration

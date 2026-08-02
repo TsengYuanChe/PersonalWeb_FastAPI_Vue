@@ -19,9 +19,9 @@
 ### 渲染與資料
 - 使用 Vue 3 Composition API 與 reactive state。
 - 在執行期自 backend 取得內容：
-  - `GET /api/about`
-  - `GET /api/experience`
-  - `GET /api/projects`
+  - `GET /api/v1/about`
+  - `GET /api/v1/experience`
+  - `GET /api/v1/projects`
 - 根據 backend metadata 計算並顯示統一的「Last updated」日期。
 
 ### 響應式與互動
@@ -32,9 +32,9 @@
 
 ## 3. Backend 功能
 ### API Surface
-- `GET /api/about`
-- `GET /api/experience`
-- `GET /api/projects`
+- `GET /api/v1/about`
+- `GET /api/v1/experience`
+- `GET /api/v1/projects`
 - `GET /`（service status message）
 
 ### 內容提供模型

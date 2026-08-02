@@ -40,7 +40,7 @@ The system is split into three runtime layers and one delivery layer:
 ```mermaid
 flowchart LR
     U[User Browser] --> FE[Vue Frontend Service\nCloud Run + Nginx]
-    FE -->|GET /api/about\nGET /api/experience\nGET /api/projects| BE[FastAPI Backend Service\nCloud Run]
+    FE -->|GET /api/v1/about\nGET /api/v1/experience\nGET /api/v1/projects| BE[FastAPI Backend Service\nCloud Run]
     BE --> DATA[(JSON Content Files\nbackend/data/*.json)]
     DATA --> BE
     BE -->|JSON + updated_at| FE
@@ -71,7 +71,7 @@ Responsibilities:
 ### Backend
 Responsibilities:
 - FastAPI service bootstrap and middleware setup (`backend/main.py`).
-- Content APIs (`/api/about`, `/api/experience`, `/api/projects`).
+- Content APIs (`/api/v1/about`, `/api/v1/experience`, `/api/v1/projects`).
 - JSON loading from filesystem (`backend/routers/main_api.py`).
 - Timestamp injection (`updated_at`) from file modified time.
 
@@ -95,7 +95,7 @@ Responsibilities:
 End-to-end runtime flow:
 1. User requests the frontend URL.
 2. Frontend assets are served and Vue app mounts.
-3. Frontend sends API requests to backend (`/api/about`, `/api/experience`, `/api/projects`).
+3. Frontend sends API requests to backend (`/api/v1/about`, `/api/v1/experience`, `/api/v1/projects`).
 4. Backend endpoint resolves target JSON file and reads content.
 5. Backend injects `updated_at` timestamp into response payload.
 6. Backend returns structured JSON responses.

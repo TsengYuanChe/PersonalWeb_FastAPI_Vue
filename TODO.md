@@ -18,7 +18,7 @@ Goal: improve maintainability, engineering credibility, architectural clarity, a
 - Current state: ✅ Implemented. Versioned endpoints (`/api/v1/about`, `/api/v1/experience`, `/api/v1/projects`) now return a standardized envelope (`data` + `meta`), and frontend consumption has been updated to use `/api/v1/...`.
 - Suggested structure or code example:
 ```python
-# backend/routers/v1/content.py
+# backend/routers/v1/about.py
 @router.get("/api/v1/about")
 def get_about():
     return {"data": about_payload, "meta": {"updated_at": updated_at}}
@@ -55,12 +55,12 @@ payload = content_service.get_about()
   - Lower coupling
   - Cleaner module boundaries
 
-### 1.3 ✅ Add `/health` endpoint
+### 1.3 ✅ Add `/api/v1/health` endpoint
 - Short explanation: provide standard service health probe.
-- Current state: ✅ Implemented. Dedicated health endpoint is available at `GET /health` via `backend/routers/v1/health.py` and is registered in `backend/main.py`.
+- Current state: ✅ Implemented. Dedicated health endpoint is available at `GET /api/v1/health` via `backend/routers/v1/health.py` and is registered in `backend/main.py`.
 - Suggested structure or code example:
 ```python
-@app.get("/health")
+@app.get("/api/v1/health")
 def health():
     return {"status": "ok"}
 ```
@@ -98,7 +98,7 @@ class ApiResponse(BaseModel):
 
 ### 2.2 ✅ Reorganize backend modules for domain clarity
 - Short explanation: group code by responsibility and version.
-- Current state: ✅ Implemented. Routes are organized under `backend/routers/v1/` (`content.py`, `health.py`) and placeholders exist for `backend/core/` and `backend/schemas/` modules.
+- Current state: ✅ Implemented. Resource routes are organized under `backend/routers/v1/` (`about.py`, `experience.py`, `projects.py`, `timeline.py`, `health.py`) and placeholders exist for `backend/core/` and `backend/schemas/` modules.
 - Suggested structure or code example:
 ```text
 backend/
@@ -108,7 +108,10 @@ backend/
     logging.py
   routers/
     v1/
-      content.py
+      about.py
+      experience.py
+      projects.py
+      timeline.py
       health.py
   services/
     content_service.py

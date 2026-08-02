@@ -40,7 +40,7 @@
 ```mermaid
 flowchart LR
     User[Browser] --> FE[Frontend Service\nVue SPA on Cloud Run]
-    FE -->|GET /api/about\nGET /api/experience\nGET /api/projects| BE[Backend Service\nFastAPI on Cloud Run]
+    FE -->|GET /api/v1/about\nGET /api/v1/experience\nGET /api/v1/projects| BE[Backend Service\nFastAPI on Cloud Run]
     BE --> DATA[(backend/data/*.json)]
     DATA --> BE
     BE -->|JSON + updated_at| FE
@@ -69,9 +69,9 @@ flowchart LR
 
 ## 5. API Layer（API 層）
 ### Endpoints
-- `GET /api/about`
-- `GET /api/experience`
-- `GET /api/projects`
+- `GET /api/v1/about`
+- `GET /api/v1/experience`
+- `GET /api/v1/projects`
 - `GET /`（service health/message）
 
 ### Backend Design Characteristics（後端設計特性）
