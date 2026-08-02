@@ -14,11 +14,11 @@ from schemas.content import AboutResponse, ExperienceItem, ProjectItem, Timeline
 def main():
     data_root = BACKEND_ROOT / "data"
     file_to_schema = {
-        "profile/about.json": (AboutResponse, True),
+        "portfolio/about/about.json": (AboutResponse, True),
         "portfolio/projects/mris.json": (ProjectItem, False),
         "portfolio/projects/personal-portfolio.json": (ProjectItem, False),
         "portfolio/projects/mamatoya.json": (ProjectItem, False),
-        "portfolio/timeline-events.json": (TimelineEventsData, False),
+        "portfolio/timeline/events.json": (TimelineEventsData, False),
     }
 
     errors = []

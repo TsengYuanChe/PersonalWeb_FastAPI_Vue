@@ -1,34 +1,21 @@
 from fastapi import HTTPException
 
 from repositories.content_repository import (
+    read_about_with_timestamp,
     read_experiences_with_timestamps,
-    read_json_with_timestamp,
     read_project_with_timestamp,
     read_projects_with_timestamps,
     read_timeline_events_with_timestamp,
 )
-from schemas.content import ExperienceItem, ProjectItem, TimelineEventsData
-
-
-def get_legacy_content(filename):
-    data, updated_at = read_json_with_timestamp(filename)
-    data["updated_at"] = updated_at
-    return data
-
-
-def get_v1_content(filename):
-    data, updated_at = read_json_with_timestamp(filename)
-    return {
-        "data": data,
-        "meta": {
-            "updated_at": updated_at,
-            "version": "v1",
-        },
-    }
+from schemas.content import AboutData, ExperienceItem, ProjectItem, TimelineEventsData
 
 
 def get_about_legacy():
-    return get_legacy_content("profile/about.json")
+    about, updated_at = _get_validated_about()
+    return {
+        **about,
+        "updated_at": updated_at,
+    }
 
 
 def get_experience_legacy():
@@ -48,7 +35,14 @@ def get_projects_legacy():
 
 
 def get_about_v1():
-    return get_v1_content("profile/about.json")
+    about, updated_at = _get_validated_about()
+    return {
+        "data": about,
+        "meta": {
+            "updated_at": updated_at,
+            "version": "v1",
+        },
+    }
 
 
 def get_experience_v1():
@@ -117,6 +111,12 @@ def _get_validated_experiences():
         for experience in experiences
     ]
     return validated, updated_at
+
+
+def _get_validated_about():
+    data, updated_at = read_about_with_timestamp()
+    validated = AboutData.model_validate(data)
+    return validated.model_dump(mode="json"), updated_at
 
 
 def _get_validated_timeline_events():

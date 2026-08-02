@@ -112,16 +112,17 @@ PersonalWeb_Flask_Vue/
 │   │   ├── common.py              # Meta / ApiResponse
 │   │   └── content.py             # About / Experience / Project models
 │   ├── data/
-│   │   ├── profile/about.json
-│   │   ├── portfolio/experience/  # 每段完整 Journey 各一份 slug JSON
-│   │   │   ├── ezoom.json
-│   │   │   ├── nycu-master.json
-│   │   │   └── nchu-bachelor.json
-│   │   ├── portfolio/timeline-events.json # Journey Timeline 的非 Experience 事件
-│   │   └── portfolio/projects/     # 每個完整 Project 各一份 slug JSON
-│   │       ├── mris.json
-│   │       ├── personal-portfolio.json
-│   │       └── mamatoya.json
+│   │   └── portfolio/              # 依 Portfolio page 分組的 backend content
+│   │       ├── about/about.json
+│   │       ├── experience/         # 每段完整 Journey 各一份 slug JSON
+│   │       │   ├── ezoom.json
+│   │       │   ├── nycu-master.json
+│   │       │   └── nchu-bachelor.json
+│   │       ├── timeline/events.json # Journey Timeline 的非 Experience 事件
+│   │       └── projects/           # 每個完整 Project 各一份 slug JSON
+│   │           ├── mris.json
+│   │           ├── personal-portfolio.json
+│   │           └── mamatoya.json
 │   ├── scripts/validate_content_schema.py
 │   ├── core/config.py             # placeholder
 │   ├── core/logging.py            # placeholder
@@ -252,7 +253,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - 正文最大寬度 880px。
 - Sections：Introduction、What I Do、Current Role、Engineering Approach、Technical Background、Current Focus。
 - 每個 section 目前僅顯示 `Coming soon.`。
-- **目前不呼叫 About API**；後端 `paragraphs` 尚未轉為 section-based contract。
+- **目前不呼叫 About API**；後端已提供保留 legacy `paragraphs` 並新增 `sections[{id,title,paragraphs,items}]` 的可擴充 contract，前端串接留待下一階段。
 
 ### 6.3 `/experience`
 
@@ -406,9 +407,9 @@ Desktop social links 位於 Sidebar 底部；Mobile 則以 App template 中的 f
 | 首頁 About Preview | `frontend/src/data/home/about.json` | HomeView |
 | 首頁 Journey Preview | `frontend/src/data/home/experiences.json` | HomeJourneyItem |
 | 首頁 Projects Preview | `frontend/src/data/home/projects.json` | HomeProjectPreview |
-| 完整 About JSON | `backend/data/profile/about.json` | About API；目前頁面內容未使用 |
+| 完整 About JSON | `backend/data/portfolio/about/about.json` | About API；目前頁面內容未使用 |
 | 完整 Experience JSON | `backend/data/portfolio/experience/{ezoom,nycu-master,nchu-bachelor}.json` | Experience API/detail page |
-| Timeline Events JSON | `backend/data/portfolio/timeline-events.json` | Timeline Events API／Timeline.vue |
+| Timeline Events JSON | `backend/data/portfolio/timeline/events.json` | Timeline Events API／Timeline.vue |
 | 完整 Projects JSON | `backend/data/portfolio/projects/{mris,personal-portfolio,mamatoya}.json` | Projects API/detail page |
 | Experience logos | `frontend/src/assets/images/exp/*.png` | Vite asset imports |
 | Future project screenshots | 預定 `frontend/public/images/projects/covers/*.webp` | 目前檔案尚不存在 |
@@ -443,6 +444,17 @@ Desktop social links 位於 Sidebar 底部；Mobile 則以 App template 中的 f
 - 首頁仍只讀取 `frontend/src/data/home/projects.json` 的三筆小型 summary，避免為 Preview 載入不需要的 detail 與 Cloud Run cold start。首頁不顯示 architecture、challenges、deployment 或 showcase。
 - Cover 檔案仍由 frontend 靜態資產路徑 `frontend/public/images/projects/covers/` 負責；backend JSON 只保存公開 path 與 ready flag。
 - Project repository 以固定 slug/file mapping 維持 MRIS、Personal Portfolio Website、Mamatoya 的目前顯示順序。尚未實作 visibility、hide、featured、public、archived 等欄位或篩選邏輯。
+
+### 9.3 Portfolio page data responsibility
+
+Backend Portfolio content 統一以頁面為單位放在 `backend/data/portfolio/`：
+
+- About：`portfolio/about/`，管理個人介紹 paragraphs 與結構化 sections。
+- Experience：`portfolio/experience/`，管理 Journey Sections 與 Detail 的獨立 slug JSON。
+- Timeline：`portfolio/timeline/`，管理屬於 Journey 時間軸、但不屬於 Experience 的 events。
+- Projects：`portfolio/projects/`，管理 Project summary 與 detail JSON。
+
+舊的 `backend/data/profile/` 分類已移除；未來新增 Portfolio page data 時應建立對應 page folder，不把頁面資料放回 portfolio root。
 
 ## 10. Backend API 與 schemas
 
@@ -483,7 +495,11 @@ Desktop social links 位於 Sidebar 底部；Mobile 則以 App template 中的 f
 
 ```text
 AboutData
-└── paragraphs: string[]
+├── paragraphs: string[]（backward compatibility）
+└── sections: AboutSection[]
+    ├── id / title: string
+    ├── paragraphs: string[]
+    └── items: string[]
 
 ExperienceData
 └── experience: ExperienceItem[]
@@ -529,7 +545,7 @@ ProjectData
 
 `GET /api/experience` 與 `GET /api/v1/experience` 共用相同 repository/service aggregation：repository 動態讀取 `portfolio/experience/*.json`，service 逐筆以 `ExperienceItem` 驗證並組成 Experience list。現況沒有 `GET /api/experience/{slug}` endpoint。
 
-`GET /api/timeline-events` 與 `GET /api/v1/timeline-events` 讀取獨立的 `portfolio/timeline-events.json`，並以 discriminated union schema 驗證 point／duration 所需欄位；Experience objects 不包含 Timeline Events。
+`GET /api/timeline-events` 與 `GET /api/v1/timeline-events` 讀取獨立的 `portfolio/timeline/events.json`，並以 discriminated union schema 驗證 point／duration 所需欄位；Experience objects 不包含 Timeline Events。
 
 首頁 Projects Preview schema 是獨立的前端 schema，不應與 backend `ProjectItem` 混用。
 
@@ -660,7 +676,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 
 - `/about` 六個 sections 全部是 `Coming soon.`。
 - 三張 Project screenshots 尚未存在；首頁 `image_ready` 與 backend `cover_ready` 全為 false，三份 backend `showcase` 亦為空陣列。
-- Backend About API 仍只有 `paragraphs`，無法直接表達六個 section 的 slug/title/order。
+- Backend About API 已具備結構化 sections，但 `/about` 仍是 frontend placeholder，尚未消費正式內容。
 
 ### 14.2 Frontend debt
 
@@ -713,7 +729,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 ### 16.1 目前內容 Roadmap
 
 - **About 正式內容**：將六個 `Coming soon.` sections 補成正式個人與工程介紹。
-- **About API 整合**：現有 `/api/v1/about` 已完成，但只回傳 `paragraphs`；需先決定 section-based contract，再把 `/about` 接回 API。這不是缺少 endpoint，而是 schema 與頁面結構尚未對齊。
+- **About API 整合**：現有 `/api/v1/about` 已同時提供 backward-compatible `paragraphs` 與結構化 `sections`；下一步是讓 `/about` 取代 frontend placeholder 並加入 loading/error/empty states。
 - **Experience 詳細內容**：三份 slug JSON、聚合 API、單段收合／展開、shared-row Timeline 與 active segment glow 已存在；仍需內容校稿、公開資訊確認、Timeline stretch 與詳細頁視覺整理。
 - **Project 詳細內容**：三份 slug JSON、API、完整欄位與單卡收合／展開互動已存在；仍需內容校稿、公開資訊確認、Showcase、架構圖與詳細頁視覺整理。
 - **Homepage Project screenshots**：三張 future paths 已設定，但實體 `.webp` 尚未加入，`image_ready` 仍為 false。
@@ -730,7 +746,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 
 ### 16.3 Phase 2：內容契約
 
-1. 決定 About section-based API schema，例如 `{slug,title,paragraphs,order}`。
+1. 為既有 About section-based API 補 frontend contract tests，確認 optional items 與 section ordering。
 2. 決定 Preview 與 backend content 的同步來源或產生流程。
 3. 定義 rich-text sanitization 策略。
 4. 修正 backend content 拼字與空字串 link semantics，但先做 contract test。

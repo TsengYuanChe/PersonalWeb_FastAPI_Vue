@@ -5,13 +5,14 @@ from pathlib import Path
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, "data")
+ABOUT_FILE = "portfolio/about/about.json"
 PROJECT_FILES = {
     "mris": "portfolio/projects/mris.json",
     "personal-portfolio": "portfolio/projects/personal-portfolio.json",
     "mamatoya": "portfolio/projects/mamatoya.json",
 }
 EXPERIENCE_DIR = "portfolio/experience"
-TIMELINE_EVENTS_FILE = "portfolio/timeline-events.json"
+TIMELINE_EVENTS_FILE = "portfolio/timeline/events.json"
 
 
 def read_json_with_timestamp(filename):
@@ -36,6 +37,10 @@ def read_projects_with_timestamps():
         timestamps.append(updated_at)
 
     return projects, max(timestamps)
+
+
+def read_about_with_timestamp():
+    return read_json_with_timestamp(ABOUT_FILE)
 
 
 def read_project_with_timestamp(slug):

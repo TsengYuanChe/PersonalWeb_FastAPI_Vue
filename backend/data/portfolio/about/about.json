@@ -1,0 +1,91 @@
+{
+  "paragraphs": [
+    "Hi, I’m Yuan-Che — a <strong>Full-Stack</strong> & <strong>Cloud-Focused Software Engineer</strong>.",
+    "I design and build scalable, production-ready systems across the full development cycle—from <strong>frontend interfaces</strong> and <strong>backend APIs</strong> to <strong>databases</strong>, <strong>cloud deployments</strong>, and <strong>CI/CD automation</strong>. My work emphasizes clean architecture, reliability, and developer-friendly design.",
+    "I currently serve as a <strong>Software Development Engineer (RDSS)</strong> at <a href=\"https://www.ezoominfo.com/\" target=\"_blank\">eZoom Information</a>, where I work across the full stack using <strong>Vue</strong>, <strong>.NET 8 / C#</strong>, <strong>Python FastAPI</strong>, and <strong>MSSQL / PostgreSQL</strong>. I develop system features end-to-end: writing <strong>SA documents</strong>, planning <strong>database schemas</strong>, implementing backend services, building frontend UI, and deploying applications to <strong>Windows Server + IIS</strong> with automated pipelines.",
+    "Beyond application development, I maintain experience in cloud-native technologies, including containerization with <strong>Docker</strong>, deployment on <strong>Google Cloud Run</strong>, and creating <strong>GitHub Actions CI/CD workflows</strong> used in production environments.",
+    "Previously, I completed my master’s degree at <a href=\"https://www.nycu.edu.tw/nycu/ch/index\" target=\"_blank\">National Yang Ming Chiao Tung University</a>, specializing in <strong>quantum systems</strong>, <strong>scientific computing</strong>, and <strong>numerical algorithms</strong>. This background strengthened my analytical mindset and ability to design efficient, mathematically grounded solutions—skills that directly inform my engineering work today.",
+    "I am motivated by building practical, reliable software products, bridging backend systems with real-world workflows, and constantly pushing for better <strong>architecture</strong>, <strong>automation</strong>, and <strong>developer experience</strong>."
+  ],
+  "sections": [
+    {
+      "id": "introduction",
+      "title": "Introduction",
+      "paragraphs": [
+        "I am a full-stack software engineer focused on building cloud-oriented, production-ready applications and maintainable software systems."
+      ],
+      "items": [
+        "Full-stack development",
+        "Cloud-focused development",
+        "Production-ready applications",
+        "Maintainable software systems"
+      ]
+    },
+    {
+      "id": "what-i-do",
+      "title": "What I Do",
+      "paragraphs": [
+        "I work across the application lifecycle, connecting product-facing interfaces with backend services, data storage, deployment, and ongoing system operation."
+      ],
+      "items": [
+        "Frontend development",
+        "Backend API development",
+        "Database design",
+        "Cloud deployment",
+        "System maintenance"
+      ]
+    },
+    {
+      "id": "current-role",
+      "title": "Current Role",
+      "paragraphs": [
+        "I currently work as a Software Development Engineer (RDSS) at eZoom Information, Inc., contributing to government-related information systems.",
+        "My responsibilities span full-stack system development and production maintenance."
+      ],
+      "items": []
+    },
+    {
+      "id": "engineering-approach",
+      "title": "Engineering Approach",
+      "paragraphs": [
+        "I approach software development by establishing clear architecture and data boundaries, then improving systems incrementally without compromising reliability."
+      ],
+      "items": [
+        "Architecture first",
+        "Clear data model design",
+        "Maintainable code",
+        "Incremental improvement",
+        "Reliability"
+      ]
+    },
+    {
+      "id": "technical-background",
+      "title": "Technical Background",
+      "paragraphs": [
+        "My technical background covers frontend, backend, relational databases, containerized deployment, and delivery automation."
+      ],
+      "items": [
+        ".NET / C#",
+        "FastAPI / Python",
+        "Vue",
+        "PostgreSQL",
+        "MSSQL",
+        "Docker",
+        "CI/CD"
+      ]
+    },
+    {
+      "id": "current-focus",
+      "title": "Current Focus",
+      "paragraphs": [
+        "I am continuing to develop my engineering practice through architecture work, automation, cloud-native delivery, and the ongoing improvement of this portfolio."
+      ],
+      "items": [
+        "Personal portfolio improvement",
+        "System architecture",
+        "AI workflow automation",
+        "Cloud-native deployment"
+      ]
+    }
+  ]
+}
