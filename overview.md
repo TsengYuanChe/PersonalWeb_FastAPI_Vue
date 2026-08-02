@@ -160,7 +160,7 @@ PersonalWeb_Flask_Vue/
 │   │   │   ├── about/AboutSection.vue
 │   │   │   ├── layout/{DetailPageHeader,HomeSidebar,MobileFooter,SocialLinks}.vue
 │   │   │   ├── journey/{HomeJourneyItem,JourneySection,JourneyDetail,Timeline}.vue
-│   │   │   └── projects/{ProjectCover,ProjectAction,HomeProjectPreview,ProjectCard}.vue
+│   │   │   └── projects/{ProjectCover,ProjectAction,HomeProjectPreview,ProjectCard,ProjectDetail}.vue
 │   │   ├── config/siteLinks.js    # Social／Resume URL single source of truth
 │   │   ├── data/home/             # 首頁三份 local Preview JSON
 │   │   ├── api/
@@ -330,7 +330,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - mount 後呼叫 `GET /api/v1/projects`。
 - 提供 loading、error、empty、success 四種狀態。
 - 顯示 API 回傳的所有 projects，沒有首頁三筆限制。
-- `ProjectCard.vue` 完全由 backend Project object 建立，摘要使用 cover、title、subtitle、category、summary、role、period、technologies 與 action/status；詳細內容使用同一物件的 overview、responsibilities、architecture、challenges、deployment 與 lessons learned。
+- `ProjectCard.vue` 完全由 backend Project object 建立並負責 Summary Header、toggle 與 transition orchestration；`ProjectDetail.vue` 接收同一物件，依序 render overview、responsibilities、architecture、challenges、deployment、lessons learned 與 technologies。
 - Action 依序判斷 `website_url`、`source_url`；兩者皆無時顯示不可點擊的 `🔒 Internal`。這個判斷與首頁共用 `ProjectAction.vue`，不依賴 `status` 決定連結文字。
 - `showcase` 目前保留在資料 contract 中但三個專案皆為空陣列，因此頁面不 render Showcase 標題或空容器。
 - Project Card 預設全部收合並永遠顯示 Summary Header；Overview 起的 detail sections 只有展開時才 render。
@@ -359,7 +359,8 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - `utils/projects/`：集中 Projects domain 的 search／filter 純計算。
 - `ProjectCover.vue`：首頁與詳細 Projects 共用的 160×100、16:10 cover／placeholder。
 - `ProjectAction.vue`：首頁與詳細 Projects 共用 Live／Source／Internal 判斷與外部連結語意。
-- `HomeProjectPreview.vue` / `ProjectCard.vue`：首頁與詳細 Projects 分離，並共用 `ProjectCover.vue`。
+- `HomeProjectPreview.vue` / `ProjectCard.vue`：首頁與詳細 Projects 分離，並共用 `ProjectCover.vue`；ProjectCard 保留 summary、toggle 與 transition wrapper。
+- `ProjectDetail.vue`：Project Page 專用的完整 detail renderer；擁有 optional section 與 array 防護（local `safeArray`），不擁有 expanded state、toggle 或動畫。
 - `HomeSidebar.vue`：首頁 Sidebar profile、section navigation、desktop social area 與 Last updated；只接收 `updatedTime`，不擁有 API 或 DOM lifecycle。
 - `MobileFooter.vue`：首頁 mobile social area 與 Last updated；只接收 `updatedTime`。
 - `SocialLinks.vue`：desktop/mobile 共用的五個 social／resume anchors renderer，依 variant 保留既有 class 與 tooltip attributes。

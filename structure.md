@@ -188,6 +188,7 @@ frontend/
 │   │       ├── HomeProjectPreview.vue
 │   │       ├── ProjectAction.vue
 │   │       ├── ProjectCard.vue
+│   │       ├── ProjectDetail.vue
 │   │       └── ProjectCover.vue
 │   ├── composables/
 │   │   ├── useAutoHeightTransition.js
@@ -274,7 +275,8 @@ frontend/
 #### `components/projects/`
 
 - `HomeProjectPreview.vue` — **Home-specific**：精簡 Project preview row，組合 ProjectCover、ProjectAction。
-- `ProjectCard.vue` — **Project page-specific**：Project summary header、detail sections、共用 dynamic-height transition hooks 與 toggle events。
+- `ProjectCard.vue` — **Project page-specific orchestration**：Project summary header、expanded prop、toggle event、detail wrapper 與共用 dynamic-height transition hooks；將完整 detail rendering 委派給 ProjectDetail。
+- `ProjectDetail.vue` — **Project page-specific renderer**：接收必填 Project object，依既有順序與 optional 判斷 render overview、responsibilities、architecture、challenges、deployment、lessons learned 與 technologies；不擁有 expanded state、toggle 或 Transition。
 - `ProjectCover.vue` — **cross-page shared**：Home／Project Page 共用 160×100、16:10 image/placeholder/error fallback。
 - `ProjectAction.vue` — **cross-page shared**：依 website/source URLs render Live、Source 或 non-clickable Internal。
 
@@ -302,7 +304,7 @@ frontend/
 - `composables/shell/useHomeViewportMetrics.js`：接收 HomeSidebar／MobileFooter template refs，更新 `--header-height`、`--footer-height`、`--real-vh`，並擁有 mounted 初次量測與 resize listener cleanup；不使用 DOM selectors。
 - `composables/shell/useMouseGlow.js`：全域 mousemove cursor glow；由 `App.vue` 使用。
 - `composables/shell/useScrollProxy.js`：接收 main content template ref與 Home-layout `enabled` computed；mounted時註冊 non-passive window wheel listener，只在啟用時轉送相同 `deltaY` 並呼叫 `preventDefault()`，unmount時解除 listener，不使用 DOM selectors。
-- `ProjectCard.vue` 的 `safeArray` 是其 detail template 專用 local helper；沒有建立只有單一 consumer 的 composable 或 utility。
+- `ProjectDetail.vue` 的 `safeArray` 是其 detail template 專用 local helper；沒有建立只有單一 consumer 的 composable 或 utility。
 - `utils/journey/journeyLogos.js`：backend logo filename 到 Vite image imports 的固定 mapping。
 - `utils/journey/timelineMath.js`：不依賴 Vue、DOM 或 module-level mutable state的 Timeline 純函式；負責年月索引、Journey bounds、Event 是否完整落在單一 Journey，以及日期在 period 內的百分比位置。`Timeline.vue` 是目前唯一 consumer。
 - `utils/projects/projectSearch.js`：Project public text collection、whole-token search、exact filters、dynamic option sorting。
@@ -382,7 +384,7 @@ backend/data/portfolio/projects/*.json
   → frontend api/contentApi.getProjects()
   → ProjectView.vue
   → ProjectCard.vue
-  → ProjectCover.vue + ProjectAction.vue
+  → ProjectCover.vue + ProjectAction.vue + ProjectDetail.vue
 ```
 
 首頁 Projects 不走此流程，而是讀取 `frontend/src/data/home/projects.json` 的 preview-only summary。
@@ -444,7 +446,7 @@ CSS import order is part of current behavior. Feature files contain both Home an
 以下皆為目前程式或 tracked structure 可直接確認的狀態；本文件只記錄，不執行修正。
 
 - **Global CSS coupling**：八個 custom CSS 全域載入，約 2,200 行；Home/detail feature styles 混在同一檔案並依 cascade/import order 生效。
-- **Large orchestration files**：`JourneyView.vue`、`Timeline.vue`、`ProjectCard.vue` 都超過 200 行，同時負責多種狀態、rendering 或 transition concerns。
+- **Large orchestration files**：`JourneyView.vue` 與 `Timeline.vue` 仍超過 200 行並負責多種狀態、rendering 或 transition concerns；Project detail rendering 已從 ProjectCard 分離。
 - **App shell coupling**：Sidebar、Mobile Footer、重複 link data、viewport resize lifecycle、Home section scroll implementation與 scroll proxy selector coupling已抽離；`App.vue` 仍同時管理 route-aware layout、Last updated、route watcher、global effects 與 RouterView。
 - **No frontend stores/types/tests**：沒有 store、TypeScript types、unit/component/E2E test directories；資料 shape 主要由 backend schema、JSON 與 runtime property access約束。
 - **API naming**：frontend 沒有 `services/`；`contentApi.js` 實際扮演 service layer，而 `client.js` 保留唯一使用中的 low-level `requestRaw()` transport。
@@ -471,10 +473,9 @@ CSS import order is part of current behavior. Feature files contain both Home an
 ### Priority Medium
 
 1. 拆分大型 Journey Timeline 計算、row orchestration 與 transition concerns，保留目前元件責任邊界。
-2. 將 Project detail section rendering與 transition hooks從 `ProjectCard.vue` 適度拆分，但維持 card API。
-3. 決定首頁 preview 與 backend summary 的 single-source-of-truth 或產生流程。
-4. 補齊 request timeout、abort 與 non-JSON error handling。
-5. 清理 placeholder directories/files。
+2. 決定首頁 preview 與 backend summary 的 single-source-of-truth 或產生流程。
+3. 補齊 request timeout、abort 與 non-JSON error handling。
+4. 清理 placeholder directories/files。
 
 ### Priority Low
 
