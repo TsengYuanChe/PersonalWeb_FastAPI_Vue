@@ -2,9 +2,9 @@
 
 ## System Overview
 
-The project uses one-way, read-only content flows. The frontend owns presentation and route-local interaction state. The backend owns complete portfolio content and exposes validated resource responses. JSON files are the persistent source of truth: backend portfolio JSON owns detail content, while frontend local JSON owns the intentionally smaller Home previews.
+This document traces the project's one-way, read-only content flows from their persistent JSON sources through runtime transformations to rendered output. Backend portfolio JSON is authoritative for complete detail content, while frontend local JSON is authoritative for the intentionally smaller Home previews.
 
-Backend repositories read raw content, services coordinate validation and response preparation, and the frontend Content API normalizes backend responses before Views coordinate rendering. Components receive prepared data through props and render it; they do not persist or mutate authoritative content.
+Backend content moves through repository access, service validation, transport, frontend normalization, and View-level derivation before components render it. Home preview content follows a shorter frontend-only path. The architectural responsibilities behind these boundaries are defined in `BACKEND.md` and `FRONTEND.md`.
 
 There is no runtime content write path, database, or client-side persistence layer. Runtime transformations exist only in memory, and durable changes are made to the owning JSON source.
 
@@ -12,25 +12,16 @@ There is no runtime content write path, database, or client-side persistence lay
 
 ```mermaid
 flowchart LR
-    User --> Router[Vue Router]
-    Router --> View
-    View --> ContentAPI[Content API]
-    ContentAPI --> FastAPI[FastAPI Router]
-    FastAPI --> Service[Resource Service]
-    Service --> Repository[Resource Repository]
     PortfolioJSON[Portfolio JSON] --> Repository
-    Repository --> Service
-    Service --> Validation[Schema Validation]
-    Validation --> Response[Validated Response]
-    Response --> FastAPI
-    FastAPI --> ContentAPI
-    ContentAPI --> Normalized[Normalized Content]
-    Normalized --> View
-    View --> Components[Vue Components]
-    Components --> UI
+    Repository --> Service[Service Validation and Preparation]
+    Service --> FastAPI
+    FastAPI --> ContentAPI[Frontend Content API]
+    ContentAPI --> View
+    View --> Components
+    Components --> User
 ```
 
-The request travels from the active View through the Content API to the backend resource layers. Raw JSON travels back through repository access and service-owned validation. The normalized frontend result returns to the same View, which supplies components with render-ready data.
+Authoritative detail content begins in backend portfolio JSON and ends as user-visible output. Each intermediate stage produces the form needed by the next consumer without replacing the JSON source of truth. The backend-only transformations within this lifecycle are detailed below.
 
 ## Home Preview Flow
 
@@ -41,7 +32,7 @@ flowchart LR
     PreviewComponents --> UI[Home UI]
 ```
 
-Home intentionally bypasses the backend for its primary About, Journey, and Projects previews. The preview data is small, bundled with the frontend, and available without waiting for backend startup. HomeView owns selection and orchestration; preview components own rendering.
+Home intentionally bypasses the backend for its primary About, Journey, and Projects previews. The preview data is small, bundled with the frontend, and moves through HomeView into preview components without backend normalization.
 
 This flow contains summary content only. It does not duplicate complete About sections, Journey details, Timeline Events, or Project details. Shared public summary fields may require deliberate synchronization, while Home-specific wording and ordering remain frontend presentation concerns.
 
@@ -49,29 +40,19 @@ Last Updated is the exception within the Home shell: it is derived from backend 
 
 ## Detail Page Flow
 
-About, Journey, and Projects use the same backend-driven collection flow while preserving resource-specific View and component responsibilities.
+About, Journey, and Projects consume complete content from the backend-owned sources.
 
 ```mermaid
 flowchart LR
-    User --> Router[Vue Router]
-    Router --> View[Detail View]
-    View -. request .-> ContentAPI[Content API]
-    ContentAPI -. request .-> FastAPI[FastAPI Router]
-    FastAPI -. delegates .-> Service[Resource Service]
-    Service -. reads .-> Repository[Resource Repository]
-    JSON[Portfolio JSON] --> Repository
-    Repository --> Raw[Raw Data and Timestamp]
-    Raw --> Service
-    Service --> Validated[Validated Resource Response]
-    Validated --> FastAPI
-    FastAPI --> ContentAPI
+    JSON[Backend Portfolio JSON] --> Backend[Validated Backend Content]
+    Backend --> ContentAPI[Frontend Content API]
     ContentAPI --> Normalized[Normalized Content and Updated Time]
-    Normalized --> View
+    Normalized --> View[About, Journey, or Project View]
     View --> Components[Feature Components]
     Components --> UI
 ```
 
-The View owns request state, page-level transformations, and component coordination. The Content API owns transport-envelope normalization. Feature components own rendering and interaction within their prop and event contracts; they do not fetch the same resource again or retain a second authoritative copy.
+The backend produces validated resource content. The Content API normalizes the response for the selected View, which may derive transient page data before passing render-ready values to feature components. Those runtime forms are consumers of the backend source rather than new persistent copies.
 
 ## Backend Content Pipeline
 
@@ -83,12 +64,11 @@ flowchart LR
     Schema[Pydantic Resource Contract] --> Service
     Service --> Response[Validated Resource Response]
     Response --> API[FastAPI Resource]
-    API --> Frontend[Frontend Content API]
 ```
 
-The repository is the only backend layer that accesses portfolio files. The service combines repository output with the resource contract, preserves resource-specific ordering or lookup behavior, and prepares the validated response. FastAPI transports that response; the frontend then normalizes it for View consumption.
+Backend JSON is read with its filesystem metadata, then aggregated or ordered as required and validated against the resource contract. The resulting response is the backend pipeline's output and the frontend Content API's input.
 
-All backend portfolio content is subject to mandatory Pydantic validation. Validation changes confidence in the data, not its ownership: JSON remains the persistent content source, and no runtime layer writes validated data back to disk.
+Validation changes the runtime representation, not ownership: JSON remains the persistent content source, and no backend stage writes the validated response back to disk. Layer design details remain in `BACKEND.md`.
 
 ## Journey Timeline Flow
 
@@ -111,7 +91,7 @@ flowchart TD
     Grouping --> TimelineUI[Timeline Rendering]
 ```
 
-JourneyView owns the two resource requests, route-local active and expanded state, and shared row mapping between Journey Sections and the Timeline. The Timeline component owns presentation grouping, labels, nodes, segments, event markers, and interaction output. The Timeline math utility owns deterministic date-bound and position calculations without Vue, DOM, or API access.
+The two normalized datasets converge in JourneyView. Journey items become shared rows and presentation state; Journey items and Timeline Events then enter Timeline grouping and deterministic date-position calculation before being rendered as nodes, segments, labels, and event markers.
 
 Timeline Events do not become Journey entries and do not create Journey Sections or Details. Journey Detail rows remain presentation content rather than additional time periods, so Timeline rendering consumes the View's row mapping instead of deriving time length from expanded content.
 
@@ -132,9 +112,31 @@ flowchart TD
     ProjectDetail --> UI
 ```
 
-ProjectView owns backend loading, search and filter transformations, empty results, and the single expanded Project slug. Each normalized Project object is passed to ProjectCard. ProjectCard owns summary and expansion orchestration, then composes ProjectCover, ProjectAction, and ProjectDetail for their focused rendering responsibilities.
+Normalized Project data enters ProjectView, where search and filters derive the visible collection without changing the normalized source. Each visible Project then moves through ProjectCard into summary output and the composed ProjectCover, ProjectAction, and ProjectDetail renderers.
 
 The same Project object supplies summary and detail rendering. Components do not reconstruct Project data or maintain separate detail content. Home Project previews remain on the independent local-preview flow.
+
+## Source of Truth
+
+```mermaid
+flowchart LR
+    subgraph FrontendOwned[Frontend-owned preview content]
+        HomeJSON[Home Preview JSON] --> HomeView
+        HomeView --> HomeUI[Home Preview UI]
+    end
+
+    subgraph BackendOwned[Backend-owned detail content]
+        AboutJSON[About JSON] --> BackendAPI[Validated Backend Content]
+        JourneyJSON[Journey JSON] --> BackendAPI
+        TimelineJSON[Timeline Events JSON] --> BackendAPI
+        ProjectJSON[Project JSON] --> BackendAPI
+        BackendAPI --> DetailContentAPI[Frontend Content API]
+        DetailContentAPI --> DetailViews[Detail Views]
+        DetailViews --> DetailUI[Detail UI]
+    end
+```
+
+The two source groups are intentionally distinct. Frontend Home JSON owns preview-scale content and ends in Home rendering. Backend portfolio JSON owns complete resource content and reaches detail rendering only after backend validation and frontend normalization. Neither runtime path persists its derived output as another authoritative source.
 
 ## Data Ownership
 
@@ -151,34 +153,28 @@ Authoritative content persists only in its owning JSON files. Last Updated persi
 
 ## Data Transformation Rules
 
-### Allowed Transformations
+### Permitted Boundaries
 
-- **Repository access** may load resource-owned JSON, discover or map files, and expose timestamps.
-- **Service orchestration** may validate, aggregate, order, perform resource lookup, and prepare the established response.
-- **Content API normalization** may convert the backend response envelope into the stable shape consumed by Views.
-- **View transformations** may derive route-local display collections, filters, expansion rows, and loading states without mutating the source response.
-- **Utility calculations** may perform deterministic domain calculations from explicit inputs.
-- **Component formatting** may select optional sections, format labels, and map normalized data to semantic UI.
+- Backend content may be read, aggregated, ordered, validated, and packaged without changing its owning JSON.
+- Backend responses may be normalized into the stable content and metadata consumed by frontend Views.
+- Views may derive transient collections, filters, rows, and interaction state from normalized data.
+- Pure calculations may derive deterministic positions or matches from explicit runtime inputs.
+- Rendering may format or omit optional values without changing the data supplied to it.
 
-### Disallowed Transformations
+### Boundary Violations
 
-- Components do not mutate backend-owned content or persist edited copies.
-- Components do not create parallel API requests for data already owned by their View.
-- Utilities do not perform API calls, access the DOM, or retain mutable runtime state.
-- Views do not duplicate reusable deterministic domain calculations inside templates.
-- The frontend does not maintain complete detail JSON as a second source of truth.
-- Backend routers and services do not bypass repository-owned filesystem access.
-- Raw backend JSON does not bypass mandatory schema validation.
+- A derived runtime representation must not become a competing persistent source.
+- Backend detail content must not reach frontend rendering without validation and normalization.
+- Home preview data must not be treated as authoritative complete detail content.
+- Rendering must not mutate or persist the normalized content it consumes.
+- Domain calculations must not read or write authoritative content as a side effect.
 
 ## Design Principles
 
 - **Single source of truth**: each data category has one persistent owner; complete detail content remains backend-owned, while Home previews remain intentionally frontend-owned summaries.
-- **One-way data flow**: authoritative data moves through explicit transformation boundaries toward Views and components; user interaction emits intent back to the state owner rather than mutating content.
-- **Stateless presentation**: components render props and emit events without duplicating page-level state.
+- **One-way data flow**: authoritative data moves through explicit transformation boundaries toward its final consumer without being written back by the runtime.
+- **Stateless presentation**: rendering consumes prepared data without becoming an authoritative data owner.
 - **Normalization before rendering**: backend response envelopes are normalized before feature Views consume them.
-- **Content and presentation separation**: JSON owns content; frontend Views and components own presentation and interaction.
-- **Pure utilities**: deterministic calculations remain independent of Vue, DOM, transport, and persistence.
-- **Route-local state**: filters, active items, and expansion state remain with the owning View unless a real cross-route requirement emerges.
 - **No runtime persistence**: the running application reads content and derives UI state in memory; durable updates occur only at the owning source.
 
 ## Documentation Relationships
