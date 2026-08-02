@@ -158,9 +158,10 @@ PersonalWeb_Flask_Vue/
 │   │   │   └── ProjectView.vue
 │   │   ├── components/
 │   │   │   ├── about/AboutSection.vue
-│   │   │   ├── layout/DetailPageHeader.vue
+│   │   │   ├── layout/{DetailPageHeader,HomeSidebar,MobileFooter,SocialLinks}.vue
 │   │   │   ├── experience/{HomeJourneyItem,JourneySection,JourneyDetail,Timeline}.vue
 │   │   │   └── projects/{ProjectCover,ProjectAction,HomeProjectPreview,ProjectCard}.vue
+│   │   ├── config/siteLinks.js    # Social／Resume URL single source of truth
 │   │   ├── data/home/             # 首頁三份 local Preview JSON
 │   │   ├── api/
 │   │   │   ├── client.js          # fetch wrapper / error normalization
@@ -212,9 +213,11 @@ PersonalWeb_Flask_Vue/
 
 `frontend/src/App.vue` 以 `route.meta.layout` 決定版型：
 
-- `home`：顯示 Sidebar、內層可捲動 `.main-content`、Desktop social area、Mobile footer。
+- `home`：組合 `HomeSidebar`、內層可捲動 `.main-content` 與 `MobileFooter`。
 - `detail`：不 render Sidebar/footer，使用 full-width `.detail-main` 與一般 document scrolling。
 - `<RouterView />` 是所有頁面的 render outlet。
+
+`App.vue` 仍擁有 Last updated 的單次 About API loading、route-aware shell、hash scroll、viewport CSS variables 與全域 lifecycle；同一個 `updatedTime` 以 props 傳給 `HomeSidebar` 與 `MobileFooter`。兩者共用 `SocialLinks.vue`，而 social／resume URLs 統一由 `config/siteLinks.js` 管理。
 
 `useScrollProxy()` 只在 `.layout-container--home` 存在時攔截 wheel 並轉送給 `.main-content`。`useMouseGlow()` 仍在 App 全域啟用，Mobile 由 CSS 隱藏。
 
@@ -345,7 +348,10 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - `ProjectCover.vue`：首頁與詳細 Projects 共用的 160×100、16:10 cover／placeholder。
 - `ProjectAction.vue`：首頁與詳細 Projects 共用 Live／Source／Internal 判斷與外部連結語意。
 - `HomeProjectPreview.vue` / `ProjectCard.vue`：首頁與詳細 Projects 分離，並共用 `ProjectCover.vue`。
-- Sidebar：不是獨立 component，markup 位於 `App.vue`，並由 `v-if="isHomeLayout"` 控制。
+- `HomeSidebar.vue`：首頁 Sidebar profile、section navigation、desktop social area 與 Last updated；只接收 `updatedTime`，不擁有 API 或 DOM lifecycle。
+- `MobileFooter.vue`：首頁 mobile social area 與 Last updated；只接收 `updatedTime`。
+- `SocialLinks.vue`：desktop/mobile 共用的五個 social／resume anchors renderer，依 variant 保留既有 class 與 tooltip attributes。
+- `config/siteLinks.js`：GitHub、LinkedIn、Instagram、Facebook、Resume URL、label 與 icon 的 single source of truth。
 - Home/Detail Layout：沒有獨立 `HomeLayout.vue` 或 `DetailLayout.vue`；`App.vue` 依 route meta 條件渲染，搭配 `.layout-container--home`、`.layout-container--detail`、`.detail-main` 與 `.detail-page-container`。
 - Breadcrumb：不是單獨的 `Breadcrumb.vue`，而是 `DetailPageHeader.vue` 的一部分。
 - Shared Section Header：首頁三個 sections 共用 `.section-heading` 與 `.home-journey-link` CSS pattern，但沒有獨立 Vue component。
@@ -359,7 +365,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - GitHub、LinkedIn、Instagram、Facebook、Resume。
 - Last updated。
 
-Desktop social links 位於 Sidebar 底部；Mobile 則以 App template 中的 fixed `.mobile-footer` 顯示。詳細頁沒有 Sidebar、social links 或一般 Footer。
+Desktop social links 位於 `HomeSidebar` 底部；Mobile 則由 fixed `MobileFooter` 顯示。兩者使用同一個 `SocialLinks` 與 `siteLinks.js` 資料，詳細頁不 render 這兩個 Home-only components。
 
 ## 8. CSS、視覺系統與 RWD
 
@@ -701,7 +707,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 ### 14.2 Frontend debt
 
 - Global CSS 共 8 個檔案且依載入順序生效；仍有大量 Bootstrap utility、`!important`、散落顏色與重複數值。
-- `App.vue` 同時負責 layout、Sidebar、social links、Last updated、hash scroll、viewport CSS variables 與 RouterView。
+- `App.vue` 仍負責 route-aware layout、Last updated loading、hash scroll、viewport CSS variables、全域 lifecycle 與 RouterView；Home Sidebar／Mobile Footer markup 已拆至展示元件。
 - `useScrollProxy` 攔截首頁所有 wheel events；nested scrolling、鍵盤與觸控行為需要持續驗證。
 - Mobile 首頁高度依 DOM measurement 與三個 runtime CSS variables，受 orientation、browser chrome、內容高度影響。
 - `useMouseGlow` 每次 mousemove 查 DOM 並讀取尺寸；詳細頁 Desktop 仍會啟用。

@@ -180,7 +180,10 @@ frontend/
 │   │   │   ├── JourneyDetail.vue
 │   │   │   └── Timeline.vue
 │   │   ├── layout/
-│   │   │   └── DetailPageHeader.vue
+│   │   │   ├── DetailPageHeader.vue
+│   │   │   ├── HomeSidebar.vue
+│   │   │   ├── MobileFooter.vue
+│   │   │   └── SocialLinks.vue
 │   │   └── projects/
 │   │       ├── HomeProjectPreview.vue
 │   │       ├── ProjectAction.vue
@@ -189,6 +192,8 @@ frontend/
 │   ├── composables/
 │   │   ├── useMouseGlow.js
 │   │   └── useScrollProxy.js
+│   ├── config/
+│   │   └── siteLinks.js
 │   ├── utils/
 │   │   ├── experienceLogos.js
 │   │   └── projectSearch.js
@@ -236,7 +241,7 @@ frontend/
 ### Frontend entry, shell, and routing
 
 - `src/main.js` — **runtime entry**：建立 Vue app、安裝 router、依固定順序全域載入 Bootstrap、icons 與八個自訂 CSS 檔。
-- `src/App.vue` — **runtime application shell**：依 route meta 切換 Home／Detail layout；包含首頁 Sidebar、navigation、social links、Last updated API request、RouterView 與 mobile footer。
+- `src/App.vue` — **runtime application shell**：依 route meta 切換 Home／Detail layout，組合 HomeSidebar／main／MobileFooter；擁有 Last updated API request、hash scroll、viewport variables、global composables、lifecycle 與 RouterView，並將 `updatedTime` 下傳給兩個 Home shell children。
 - `src/router/index.js` — **runtime routing**：history-mode `/`、`/about`、`/experience`、`/project`；route meta 指定 layout；route change 回到頂部。沒有 catch-all 404 route。
 
 ### Views
@@ -269,6 +274,13 @@ frontend/
 #### `components/layout/`
 
 - `DetailPageHeader.vue` — **detail-page shared**：About、Experience、Project 共用 breadcrumb、唯一 page `h1` 與 description。
+- `HomeSidebar.vue` — **Home shell-specific**：profile header、三個 section RouterLinks、desktop SocialLinks 與 Last updated；presentation-only，接收 `updatedTime`。
+- `MobileFooter.vue` — **Home shell-specific**：mobile SocialLinks 與 Last updated；presentation-only，接收 `updatedTime`。
+- `SocialLinks.vue` — **Home shell shared renderer**：以單一 anchor template render desktop/mobile social 與 Resume links，依 `variant` 保留既有 classes、labels 與 tooltip attributes。
+
+### Frontend config
+
+- `config/siteLinks.js`：GitHub、LinkedIn、Instagram、Facebook 與 Resume 的 id、label、URL、Bootstrap icon class 與 new-tab behavior；由 `SocialLinks.vue` 單獨消費。
 
 ### API layer
 
@@ -422,7 +434,7 @@ CSS import order is part of current behavior. Feature files contain both Home an
 
 - **Global CSS coupling**：八個 custom CSS 全域載入，約 2,200 行；Home/detail feature styles 混在同一檔案並依 cascade/import order 生效。
 - **Large orchestration files**：`ExperienceView.vue`、`Timeline.vue`、`ProjectCard.vue` 都超過 200 行，同時負責多種狀態、rendering 或 transition concerns。
-- **App shell coupling**：`App.vue` 同時管理 layout、Sidebar、navigation、social links、Last updated、DOM measurements、hash scrolling 與 RouterView。
+- **App shell coupling**：Sidebar、Mobile Footer 與重複 link data 已抽離；`App.vue` 仍同時管理 route-aware layout、Last updated、DOM measurements、hash scrolling、global composables 與 RouterView，下一階段才適合處理 lifecycle ownership。
 - **No frontend stores/types/tests**：沒有 store、TypeScript types、unit/component/E2E test directories；資料 shape 主要由 backend schema、JSON 與 runtime property access約束。
 - **API naming**：frontend 沒有 `services/`；`contentApi.js` 實際扮演 service layer，而 `client.js` 保留唯一使用中的 low-level `requestRaw()` transport。
 - **Synchronous JSON I/O**：每個 content request 都同步開檔、parse JSON、validate；沒有 cache。
