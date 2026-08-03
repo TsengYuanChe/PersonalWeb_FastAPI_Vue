@@ -1,14 +1,17 @@
 export const pageMeta = {
   about: {
     title: 'About Me',
-    description: 'A closer look at my background, engineering approach, and the work I care about.',
+    description:
+      'A software engineer with a background in science, focused on building reliable systems and maintainable software solutions.',
   },
   journey: {
     title: 'Journey',
-    description: 'A detailed view of my professional and academic experience.',
+    description:
+      'A timeline of my professional development, academic background, and engineering growth.',
   },
   project: {
     title: 'Projects',
-    description: 'Architecture, implementation details, trade-offs, and future work.',
+    description:
+      'A collection of engineering projects covering architecture, implementation decisions, and technical solutions.',
   },
 }
