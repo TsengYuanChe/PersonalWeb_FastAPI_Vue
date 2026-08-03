@@ -11,7 +11,6 @@ class AboutSection(BaseModel):
 
 
 class AboutData(BaseModel):
-    paragraphs: list[str]
     sections: list[AboutSection]
 
 

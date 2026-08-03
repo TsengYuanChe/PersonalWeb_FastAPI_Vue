@@ -280,13 +280,13 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 
 - Full-width detail shell，外層 container 最大 1200px。
 - Breadcrumb：`HOME > ABOUT`。
-- Header：`About Me` + 一行 description。
+- Header：`About Me` + 一行 description；兩者是 `AboutView.vue` 的 route-level presentation configuration，不屬於 backend section content。
 - 正文最大寬度 880px。
 - Sections：Introduction、What I Do、Current Role、Engineering Approach、Technical Background、Current Focus。
 - mount 後透過既有 `getAbout()` 呼叫 `GET /api/v1/about`，資料來源是 `backend/data/portfolio/about/about.json`。
 - `AboutView.vue` 提供 loading、error、empty、success 四種狀態，並依 API 順序動態 render `sections[]`。
 - `AboutSection.vue` 負責單一 section 的 title、paragraphs 與 optional items；不包含 API request、layout 或互動邏輯。
-- Backend 保留 legacy `paragraphs` 並提供 `sections[{id,title,paragraphs,items}]`；詳細頁只消費結構化 sections。
+- Backend About JSON 只提供 `sections[{id,title,paragraphs,items}]`，作為 About detail body 的唯一內容來源。
 
 ### 6.3 `/journey`
 
@@ -456,7 +456,7 @@ CSS 仍由 `main.js` 全域載入，ownership 依 feature boundary 與 selector 
 | 首頁 About Preview | `frontend/src/data/home/about.json` | HomeView |
 | 首頁 Journey Preview | `frontend/src/data/home/journey.json` | HomeJourneyItem |
 | 首頁 Projects Preview | `frontend/src/data/home/projects.json` | HomeProjectPreview |
-| 完整 About JSON | `backend/data/portfolio/about/about.json` | About API；目前頁面內容未使用 |
+| 完整 About JSON | `backend/data/portfolio/about/about.json` | About API／AboutView sections |
 | 完整 Journey JSON | `backend/data/portfolio/journey/{ezoom,nycu-master,nchu-bachelor}.json` | Journey API/detail page |
 | Timeline Events JSON | `backend/data/portfolio/timeline/events.json` | Timeline Events API／Timeline.vue |
 | 完整 Projects JSON | `backend/data/portfolio/projects/{mris,personal-portfolio,mamatoya}.json` | Projects API/detail page |
@@ -498,7 +498,7 @@ CSS 仍由 `main.js` 全域載入，ownership 依 feature boundary 與 selector 
 
 Backend Portfolio content 統一以頁面為單位放在 `backend/data/portfolio/`：
 
-- About：`portfolio/about/`，管理個人介紹 paragraphs 與結構化 sections。
+- About：`portfolio/about/`，管理 About detail body 的結構化 sections。
 - Journey：`portfolio/journey/`，管理 Journey Sections 與 Detail 的獨立 slug JSON。
 - Timeline：`portfolio/timeline/`，管理屬於 Journey 時間軸、但不屬於 Journey 的 events。
 - Projects：`portfolio/projects/`，管理 Project summary 與 detail JSON。
@@ -540,7 +540,6 @@ Backend Portfolio content 統一以頁面為單位放在 `backend/data/portfolio
 
 ```text
 AboutData
-├── paragraphs: string[]（backward compatibility）
 └── sections: AboutSection[]
     ├── id / title: string
     ├── paragraphs: string[]

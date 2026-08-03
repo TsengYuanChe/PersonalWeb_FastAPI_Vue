@@ -104,7 +104,7 @@ backend/
 
 所有檔案均為 **runtime content source**，同時由 validation script 檢查：
 
-- `about/about.json`：About legacy paragraphs 與結構化 `sections[{id,title,paragraphs,items}]`。
+- `about/about.json`：About detail body 的結構化 `sections[{id,title,paragraphs,items}]`；不保存 View-owned page header copy。
 - `journey/*.json`：每段 Journey 一份 slug JSON；repository 動態掃描並以 `start_date` 新到舊排序。
 - `projects/*.json`：每個 Project 一份 summary + detail JSON；目前 repository 以固定 mapping 控制三筆順序及 slug lookup。
 - `timeline/events.json`：不屬於 Journey 的 point/duration Timeline Events。
@@ -255,7 +255,7 @@ frontend/
 ### Views
 
 - `HomeView.vue` — **Home-only**：直接 import 三份 frontend local preview JSON，組裝 Profile、Journey、Projects previews。
-- `AboutView.vue` — **About-only**：透過 `getAbout()` 載入 sections，處理 loading/error/empty/success，交給 `AboutSection` render。
+- `AboutView.vue` — **About-only**：擁有 route-level header title／description，透過 `getAbout()` 載入 body sections，處理 loading/error/empty/success，交給 `AboutSection` render。
 - `JourneyView.vue` — **Journey-only orchestration**：載入 Journey + Timeline Events、管理 active/expanded/leaving states、計算 Grid rows，並協調 Timeline、JourneySection、JourneyDetail 與共用 dynamic-height transition hooks。
 - `ProjectView.vue` — **Projects-only orchestration**：載入 Projects、管理 search/filter/empty state 與單一 expanded slug，render ProjectCard list。
 
