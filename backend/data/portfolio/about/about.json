@@ -4,79 +4,64 @@
       "id": "introduction",
       "title": "Introduction",
       "paragraphs": [
-        "I am a full-stack software engineer focused on building cloud-oriented, production-ready applications and maintainable software systems."
+        "I am a software engineer focused on building reliable and maintainable applications across frontend, backend, and cloud environments.",
+        "I enjoy turning complex ideas into practical software solutions that solve real-world problems and deliver long-term value."
       ],
       "items": [
         "Full-stack development",
-        "Cloud-focused development",
-        "Production-ready applications",
-        "Maintainable software systems"
+        "Backend engineering",
+        "Cloud deployment",
+        "Maintainable software"
       ]
     },
     {
-      "id": "what-i-do",
-      "title": "What I Do",
+      "id": "background",
+      "title": "Background",
       "paragraphs": [
-        "I work across the application lifecycle, connecting product-facing interfaces with backend services, data storage, deployment, and ongoing system operation."
+        "Before becoming a software engineer, I studied chemistry and computational research, where I explored scientific computing, numerical methods, and mathematical approaches to solving complex problems.",
+        "This background has shaped my analytical thinking and continues to influence how I approach software engineering, from understanding complex problems to designing structured and reliable solutions."
       ],
-      "items": [
-        "Frontend development",
-        "Backend API development",
-        "Database design",
-        "Cloud deployment",
-        "System maintenance"
-      ]
+      "items": []
     },
     {
       "id": "current-role",
       "title": "Current Role",
       "paragraphs": [
-        "I currently work as a Software Development Engineer (RDSS) at eZoom Information, Inc., contributing to government-related information systems.",
-        "My responsibilities span full-stack system development and production maintenance."
+        "I currently work as a Software Development Engineer (RDSS) at eZoom Information, contributing to production system integration and full-stack application development.",
+        "My works spans infrastructure maintenance, deployment automation, backend development, frontend integration, and system design, allowing me to contribute throughout the entire software delivery lifecycle."
       ],
-      "items": []
+      "items": [
+        "Production system integration",
+        "Deployment and infrastructure maintenance",
+        "Full-stack feature development",
+        "System analysis and backend architecture"
+      ]
     },
     {
       "id": "engineering-approach",
       "title": "Engineering Approach",
       "paragraphs": [
-        "I approach software development by establishing clear architecture and data boundaries, then improving systems incrementally without compromising reliability."
+        "I believe good software begins with clear architecture, well-defined responsibilities, and thoughtful system design.",
+        "When solving problems, I look beyond the immediate implementation and consider ownership, data flow, deployment, documentation, and long-term maintainability. My goal is to build systems that remain understandable, reliable, and easier to evolve over time."
       ],
       "items": [
         "Architecture first",
-        "Clear data model design",
-        "Maintainable code",
-        "Incremental improvement",
-        "Reliability"
+        "Clear ownership",
+        "Maintainable systems",
+        "Continuous improvement"
       ]
     },
     {
-      "id": "technical-background",
-      "title": "Technical Background",
+      "id": "technical-focus",
+      "title": "Technical Focus",
       "paragraphs": [
-        "My technical background covers frontend, backend, relational databases, containerized deployment, and delivery automation."
+        "My work primarily focuses on full-stack web applications, backend services, relational databases, cloud deployment, and development automation. I enjoy building complete systems that connect these technologies into reliable production solutions."
       ],
       "items": [
-        ".NET / C#",
-        "FastAPI / Python",
-        "Vue",
-        "PostgreSQL",
-        "MSSQL",
-        "Docker",
-        "CI/CD"
-      ]
-    },
-    {
-      "id": "current-focus",
-      "title": "Current Focus",
-      "paragraphs": [
-        "I am continuing to develop my engineering practice through architecture work, automation, cloud-native delivery, and the ongoing improvement of this portfolio."
-      ],
-      "items": [
-        "Personal portfolio improvement",
-        "System architecture",
-        "AI workflow automation",
-        "Cloud-native deployment"
+        "Frontend: Vue",
+        "Backend: .NET / C#, Python / FastAPI",
+        "Database: PostgreSQL, MSSQL",
+        "Cloud & DevOps: Docker, GitHub Actions"
       ]
     }
   ]
