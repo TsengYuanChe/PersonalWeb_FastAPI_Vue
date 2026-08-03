@@ -23,12 +23,12 @@
   "responsibilities": {
     "title": "Responsibilities",
     "items": [
-      "Develop and maintain Vue-based user interfaces within an existing enterprise application.",
-      "Implement and integrate .NET REST APIs across multiple application services.",
-      "Build PostgreSQL-backed CRUD, search, filtering, and pagination workflows.",
-      "Maintain authentication and authorization behavior across protected features.",
-      "Investigate issues across frontend, API, database, routing, and deployment layers.",
-      "Deliver incremental changes that improve system stability and maintainability without disrupting existing workflows."
+      "Develop and maintain full-stack features across Vue frontends and .NET backend services within a large production system.",
+      "Participate in system analysis, feature planning, database design, and REST API implementation throughout the development lifecycle.",
+      "Design and optimize PostgreSQL data models and implement business workflows including CRUD operations, search, filtering, and pagination.",
+      "Deploy, maintain, and troubleshoot applications running on Windows Server and IIS, ensuring reliable production operation.",
+      "Investigate and resolve issues spanning frontend, backend APIs, databases, authentication, routing, and deployment environments.",
+      "Continuously improve system maintainability through incremental enhancements, technical documentation, and architectural refinements."
     ]
   },
   "technical_highlights": {
