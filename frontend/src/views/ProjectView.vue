@@ -3,8 +3,10 @@ import { computed, onMounted, ref, watch } from 'vue'
 import { getProjects } from '@/api/contentApi'
 import ProjectCard from '@/components/projects/ProjectCard.vue'
 import DetailPageHeader from '@/components/layout/DetailPageHeader.vue'
+import { pageMeta } from '@/config/pageMeta'
 import { matchesExactValue, matchesProjectSearch, uniqueSortedValues } from '@/utils/projects/projectSearch'
 
+const projectPageMeta = pageMeta.project
 const projects = ref([])
 const loading = ref(true)
 const error = ref('')
@@ -80,8 +82,8 @@ onMounted(async () => {
     <DetailPageHeader
       current="PROJECTS"
       heading-id="project-heading"
-      title="Projects"
-      description="Architecture, implementation details, trade-offs, and future work."
+      :title="projectPageMeta.title"
+      :description="projectPageMeta.description"
     />
 
     <div v-if="loading" class="page-state" role="status">

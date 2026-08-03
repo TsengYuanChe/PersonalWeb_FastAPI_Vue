@@ -161,7 +161,9 @@ PersonalWeb_Flask_Vue/
 │   │   │   ├── layout/{DetailPageHeader,HomeSidebar,MobileFooter,SocialLinks}.vue
 │   │   │   ├── journey/{HomeJourneyItem,JourneySection,JourneyDetail,Timeline}.vue
 │   │   │   └── projects/{ProjectCover,ProjectAction,HomeProjectPreview,ProjectCard,ProjectDetail}.vue
-│   │   ├── config/siteLinks.js    # Social／Resume URL single source of truth
+│   │   ├── config/
+│   │   │   ├── siteLinks.js       # Social／Resume URL single source of truth
+│   │   │   └── pageMeta.js        # Detail route presentation metadata
 │   │   ├── data/home/             # 首頁三份 local Preview JSON
 │   │   ├── api/
 │   │   │   ├── client.js          # fetch wrapper / error normalization
@@ -280,7 +282,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 
 - Full-width detail shell，外層 container 最大 1200px。
 - Breadcrumb：`HOME > ABOUT`。
-- Header：`About Me` + 一行 description；兩者是 `AboutView.vue` 的 route-level presentation configuration，不屬於 backend section content。
+- Header title／description 由 `config/pageMeta.js` 提供，`AboutView.vue` 選取 About metadata 並交給 `DetailPageHeader.vue`；這些 route-level presentation metadata 不屬於 backend section content。
 - 正文最大寬度 880px。
 - Sections：Introduction、What I Do、Current Role、Engineering Approach、Technical Background、Current Focus。
 - mount 後透過既有 `getAbout()` 呼叫 `GET /api/v1/about`，資料來源是 `backend/data/portfolio/about/about.json`。
@@ -349,7 +351,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 
 ### 7.1 共用元件
 
-- `DetailPageHeader.vue`：三個詳細頁共用 Breadcrumb、唯一 `h1` 與 description。
+- `DetailPageHeader.vue`：三個詳細頁共用 Breadcrumb、唯一 `h1` 與 description；各 View 從 `config/pageMeta.js` 選取對應 route metadata 後以 props 傳入。
 - `AboutSection.vue`：About 詳細頁的 data-driven section renderer，顯示 title、paragraphs 與 optional items。
 - `HomeJourneyItem.vue` / `JourneySection.vue` / `JourneyDetail.vue`：首頁 Preview、詳細頁 Summary Header 與展開 Detail 分離。
 - `Timeline.vue`：詳細 Journey 專用的 data-driven Timeline Prototype；負責 reactive presentation mapping、line/nodes/events rendering、日期 labels、hover/focus state 與 accessibility，不包含 Section、展開邏輯或底層日期位置公式。
@@ -365,6 +367,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - `MobileFooter.vue`：首頁 mobile social area 與 Last updated；只接收 `updatedTime`。
 - `SocialLinks.vue`：desktop/mobile 共用的五個 social／resume anchors renderer，依 variant 保留既有 class 與 tooltip attributes。
 - `config/siteLinks.js`：GitHub、LinkedIn、Instagram、Facebook、Resume URL、label 與 icon 的 single source of truth。
+- `config/pageMeta.js`：About、Journey、Project 詳細頁靜態 title／description 的 single source of truth；不包含 backend-owned portfolio body content。
 - Home/Detail Layout：沒有獨立 `HomeLayout.vue` 或 `DetailLayout.vue`；`App.vue` 依 route meta 條件渲染，搭配 `.layout-container--home`、`.layout-container--detail`、`.detail-main` 與 `.detail-page-container`。
 - Breadcrumb：不是單獨的 `Breadcrumb.vue`，而是 `DetailPageHeader.vue` 的一部分。
 - Shared Section Header：首頁三個 sections 共用 `.section-heading` 與 `.home-journey-link` CSS pattern，但沒有獨立 Vue component。

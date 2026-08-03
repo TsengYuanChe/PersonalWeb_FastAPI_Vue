@@ -198,7 +198,8 @@ frontend/
 │   │       ├── useMouseGlow.js
 │   │       └── useScrollProxy.js
 │   ├── config/
-│   │   └── siteLinks.js
+│   │   ├── siteLinks.js
+│   │   └── pageMeta.js
 │   ├── utils/
 │   │   ├── journey/
 │   │   │   ├── journeyLogos.js
@@ -255,9 +256,9 @@ frontend/
 ### Views
 
 - `HomeView.vue` — **Home-only**：直接 import 三份 frontend local preview JSON，組裝 Profile、Journey、Projects previews。
-- `AboutView.vue` — **About-only**：擁有 route-level header title／description，透過 `getAbout()` 載入 body sections，處理 loading/error/empty/success，交給 `AboutSection` render。
-- `JourneyView.vue` — **Journey-only orchestration**：載入 Journey + Timeline Events、管理 active/expanded/leaving states、計算 Grid rows，並協調 Timeline、JourneySection、JourneyDetail 與共用 dynamic-height transition hooks。
-- `ProjectView.vue` — **Projects-only orchestration**：載入 Projects、管理 search/filter/empty state 與單一 expanded slug，render ProjectCard list。
+- `AboutView.vue` — **About-only**：選取 About page metadata，透過 `getAbout()` 載入 body sections，處理 loading/error/empty/success，交給 `DetailPageHeader` 與 `AboutSection` render。
+- `JourneyView.vue` — **Journey-only orchestration**：選取 Journey page metadata、載入 Journey + Timeline Events、管理 active/expanded/leaving states、計算 Grid rows，並協調 DetailPageHeader、Timeline、JourneySection、JourneyDetail 與共用 dynamic-height transition hooks。
+- `ProjectView.vue` — **Projects-only orchestration**：選取 Project page metadata、載入 Projects、管理 search/filter/empty state 與單一 expanded slug，協調 DetailPageHeader 並 render ProjectCard list。
 
 ### Components
 
@@ -282,7 +283,7 @@ frontend/
 
 #### `components/layout/`
 
-- `DetailPageHeader.vue` — **detail-page shared**：About、Journey、Project 共用 breadcrumb、唯一 page `h1` 與 description。
+- `DetailPageHeader.vue` — **detail-page shared**：About、Journey、Project 共用 breadcrumb、唯一 page `h1` 與 description；只 render View 傳入的 presentation props。
 - `HomeSidebar.vue` — **Home shell-specific**：profile header、三個 section RouterLinks、desktop SocialLinks 與 Last updated；presentation-only，接收 `updatedTime`。
 - `MobileFooter.vue` — **Home shell-specific**：mobile SocialLinks 與 Last updated；presentation-only，接收 `updatedTime`。
 - `SocialLinks.vue` — **Home shell shared renderer**：以單一 anchor template render desktop/mobile social 與 Resume links，依 `variant` 保留既有 classes、labels 與 tooltip attributes。
@@ -290,6 +291,7 @@ frontend/
 ### Frontend config
 
 - `config/siteLinks.js`：GitHub、LinkedIn、Instagram、Facebook 與 Resume 的 id、label、URL、Bootstrap icon class 與 new-tab behavior；由 `SocialLinks.vue` 單獨消費。
+- `config/pageMeta.js`：About、Journey、Project detail routes 的靜態 title／description；各 View 選取對應 entry，並交由 `DetailPageHeader.vue` render。它不擁有 backend portfolio body content。
 
 ### API layer
 

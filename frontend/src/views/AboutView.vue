@@ -3,7 +3,9 @@ import { onMounted, ref } from 'vue'
 import { getAbout } from '@/api/contentApi'
 import AboutSection from '@/components/about/AboutSection.vue'
 import DetailPageHeader from '@/components/layout/DetailPageHeader.vue'
+import { pageMeta } from '@/config/pageMeta'
 
+const aboutPageMeta = pageMeta.about
 const sections = ref([])
 const loading = ref(true)
 const error = ref('')
@@ -28,8 +30,8 @@ onMounted(async () => {
     <DetailPageHeader
       current="ABOUT"
       heading-id="about-heading"
-      title="About Me"
-      description="A closer look at my background, engineering approach, and the work I care about."
+      :title="aboutPageMeta.title"
+      :description="aboutPageMeta.description"
     />
 
     <div v-if="loading" class="page-state" role="status">

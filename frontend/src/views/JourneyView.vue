@@ -6,7 +6,9 @@ import JourneySection from '@/components/journey/JourneySection.vue'
 import Timeline from '@/components/journey/Timeline.vue'
 import DetailPageHeader from '@/components/layout/DetailPageHeader.vue'
 import { useAutoHeightTransition } from '@/composables/useAutoHeightTransition'
+import { pageMeta } from '@/config/pageMeta'
 
+const journeyPageMeta = pageMeta.journey
 const journeyItems = ref([])
 const timelineEvents = ref([])
 const loading = ref(true)
@@ -134,8 +136,8 @@ onMounted(async () => {
     <DetailPageHeader
       current="JOURNEY"
       heading-id="journey-heading"
-      title="Journey"
-      description="A detailed view of my professional and academic experience."
+      :title="journeyPageMeta.title"
+      :description="journeyPageMeta.description"
     />
 
     <div v-if="loading" class="page-state" role="status">
