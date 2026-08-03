@@ -79,7 +79,7 @@ Every resource follows the same Router → Service → Repository → Schema arc
 
 - **About**: structured portfolio introduction and About sections from a single page-owned content source.
 - **Journey**: independently maintained Journey entries aggregated into the established ordered collection.
-- **Projects**: independently maintained Project summary and detail content, with deterministic collection order and slug lookup behavior.
+- **Projects**: independently maintained Project summary and detail content, with a canonical section contract defined in `overview.md`, deterministic collection order, and slug lookup behavior.
 - **Timeline Events**: Journey Timeline point and duration events maintained separately from Journey entries.
 - **Health**: infrastructure status independent of portfolio JSON.
 

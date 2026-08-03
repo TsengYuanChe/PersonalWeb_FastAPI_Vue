@@ -16,8 +16,8 @@
   "overview": {
     "title": "Overview",
     "paragraphs": [
-      "MRIS is an enterprise mountain rescue information system that supports operational information workflows through an integrated web application.",
-      "The work focuses on maintaining and extending an established production system while protecting reliability, compatibility, and maintainability. Public portfolio material intentionally excludes client-sensitive screens, routes, infrastructure identifiers, and private API details."
+      "MRIS is the primary production system I work on as a Software Development Engineer at eZoom Information.",
+      "I contribute to full-stack feature development, production maintenance, system integration, and deployment while working within a large existing enterprise application."
     ]
   },
   "responsibilities": {
@@ -31,8 +31,8 @@
       "Deliver incremental changes that improve system stability and maintainability without disrupting existing workflows."
     ]
   },
-  "architecture": {
-    "title": "Architecture",
+  "technical_highlights": {
+    "title": "Technical Highlights",
     "paragraphs": [
       "The system uses a Vue client backed by .NET REST services and PostgreSQL persistence, with application routing and integration boundaries connecting multiple services."
     ],
@@ -60,8 +60,8 @@
       }
     ]
   },
-  "deployment": {
-    "title": "Deployment and Operations",
+  "outcome": {
+    "title": "Outcome",
     "paragraphs": [
       "The application is maintained in a production Windows Server and IIS environment, with reverse-proxy and application-routing configuration supporting its services."
     ],

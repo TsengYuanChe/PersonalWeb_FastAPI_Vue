@@ -31,8 +31,8 @@
       "Balance visual requirements, delivery cost, and future content maintenance."
     ]
   },
-  "architecture": {
-    "title": "Architecture",
+  "technical_highlights": {
+    "title": "Technical Highlights",
     "paragraphs": [
       "The website is implemented as a Vue frontend and delivered as a responsive static web experience through Firebase Hosting."
     ],
@@ -60,8 +60,8 @@
       }
     ]
   },
-  "deployment": {
-    "title": "Deployment and Operations",
+  "outcome": {
+    "title": "Outcome",
     "paragraphs": [
       "The production site is delivered through Firebase Hosting with a deployment flow suited to a frontend-focused commercial website."
     ],

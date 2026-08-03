@@ -332,7 +332,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - mount 後呼叫 `GET /api/v1/projects`。
 - 提供 loading、error、empty、success 四種狀態。
 - 顯示 API 回傳的所有 projects，沒有首頁三筆限制。
-- `ProjectCard.vue` 完全由 backend Project object 建立並負責 Summary Header、toggle 與 transition orchestration；`ProjectDetail.vue` 接收同一物件，依序 render overview、responsibilities、architecture、challenges、deployment、lessons learned 與 technologies。
+- `ProjectCard.vue` 完全由 backend Project object 建立並負責 Summary Header、toggle 與 transition orchestration；`ProjectDetail.vue` 接收同一物件，依 canonical Project section order render 可用的 detail content，並在最後顯示 technologies。
 - Action 依序判斷 `website_url`、`source_url`；兩者皆無時顯示不可點擊的 `🔒 Internal`。這個判斷與首頁共用 `ProjectAction.vue`，不依賴 `status` 決定連結文字。
 - `showcase` 目前保留在資料 contract 中但三個專案皆為空陣列，因此頁面不 render Showcase 標題或空容器。
 - Project Card 預設全部收合並永遠顯示 Summary Header；Overview 起的 detail sections 只有展開時才 render。
@@ -493,7 +493,7 @@ CSS 仍由 `main.js` 全域載入，ownership 依 feature boundary 與 selector 
 
 - 每個完整 Project 使用一份穩定 slug JSON；同一物件同時包含 card summary metadata 與 detail sections。
 - Backend Project JSON 是 `/project` 的完整內容來源；frontend 不保存另一份 Project Detail JSON。
-- 首頁仍只讀取 `frontend/src/data/home/projects.json` 的三筆小型 summary，避免為 Preview 載入不需要的 detail 與 Cloud Run cold start。首頁不顯示 architecture、challenges、deployment 或 showcase。
+- 首頁仍只讀取 `frontend/src/data/home/projects.json` 的三筆小型 summary，避免為 Preview 載入不需要的 detail 與 Cloud Run cold start。首頁不顯示 technical highlights、challenges、outcome 或 showcase。
 - Cover 檔案仍由 frontend 靜態資產路徑 `frontend/public/images/projects/covers/` 負責；backend JSON 只保存公開 path 與 ready flag。
 - Project repository 以固定 slug/file mapping 維持 MRIS、Personal Portfolio Website、Mamatoya 的目前顯示順序。尚未實作 visibility、hide、featured、public、archived 等欄位或篩選邏輯。
 
@@ -581,12 +581,14 @@ ProjectData
     ├── technologies: string[]
     ├── overview: { title, paragraphs[] }
     ├── responsibilities: { title, items[] }
-    ├── architecture: { title, paragraphs[], highlights[] }
+    ├── technical_highlights: { title, paragraphs[], highlights[] }
     ├── challenges: { title, items[{ title, description }] }
-    ├── deployment: { title, paragraphs[], highlights[] }
+    ├── outcome: { title, paragraphs[], highlights[] }
     ├── lessons_learned: { title, items[] }
     └── showcase: ShowcaseItem[]
 ```
+
+Project detail 的 canonical content order 是 Overview、Responsibilities、Technical Highlights、Challenges、Outcome、Lessons Learned、Showcase。`technical_highlights` 保留 paragraphs／highlights 結構以容納 architecture、technical decisions 與 implementation highlights；`outcome` 使用相同結構描述 production usage、deployment、operational impact、current status 或 achievements，而不強制每個 Project 只談 deployment。
 
 `GET /api/v1/projects` 會依 repository 的固定順序讀取並逐筆以 `ProjectItem` 驗證；`GET /api/v1/projects/{slug}` 使用相同 repository 與 schema，不建立第二套 loader。三個 Project 的 `showcase` 目前都是空陣列，但 `ShowcaseItem` 已定義 image、image_alt 與選填 caption，供後續加入公開素材。
 

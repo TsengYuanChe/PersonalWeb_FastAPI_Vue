@@ -92,7 +92,7 @@ Layout components render stable shell or detail-page structure. They receive pre
 
 ### Feature Components
 
-Feature components belong to About, Journey, or Projects and render domain-specific content. Summary and detail responsibilities may be separated when they change independently or have distinct state boundaries. Feature components remain unaware of neighboring feature architecture unless an explicit shared contract exists.
+Feature components belong to About, Journey, or Projects and render domain-specific content. Summary and detail responsibilities may be separated when they change independently or have distinct state boundaries. Project detail rendering follows the canonical content sequence defined in `overview.md`, while its View retains page orchestration. Feature components remain unaware of neighboring feature architecture unless an explicit shared contract exists.
 
 ### Shared Components
 

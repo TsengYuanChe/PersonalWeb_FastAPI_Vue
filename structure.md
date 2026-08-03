@@ -277,7 +277,7 @@ frontend/
 
 - `HomeProjectPreview.vue` — **Home-specific**：精簡 Project preview row，組合 ProjectCover、ProjectAction。
 - `ProjectCard.vue` — **Project page-specific orchestration**：Project summary header、expanded prop、toggle event、detail wrapper 與共用 dynamic-height transition hooks；將完整 detail rendering 委派給 ProjectDetail。
-- `ProjectDetail.vue` — **Project page-specific renderer**：接收必填 Project object，依既有順序與 optional 判斷 render overview、responsibilities、architecture、challenges、deployment、lessons learned 與 technologies；不擁有 expanded state、toggle 或 Transition。
+- `ProjectDetail.vue` — **Project page-specific renderer**：接收必填 Project object，依 `overview.md` 定義的 canonical Project section order 與 optional 判斷 render detail content，並顯示 technologies；不擁有 expanded state、toggle 或 Transition。
 - `ProjectCover.vue` — **cross-page shared**：Home／Project Page 共用 160×100、16:10 image/placeholder/error fallback。
 - `ProjectAction.vue` — **cross-page shared**：依 website/source URLs render Live、Source 或 non-clickable Internal。
 

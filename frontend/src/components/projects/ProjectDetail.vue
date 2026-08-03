@@ -38,19 +38,22 @@ function safeArray(value) {
     </ul>
   </section>
 
-  <section v-if="project.architecture" class="project-detail-section">
-    <h3 class="text-light h6 mb-2">{{ project.architecture.title }}</h3>
+  <section v-if="project.technical_highlights" class="project-detail-section">
+    <h3 class="text-light h6 mb-2">{{ project.technical_highlights.title }}</h3>
     <p
-      v-for="(paragraph, index) in safeArray(project.architecture.paragraphs)"
-      :key="`architecture-paragraph-${index}`"
+      v-for="(paragraph, index) in safeArray(project.technical_highlights.paragraphs)"
+      :key="`technical-highlight-paragraph-${index}`"
       class="text-secondary mb-2"
     >
       {{ paragraph }}
     </p>
-    <ul v-if="safeArray(project.architecture.highlights).length" class="text-secondary mb-2">
+    <ul
+      v-if="safeArray(project.technical_highlights.highlights).length"
+      class="text-secondary mb-2"
+    >
       <li
-        v-for="(item, index) in safeArray(project.architecture.highlights)"
-        :key="`architecture-${index}`"
+        v-for="(item, index) in safeArray(project.technical_highlights.highlights)"
+        :key="`technical-highlight-${index}`"
       >
         {{ item }}
       </li>
@@ -71,19 +74,19 @@ function safeArray(value) {
     </div>
   </section>
 
-  <section v-if="project.deployment" class="project-detail-section">
-    <h3 class="text-light h6 mb-2">{{ project.deployment.title }}</h3>
+  <section v-if="project.outcome" class="project-detail-section">
+    <h3 class="text-light h6 mb-2">{{ project.outcome.title }}</h3>
     <p
-      v-for="(paragraph, index) in safeArray(project.deployment.paragraphs)"
-      :key="`deployment-paragraph-${index}`"
+      v-for="(paragraph, index) in safeArray(project.outcome.paragraphs)"
+      :key="`outcome-paragraph-${index}`"
       class="text-secondary mb-2"
     >
       {{ paragraph }}
     </p>
-    <ul v-if="safeArray(project.deployment.highlights).length" class="text-secondary mb-2">
+    <ul v-if="safeArray(project.outcome.highlights).length" class="text-secondary mb-2">
       <li
-        v-for="(item, index) in safeArray(project.deployment.highlights)"
-        :key="`deployment-${index}`"
+        v-for="(item, index) in safeArray(project.outcome.highlights)"
+        :key="`outcome-${index}`"
       >
         {{ item }}
       </li>

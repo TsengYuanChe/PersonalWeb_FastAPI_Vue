@@ -74,8 +74,8 @@ export function collectProjectSearchValues(project) {
 
   addTitledSection(values, project?.overview, ['paragraphs'])
   addTitledSection(values, project?.responsibilities, ['items'])
-  addTitledSection(values, project?.architecture, ['paragraphs', 'highlights', 'items'])
-  addTitledSection(values, project?.deployment, ['paragraphs', 'highlights', 'items'])
+  addTitledSection(values, project?.technical_highlights, ['paragraphs', 'highlights', 'items'])
+  addTitledSection(values, project?.outcome, ['paragraphs', 'highlights', 'items'])
   addTitledSection(values, project?.lessons_learned, ['paragraphs', 'items'])
 
   if (project?.challenges && typeof project.challenges === 'object') {

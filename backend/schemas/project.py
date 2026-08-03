@@ -54,9 +54,9 @@ class ProjectItem(BaseModel):
     technologies: list[str]
     overview: ParagraphSection
     responsibilities: ListSection
-    architecture: HighlightSection
+    technical_highlights: HighlightSection
     challenges: ChallengesSection
-    deployment: HighlightSection
+    outcome: HighlightSection
     lessons_learned: ListSection
     showcase: list[ShowcaseItem]
 
