@@ -21,6 +21,7 @@ def main():
         "portfolio/projects/mris.json": (ProjectItem, False),
         "portfolio/projects/personal-portfolio.json": (ProjectItem, False),
         "portfolio/projects/mamatoya.json": (ProjectItem, False),
+        "portfolio/projects/sample.json": (ProjectItem, False),
         "portfolio/timeline/events.json": (TimelineEventsData, False),
     }
 

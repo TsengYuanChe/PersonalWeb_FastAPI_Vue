@@ -1,0 +1,43 @@
+{
+  "slug": "",
+  "title": "",
+  "subtitle": "",
+  "category": "",
+  "summary": "",
+  "cover": "",
+  "cover_alt": "",
+  "cover_ready": false,
+  "period": "",
+  "role": "",
+  "status": "",
+  "website_url": null,
+  "source_url": null,
+  "technologies": [],
+  "overview": {
+    "title": "",
+    "paragraphs": []
+  },
+  "responsibilities": {
+    "title": "",
+    "items": []
+  },
+  "technical_highlights": {
+    "title": "",
+    "paragraphs": [],
+    "highlights": []
+  },
+  "challenges": {
+    "title": "",
+    "items": []
+  },
+  "outcome": {
+    "title": "",
+    "paragraphs": [],
+    "highlights": []
+  },
+  "lessons_learned": {
+    "title": "",
+    "items": []
+  },
+  "showcase": []
+}

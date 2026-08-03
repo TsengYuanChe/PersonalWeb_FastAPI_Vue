@@ -493,6 +493,7 @@ CSS 仍由 `main.js` 全域載入，ownership 依 feature boundary 與 selector 
 
 - 每個完整 Project 使用一份穩定 slug JSON；同一物件同時包含 card summary metadata 與 detail sections。
 - Backend Project JSON 是 `/project` 的完整內容來源；frontend 不保存另一份 Project Detail JSON。
+- `backend/data/portfolio/projects/sample.json` 是建立新 Project entry 的 canonical template；新檔案應由此 template 複製，以維持與 `ProjectItem` schema 一致。Template 只供內容建立與 validation 使用，不在 runtime repository mapping 中。
 - 首頁仍只讀取 `frontend/src/data/home/projects.json` 的三筆小型 summary，避免為 Preview 載入不需要的 detail 與 Cloud Run cold start。首頁不顯示 technical highlights、challenges、outcome 或 showcase。
 - Cover 檔案仍由 frontend 靜態資產路徑 `frontend/public/images/projects/covers/` 負責；backend JSON 只保存公開 path 與 ready flag。
 - Project repository 以固定 slug/file mapping 維持 MRIS、Personal Portfolio Website、Mamatoya 的目前顯示順序。尚未實作 visibility、hide、featured、public、archived 等欄位或篩選邏輯。
