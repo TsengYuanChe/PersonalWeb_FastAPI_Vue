@@ -3,10 +3,10 @@
   "title": "MRIS",
   "subtitle": "Mountain Rescue Information System",
   "category": "Enterprise System",
-  "summary": "Enterprise mountain rescue information system for backend development and production maintenance.",
+  "summary": "Enterprise mountain rescue platform focused on production system development, integration, and long-term maintenance.",
   "cover": "/images/projects/covers/mris.webp",
   "cover_alt": "MRIS project cover",
-  "cover_ready": false,
+  "cover_ready": true,
   "period": "2025 — Present",
   "role": "Software Engineer",
   "status": "internal",
@@ -34,49 +34,51 @@
   "technical_highlights": {
     "title": "Technical Highlights",
     "paragraphs": [
-      "The system uses a Vue client backed by .NET REST services and PostgreSQL persistence, with application routing and integration boundaries connecting multiple services."
+      "MRIS is a mature enterprise system where implementing a feature often requires understanding interactions across multiple services rather than a single codebase. The project emphasizes end-to-end thinking, from user interfaces and backend services to databases, deployment, and operational infrastructure.",
+      "Working in this environment strengthened my ability to navigate complex systems, troubleshoot production issues across technical boundaries, and improve maintainability through incremental engineering practices."
     ],
     "highlights": [
-      "Vue interfaces communicate with domain APIs through defined REST contracts.",
-      ".NET services coordinate business workflows and PostgreSQL data access.",
-      "Authentication and permission checks protect role-specific operations.",
-      "Reverse-proxy and application routing connect independently deployed services."
+      "Full-stack feature development",
+      "Cross-service system integration",
+      "Production troubleshooting",
+      "Deployment and operational support",
+      "Architecture and maintainability"
     ]
   },
   "challenges": {
     "title": "Challenges",
     "items": [
       {
-        "title": "Evolving a large existing system",
-        "description": "Changes must fit established contracts and user workflows, so implementation favors small, reviewable improvements over disruptive rewrites."
+        "title": "System integration across multiple teams",
+        "description": "The platform integrates services developed by different internal teams and external vendors. Delivering new features often requires understanding existing interfaces, coordinating changes across systems, and maintaining compatibility without disrupting established workflows."
       },
       {
-        "title": "Cross-service integration",
-        "description": "Features can cross frontend, API, data, and routing boundaries, requiring careful interface coordination and end-to-end verification."
+        "title": "Maintaining compatibility across versions",
+        "description": "Enterprise systems evolve continuously, making backward compatibility and controlled releases essential. New functionality must integrate with existing modules while minimizing risk to production environments and ongoing operations."
       },
       {
-        "title": "Production diagnosis",
-        "description": "Failures may originate in application logic, database access, reverse-proxy routing, or environment configuration, so troubleshooting follows the complete request path."
+        "title": "Rapid production troubleshooting",
+        "description": "Production issues can originate from frontend applications, backend services, databases, authentication, routing, deployment, or infrastructure. Effective troubleshooting requires tracing requests across the entire system to identify root causes and restore normal operation quickly."
       }
     ]
   },
   "outcome": {
     "title": "Outcome",
     "paragraphs": [
-      "The application is maintained in a production Windows Server and IIS environment, with reverse-proxy and application-routing configuration supporting its services."
+      "Working on MRIS has provided hands-on experience developing and maintaining large-scale production systems. Beyond feature implementation, the project has strengthened my understanding of enterprise software development, cross-team collaboration, and long-term system maintenance."
     ],
     "highlights": [
-      "Coordinate controlled releases for frontend and backend changes.",
-      "Verify application routing, API availability, and database connectivity after deployment.",
-      "Use production observations to isolate faults and guide maintainability improvements."
+      "Contributed to a production enterprise system used in daily operations.",
+      "Delivered incremental improvements while preserving system stability.",
+      "Built practical experience across the complete software lifecycle."
     ]
   },
   "lessons_learned": {
     "title": "Lessons Learned",
     "items": [
-      "Reliability work requires understanding the entire request path, not only application code.",
-      "Stable contracts and incremental delivery reduce risk in a mature enterprise system.",
-      "Clear documentation and repeatable diagnosis make cross-service maintenance more effective."
+      "Building enterprise software requires understanding existing systems before introducing new solutions.",
+      "Long-term maintainability comes from clear architecture, stable interfaces, and incremental improvement rather than large-scale rewrites.",
+      "Successful production troubleshooting depends on understanding how every layer of a system works together, not just the code being changed."
     ]
   },
   "showcase": []

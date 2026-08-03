@@ -4,7 +4,7 @@
       "name": "MRIS",
       "image": "/images/projects/covers/mris.webp",
       "image_alt": "MRIS project cover",
-      "image_ready": false,
+      "image_ready": true,
       "introduction": "Enterprise mountain rescue information system for backend development and production maintenance.",
       "tags": [".NET", "Vue.js", "PostgreSQL", "REST API"],
       "website_url": ""
