@@ -13,7 +13,7 @@
       "name": "Personal Portfolio Website",
       "image": "/images/projects/covers/personal-website.webp",
       "image_alt": "Personal Portfolio Website cover",
-      "image_ready": false,
+      "image_ready": true,
       "introduction": "Full-stack portfolio platform showcasing projects and engineering experience.",
       "tags": ["Vue 3", "FastAPI", "Docker", "Cloud Run"],
       "website_url": "https://adamtseng.com"
