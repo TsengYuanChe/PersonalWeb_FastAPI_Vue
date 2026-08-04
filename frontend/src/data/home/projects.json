@@ -19,11 +19,11 @@
       "website_url": "https://adamtseng.com"
     },
     {
-      "name": "Mamatoya Website",
-      "image": "/images/projects/covers/mamatoya.webp",
-      "image_alt": "Mamatoya Website cover",
-      "image_ready": false,
-      "introduction": "Commercial restaurant website focused on branding, SEO, and responsive design.",
+      "name": "ANDESSENCE Website",
+      "image": "/images/projects/covers/andessence.webp",
+      "image_alt": "ANDESSENCE Website cover",
+      "image_ready": true,
+      "introduction": "Commercial Marketing website focused on branding, SEO, and responsive design.",
       "tags": ["Vue 3", "Firebase", "SEO", "Responsive Design"],
       "website_url": "https://mamatoya-b2afb.web.app/"
     }

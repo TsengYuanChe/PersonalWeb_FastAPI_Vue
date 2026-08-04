@@ -1,0 +1,84 @@
+{
+  "slug": "andessence",
+  "title": " ANDESSENCE",
+  "subtitle": "Commercial Marketing Website",
+  "category": "Commercial",
+  "summary": "Commercial Marketing website focused on branding, SEO, and responsive design.",
+  "cover": "/images/projects/covers/andessence.webp",
+  "cover_alt": "ANDESSENCE Website project cover",
+  "cover_ready": true,
+  "period": "",
+  "role": "Frontend Developer",
+  "status": "live",
+  "website_url": "https://andessence.shop/",
+  "source_url": null,
+  "technologies": ["Vue 3", "Firebase", "SEO", "Responsive Design"],
+  "overview": {
+    "title": "Overview",
+    "paragraphs": [
+      "Mamatoya is a commercial website developed for a restaurant brand, focusing on presenting the business through a clean, responsive, and visually engaging online experience.",
+      "The project emphasizes translating business requirements into a production-ready website that supports brand identity, improves online visibility, and provides an intuitive browsing experience across devices."
+    ]
+  },
+  "responsibilities": {
+    "title": "Responsibilities",
+    "items": [
+      "Gather business requirements and translate them into a structured website.",
+      "Design and implement responsive frontend pages using Vue.",
+      "Build reusable page sections for menus, branding, and business information.",
+      "Optimize page structure, images, and metadata for performance and search visibility.",
+      "Deploy and maintain the production website through Firebase Hosting.",
+      "Support future content updates while preserving a consistent visual experience."
+    ]
+  },
+  "technical_highlights": {
+    "title": "Technical Highlights",
+    "paragraphs": [
+      "The project focuses on delivering a production-ready commercial website with responsive layouts, maintainable content organization, and foundational SEO, while keeping deployment and future updates straightforward."
+    ],
+    "highlights": [
+      "Responsive commercial website",
+      "Component-based frontend",
+      "Technical SEO foundation",
+      "Firebase deployment",
+      "Maintainable content structure"
+    ]
+  },
+  "challenges": {
+    "title": "Challenges",
+    "items": [
+      {
+        "title": "Translating business requirements",
+        "description": "Understanding business goals and converting them into a website that accurately represents the brand while remaining practical to develop and maintain."
+      },
+      {
+        "title": "Balancing branding and usability",
+        "description": "Creating a visually engaging experience without sacrificing readability, accessibility, or responsive behavior across different devices."
+      },
+      {
+        "title": "Delivering within commercial constraints",
+        "description": "Balancing design expectations, development effort, project budget, and future maintainability while delivering a production-ready website."
+      }
+    ]
+  },
+  "outcome": {
+    "title": "Outcome",
+    "paragraphs": [
+      "The project resulted in a production-ready commercial website that strengthens the client's online presence while providing a maintainable foundation for future updates."
+    ],
+    "highlights": [
+      "Production commercial website",
+      "Responsive user experience",
+      "SEO-ready foundation"
+    ]
+  },
+  "lessons_learned": {
+    "title": "Lessons Learned",
+    "items": [
+      "Understanding business goals is just as important as implementing technical solutions.",
+      "Good commercial websites balance visual design, usability, and long-term maintainability.",
+      "Clear communication with clients leads to better technical decisions and smoother project delivery."
+    ]
+  },
+  "showcase": []
+}

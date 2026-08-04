@@ -20,7 +20,7 @@ def main():
         "portfolio/about/about.json": (AboutResponse, True),
         "portfolio/projects/mris.json": (ProjectItem, False),
         "portfolio/projects/personal-portfolio.json": (ProjectItem, False),
-        "portfolio/projects/mamatoya.json": (ProjectItem, False),
+        "portfolio/projects/andessence.json": (ProjectItem, False),
         "portfolio/projects/sample.json": (ProjectItem, False),
         "portfolio/timeline/events.json": (TimelineEventsData, False),
     }
