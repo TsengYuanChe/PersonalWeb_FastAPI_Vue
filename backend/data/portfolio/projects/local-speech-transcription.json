@@ -1,0 +1,80 @@
+{
+  "slug": "local-speech-transcription",
+  "title": "Local Speech Transcription",
+  "subtitle": ".NET Speech-to-Text Prototype",
+  "category": "Proof of Concept",
+  "summary": "A local speech-to-text prototype built for integrating Chinese audio transcription into an internal .NET system.",
+  "cover": "/images/projects/covers/local-speech-transcription.webp",
+  "cover_alt": "Local Speech Transcription project cover",
+  "cover_ready": true,
+  "period": "",
+  "role": "Software Developer",
+  "status": "opensource",
+  "website_url": null,
+  "source_url": "https://github.com/TsengYuanChe/ffmpeg_whisper",
+  "technologies": [
+    ".NET 8",
+    "Whisper.net",
+    "FFmpeg"
+  ],
+  "overview": {
+    "title": "Overview",
+    "paragraphs": [
+      "This project was developed as a proof of concept for adding Chinese speech transcription to an existing internal .NET system.",
+      "Because the system could not use external transcription APIs, the solution was designed to process audio locally using FFmpeg and Whisper.net."
+    ]
+  },
+  "responsibilities": {
+    "title": "Responsibilities",
+    "items": [
+      "Survey available approaches for local speech transcription.",
+      "Select and integrate FFmpeg and Whisper.net with .NET 8.",
+      "Build and test a working Chinese speech-to-text prototype.",
+      "Demonstrate the solution and deliver the source code for further integration."
+    ]
+  },
+  "technical_highlights": {
+    "title": "Technical Highlights",
+    "paragraphs": [
+      "The prototype keeps transcription local by converting source audio into a Whisper-compatible format with FFmpeg and processing it directly through Whisper.net."
+    ],
+    "highlights": [
+      "Local speech recognition",
+      "FFmpeg audio preprocessing",
+      "Whisper.net integration",
+      "Chinese transcription"
+    ]
+  },
+  "challenges": {
+    "title": "Challenges",
+    "items": [
+      {
+        "title": "Offline transcription requirement",
+        "description": "The internal system could not rely on external transcription APIs, requiring a solution that could perform speech recognition locally."
+      },
+      {
+        "title": "Integrating speech recognition with .NET",
+        "description": "The prototype needed to connect media preprocessing and Whisper inference into a simple workflow suitable for later integration with an existing .NET system."
+      }
+    ]
+  },
+  "outcome": {
+    "title": "Outcome",
+    "paragraphs": [
+      "The completed prototype successfully demonstrated local Chinese speech transcription without relying on an external transcription API."
+    ],
+    "highlights": [
+      "Validated technical feasibility",
+      "Completed working prototype",
+      "Delivered source code"
+    ]
+  },
+  "lessons_learned": {
+    "title": "Lessons Learned",
+    "items": [
+      "Technical constraints can significantly influence architecture and technology selection.",
+      "A focused proof of concept can validate an integration approach before committing to full system development."
+    ]
+  },
+  "showcase": []
+}
