@@ -1,0 +1,89 @@
+{
+  "slug": "image-converter",
+  "title": "Image Converter",
+  "subtitle": "Developer Image Processing Tool",
+  "category": "Developer Tool",
+  "summary": "An open-source Python utility for batch image conversion and optimization workflows.",
+  "cover": "/images/projects/covers/image-converter.webp",
+  "cover_alt": "Image Converter project cover",
+  "cover_ready": true,
+  "period": "2026",
+  "role": "Designer & Developer",
+  "status": "opensource",
+  "website_url": null,
+  "source_url": "https://github.com/TsengYuanChe/image-converter",
+  "technologies": [
+    "Python",
+    "Pillow",
+    "CLI",
+    "Open Source"
+  ],
+  "overview": {
+    "title": "Overview",
+    "paragraphs": [
+      "Image Converter is an open-source Python utility designed to simplify repetitive image processing tasks during web development. The project focuses on batch conversion, optimization, and developer-friendly workflows.",
+      "Rather than relying on online converters, the tool provides a lightweight local solution that integrates naturally into everyday development, making image preparation faster, more consistent, and easier to automate."
+    ]
+  },
+  "responsibilities": {
+    "title": "Responsibilities",
+    "items": [
+      "Design the overall project architecture and command-line workflow.",
+      "Implement image conversion and optimization features using Python.",
+      "Develop reusable utilities for file discovery and batch processing.",
+      "Write project documentation and usage guides.",
+      "Maintain the project as an open-source developer tool."
+    ]
+  },
+  "technical_highlights": {
+    "title": "Technical Highlights",
+    "paragraphs": [
+      "The project emphasizes simplicity, maintainability, and automation. Individual tools share common utilities while remaining independent, making it straightforward to extend the project with additional image-processing capabilities."
+    ],
+    "highlights": [
+      "Batch image processing",
+      "Reusable utility architecture",
+      "CLI-based workflow",
+      "Open-source project structure",
+      "Developer-oriented tooling"
+    ]
+  },
+  "challenges": {
+    "title": "Challenges",
+    "items": [
+      {
+        "title": "Designing reusable utilities",
+        "description": "The project needed a shared foundation that could support multiple image-processing tools without duplicating logic."
+      },
+      {
+        "title": "Balancing simplicity and extensibility",
+        "description": "The tool was designed to remain easy to use while providing an architecture that supports future features such as resizing, PDF conversion, video thumbnails, and background removal."
+      },
+      {
+        "title": "Improving developer workflows",
+        "description": "The goal was to replace repetitive manual image preparation with a fast, consistent local workflow that integrates naturally into development."
+      }
+    ]
+  },
+  "outcome": {
+    "title": "Outcome",
+    "paragraphs": [
+      "The project provides a practical developer utility that streamlines image preparation for web projects while serving as a reusable foundation for future media-processing tools."
+    ],
+    "highlights": [
+      "Open-source developer tool",
+      "Automated image workflow",
+      "Extensible project architecture",
+      "Improved development efficiency"
+    ]
+  },
+  "lessons_learned": {
+    "title": "Lessons Learned",
+    "items": [
+      "Small automation tools can significantly improve everyday development workflows.",
+      "Building reusable utilities makes future feature development substantially easier.",
+      "Good documentation is just as important as implementation for open-source projects."
+    ]
+  },
+  "showcase": []
+}

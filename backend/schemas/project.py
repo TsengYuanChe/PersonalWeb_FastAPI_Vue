@@ -48,7 +48,7 @@ class ProjectItem(BaseModel):
     cover_ready: bool = False
     period: str
     role: str
-    status: Literal["internal", "live"]
+    status: Literal["internal", "live", "opensource"]
     website_url: Optional[str] = None
     source_url: Optional[str] = None
     technologies: list[str]
