@@ -122,7 +122,7 @@ PersonalWeb_Flask_Vue/
 │   │   ├── common.py              # Shared JSON read 與 mtime helper
 │   │   ├── about_repository.py    # About JSON path 與讀取
 │   │   ├── journey_repository.py # Journey scan 與 ordering
-│   │   ├── project_repository.py  # Project mapping、ordering 與 slug lookup
+│   │   ├── project_repository.py  # Project discovery、ordering 與 slug lookup
 │   │   └── timeline_repository.py # Timeline Events path 與讀取
 │   ├── schemas/
 │   │   ├── common.py              # Meta / ApiResponse
@@ -493,10 +493,10 @@ CSS 仍由 `main.js` 全域載入，ownership 依 feature boundary 與 selector 
 
 - 每個完整 Project 使用一份穩定 slug JSON；同一物件同時包含 card summary metadata 與 detail sections。
 - Backend Project JSON 是 `/project` 的完整內容來源；frontend 不保存另一份 Project Detail JSON。
-- `backend/data/portfolio/projects/sample.json` 是建立新 Project entry 的 canonical template；新檔案應由此 template 複製，以維持與 `ProjectItem` schema 一致。Template 只供內容建立與 validation 使用，不在 runtime repository mapping 中。
+- `backend/data/portfolio/projects/sample.json` 是建立新 Project entry 的 canonical template；新檔案應由此 template 複製，以維持與 `ProjectItem` schema 一致。Template 只供內容建立與 validation 使用，不參與 runtime discovery。
 - 首頁仍只讀取 `frontend/src/data/home/projects.json` 的三筆小型 summary，避免為 Preview 載入不需要的 detail 與 Cloud Run cold start。首頁不顯示 technical highlights、challenges、outcome 或 showcase。
 - Cover 檔案仍由 frontend 靜態資產路徑 `frontend/public/images/projects/covers/` 負責；backend JSON 只保存公開 path 與 ready flag。
-- Project repository 以固定 slug/file mapping 維持 MRIS、Personal Portfolio Website、Mamatoya 的目前顯示順序。尚未實作 visibility、hide、featured、public、archived 等欄位或篩選邏輯。
+- Project repository 自動探索 `portfolio/projects/*.json`，排除 `sample.json` 與 `.`／`_` 開頭的非 runtime files，並以 title 的 case-insensitive descending order 提供 deterministic list；slug lookup 使用 JSON 內容中的 `slug`。新增合規 Project JSON 不需修改 Python。尚未實作 visibility、hide、featured、public、archived 等欄位或篩選邏輯。
 
 ### 9.3 Portfolio page data responsibility
 
@@ -746,7 +746,7 @@ Backend workflow 在建 image 前會安裝依賴並執行 content schema validat
 - JSON rich text 含外部 `<a target="_blank">`，部分內容未包含 `rel="noopener noreferrer"`，並由 `v-html` render。
 - 每個 request 都同步開檔與解析 JSON，沒有 cache。
 - HTTP route、service、repository 與 schema 均已依 Portfolio resource 分離；只有明確的跨 resource utility/model 保留在各 layer 的 `common.py`。
-- Project visibility、hide、featured、public、archived 與分類篩選尚未設計或實作；目前固定依 repository mapping 顯示三筆。
+- Project visibility、hide、featured、public、archived 與分類篩選尚未設計或實作；目前會顯示 repository 自動探索到的所有 runtime Project JSON。
 - 沒有 authentication、rate limiting、explicit cache headers 或 security headers。
 - FastAPI 使用預設 OpenAPI title/version metadata；不影響 runtime，但尚未提供 portfolio API 專屬描述。
 

@@ -145,7 +145,7 @@ The two source groups are intentionally distinct. Frontend Home JSON owns previe
 | About | Backend About JSON | Repository read, service validation, Content API normalization | About View and section rendering |
 | Journey | Backend Journey JSON files | Aggregation, ordering, validation, frontend normalization, View row mapping | Journey Sections, Details, and Timeline |
 | Timeline Events | Backend Timeline Events JSON | Validation, frontend normalization, Timeline containment and position calculation | Timeline rendering |
-| Projects | Backend Project JSON files | Ordered loading, validation, frontend normalization, View search and filters | ProjectCard and composed Project renderers |
+| Projects | Backend Project JSON files | Repository discovery and ordering, validation, frontend normalization, View search and filters | ProjectCard and composed Project renderers |
 | Home Preview JSON | Frontend local JSON | HomeView selection and presentation mapping | Home preview components |
 | Last Updated | Backend About content file timestamp metadata | Repository timestamp handling and Content API normalization | App shell, Home Sidebar, and Mobile Footer |
 

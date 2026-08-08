@@ -79,7 +79,7 @@ Every resource follows the same Router → Service → Repository → Schema arc
 
 - **About**: structured portfolio introduction and About sections from a single page-owned content source.
 - **Journey**: independently maintained Journey entries aggregated into the established ordered collection.
-- **Projects**: independently maintained Project summary and detail content, with a canonical section contract defined in `overview.md`, deterministic collection order, and slug lookup behavior.
+- **Projects**: independently maintained Project summary and detail content, with a canonical section contract defined in `overview.md`, repository-owned automatic discovery, deterministic collection order, and slug lookup behavior.
 - **Timeline Events**: Journey Timeline point and duration events maintained separately from Journey entries.
 - **Health**: infrastructure status independent of portfolio JSON.
 
@@ -97,7 +97,7 @@ portfolio/
 └── timeline/
 ```
 
-About has one page-owned document. Journey and Projects use one JSON document per stable item or slug. Timeline Events remain a separate Journey-related data source because they are Timeline events, not Journey entries.
+About has one page-owned document. Journey and Projects use one JSON document per stable item or slug. Project discovery excludes the canonical `sample.json` template and reserved hidden/template prefixes from runtime content. Timeline Events remain a separate Journey-related data source because they are Timeline events, not Journey entries.
 
 Content files contain public portfolio data only. Secrets, credentials, private infrastructure details, confidential customer information, and proprietary source code do not belong in this data source.
 

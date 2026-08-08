@@ -56,7 +56,8 @@ backend/
 │       ├── projects/
 │       │   ├── mris.json
 │       │   ├── personal-portfolio.json
-│       │   └── andessence.json
+│       │   ├── andessence.json
+│       │   └── sample.json
 │       └── timeline/
 │           └── events.json
 ├── repositories/
@@ -102,11 +103,11 @@ backend/
 
 ### `backend/data/portfolio/`
 
-所有檔案均為 **runtime content source**，同時由 validation script 檢查：
+Portfolio JSON 由 validation script 檢查；除明確標記的 template 外，均為 **runtime content source**：
 
 - `about/about.json`：About detail body 的結構化 `sections[{id,title,paragraphs,items}]`；不保存 View-owned page header copy。
 - `journey/*.json`：每段 Journey 一份 slug JSON；repository 動態掃描並以 `start_date` 新到舊排序。
-- `projects/*.json`：每個 Project 一份 summary + detail JSON；目前 repository 以固定 mapping 控制三筆順序及 slug lookup。
+- `projects/*.json`：每個 Project 一份 summary + detail JSON；repository 自動探索 runtime JSON、排除 `sample.json` 與 `.`／`_` 開頭檔案，依 title deterministic ordering，並以內容 `slug` 支援 single-project lookup。`sample.json` 是 validation-covered canonical template，不進入 API。
 - `timeline/events.json`：不屬於 Journey 的 point/duration Timeline Events。
 
 ### `backend/repositories/`
@@ -114,7 +115,7 @@ backend/
 - `common.py` — **runtime shared data access utility**：定義 backend data root、同步讀取 JSON，並將 filesystem mtime 格式化為 `updated_at`；不包含 resource logic。
 - `about_repository.py` — **runtime data access**：管理 About JSON path，回傳 raw About data 與 timestamp。
 - `journey_repository.py` — **runtime data access**：管理 Journey directory、動態掃描 `*.json`，並維持既有 `start_date` descending ordering 與最新 timestamp。
-- `project_repository.py` — **runtime data access**：管理 Project directory、固定 slug/file mapping、list ordering 與 single-project lookup。
+- `project_repository.py` — **runtime data access**：管理 Project directory、自動 JSON discovery、template/hidden-file exclusions、deterministic list ordering 與 content-slug lookup。
 - `timeline_repository.py` — **runtime data access**：管理 Timeline Events JSON path，回傳 raw event data 與 timestamp。
 - `content_repository.py` 已移除；目前沒有 wrapper、dead function 或 runtime consumer。
 - Repository 不進行 Pydantic validation；validation 位於 service layer。
@@ -150,7 +151,7 @@ backend/
 
 - `validate_content_schema.py` — **validation/tooling**：
   - 掃描 `backend/data/**/*.json`。
-  - 驗證 About、Journey、Projects、Timeline Events。
+  - 動態辨識並驗證 About、Journey、Projects、Timeline Events；新增 Project JSON 不需補 filename mapping。
   - 對未知或缺少 schema mapping 的 JSON fail closed。
   - 由 backend GitHub Actions workflow 在 deployment build 前執行。
 
@@ -380,7 +381,7 @@ Timeline Events 不建立 Journey Section/Detail；位置由 Timeline 依 Journe
 
 ```text
 backend/data/portfolio/projects/*.json
-  → project_repository fixed PROJECT_FILES mapping
+  → project_repository automatic discovery + exclusions + deterministic ordering
   → project_service ProjectItem validation + list/slug response handling
   → GET /api/v1/projects
   → frontend api/contentApi.getProjects()

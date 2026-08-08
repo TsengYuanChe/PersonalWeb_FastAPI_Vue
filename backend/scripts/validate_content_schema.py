@@ -18,10 +18,6 @@ def main():
     data_root = BACKEND_ROOT / "data"
     file_to_schema = {
         "portfolio/about/about.json": (AboutResponse, True),
-        "portfolio/projects/mris.json": (ProjectItem, False),
-        "portfolio/projects/personal-portfolio.json": (ProjectItem, False),
-        "portfolio/projects/andessence.json": (ProjectItem, False),
-        "portfolio/projects/sample.json": (ProjectItem, False),
         "portfolio/timeline/events.json": (TimelineEventsData, False),
     }
 
@@ -40,6 +36,15 @@ def main():
 
     if not journey_files:
         errors.append("No Journey JSON files found in portfolio/journey/")
+
+    project_files = [
+        path for path in json_files if path.startswith("portfolio/projects/")
+    ]
+    for rel_path in project_files:
+        file_to_schema[rel_path] = (ProjectItem, False)
+
+    if not project_files:
+        errors.append("No Project JSON files found in portfolio/projects/")
 
     # Fail unknown files to keep validation deterministic.
     unknown_files = [f for f in json_files if f not in file_to_schema]
