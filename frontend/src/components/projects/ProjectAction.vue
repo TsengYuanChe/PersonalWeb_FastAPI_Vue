@@ -21,18 +21,22 @@ defineProps({
       rel="noopener noreferrer"
       :aria-label="`Open ${name} live website in a new tab`"
     >
-      Live <span aria-hidden="true">↗</span>
+      <span class="bi bi-box-arrow-up-right" aria-hidden="true"></span>
+      Live
     </a>
     <a
-      v-else-if="project.source_url"
+      v-if="project.source_url"
       class="home-project-action"
       :href="project.source_url"
       target="_blank"
       rel="noopener noreferrer"
       :aria-label="`Open ${name} source code in a new tab`"
     >
-      Source <span aria-hidden="true">↗</span>
+      <span class="bi bi-github" aria-hidden="true"></span>
+      Source
     </a>
-    <span v-else class="home-project-action">🔒 Internal</span>
+    <span v-if="!project.website_url && !project.source_url" class="home-project-action">
+      🔒 Internal
+    </span>
   </div>
 </template>
