@@ -4,7 +4,7 @@ PROJECT_DIR = "portfolio/projects"
 PROJECT_FILES = {
     "mris": f"{PROJECT_DIR}/mris.json",
     "personal-portfolio": f"{PROJECT_DIR}/personal-portfolio.json",
-    "mamatoya": f"{PROJECT_DIR}/mamatoya.json",
+    "andessence": f"{PROJECT_DIR}/andessence.json",
 }
 
 

@@ -56,7 +56,7 @@ backend/
 │       ├── projects/
 │       │   ├── mris.json
 │       │   ├── personal-portfolio.json
-│       │   └── mamatoya.json
+│       │   └── andessence.json
 │       └── timeline/
 │           └── events.json
 ├── repositories/

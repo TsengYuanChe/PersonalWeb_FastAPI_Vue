@@ -141,7 +141,7 @@ PersonalWeb_Flask_Vue/
 │   │       └── projects/           # 每個完整 Project 各一份 slug JSON
 │   │           ├── mris.json
 │   │           ├── personal-portfolio.json
-│   │           └── mamatoya.json
+│   │           └── andessence.json
 │   ├── scripts/validate_content_schema.py
 │   ├── .dockerignore              # 排除 venv/cache/bytecode 等非 runtime build context
 │   ├── requirements.txt
@@ -462,7 +462,7 @@ CSS 仍由 `main.js` 全域載入，ownership 依 feature boundary 與 selector 
 | 完整 About JSON | `backend/data/portfolio/about/about.json` | About API／AboutView sections |
 | 完整 Journey JSON | `backend/data/portfolio/journey/{ezoom,nycu-master,nchu-bachelor}.json` | Journey API/detail page |
 | Timeline Events JSON | `backend/data/portfolio/timeline/events.json` | Timeline Events API／Timeline.vue |
-| 完整 Projects JSON | `backend/data/portfolio/projects/{mris,personal-portfolio,mamatoya}.json` | Projects API/detail page |
+| 完整 Projects JSON | `backend/data/portfolio/projects/{mris,personal-portfolio,andessence}.json` | Projects API/detail page |
 | Journey logos | `frontend/src/assets/images/journey/*.png` | Vite asset imports |
 | Future project screenshots | 預定 `frontend/public/images/projects/covers/*.webp` | 目前檔案尚不存在 |
 | Resume | `frontend/public/files/Adam_Tseng_Resume.pdf` | 首頁 social area |
