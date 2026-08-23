@@ -1,0 +1,90 @@
+{
+  "slug": "mail-sender",
+  "title": "Mail Sender",
+  "subtitle": "Desktop Email Automation Tool",
+  "category": "Desktop Tool",
+  "summary": "A cross-platform desktop application for sending personalized bulk emails through a structured and reliable workflow.",
+  "cover": "/images/projects/covers/mail-sender.webp",
+  "cover_alt": "Mail Sender project cover",
+  "cover_ready": true,
+  "period": "2026",
+  "role": "Designer & Developer",
+  "status": "opensource",
+  "website_url": null,
+  "source_url": "https://github.com/TsengYuanChe/mail_sender",
+  "technologies": [
+    "Python",
+    "SMTP",
+    "pytest",
+    "GitHub Actions"
+  ],
+  "overview": {
+    "title": "Overview",
+    "paragraphs": [
+      "Mail Sender is a desktop application created to simplify repetitive email workflows where similar messages need to be personalized and sent to multiple recipients.",
+      "The project turns a recurring manual task into a structured workflow covering recipient import, email templates, attachments, validation, preview, and delivery."
+    ]
+  },
+  "responsibilities": {
+    "title": "Responsibilities",
+    "items": [
+      "Design and implement the complete desktop email workflow.",
+      "Build SMTP-based email delivery with personalized recipient content and multiple attachments.",
+      "Implement recipient import, validation, email preview, and sending-result feedback.",
+      "Add automated tests for core mail delivery behavior.",
+      "Configure CI/CD and cross-platform application packaging for macOS and Windows.",
+      "Design credential handling with secure operating-system storage where supported."
+    ]
+  },
+  "technical_highlights": {
+    "title": "Technical Highlights",
+    "paragraphs": [
+      "The project focuses on turning low-level SMTP functionality into a practical desktop workflow while keeping email preparation, validation, delivery, and credential handling clearly separated."
+    ],
+    "highlights": [
+      "Personalized bulk email workflow",
+      "HTML templates and attachments",
+      "Recipient validation and preview",
+      "Automated testing",
+      "Cross-platform packaging"
+    ]
+  },
+  "challenges": {
+    "title": "Challenges",
+    "items": [
+      {
+        "title": "Designing a safe bulk-email workflow",
+        "description": "Bulk sending introduces the risk of incorrect recipients, content, or attachments, so validation and preview steps were added before messages are delivered."
+      },
+      {
+        "title": "Handling credentials securely",
+        "description": "SMTP authentication needed to remain convenient without treating credentials as ordinary application configuration, requiring platform-aware credential storage and fallback behavior."
+      },
+      {
+        "title": "Packaging across platforms",
+        "description": "The application needed to run as a standalone desktop tool on both macOS and Windows while preserving consistent behavior across development and packaged environments."
+      }
+    ]
+  },
+  "outcome": {
+    "title": "Outcome",
+    "paragraphs": [
+      "The project evolved from a personal automation need into a packaged desktop application that provides a repeatable workflow for preparing, validating, and sending personalized emails."
+    ],
+    "highlights": [
+      "Working desktop application",
+      "Automated email workflow",
+      "Tested core functionality",
+      "macOS and Windows builds"
+    ]
+  },
+  "lessons_learned": {
+    "title": "Lessons Learned",
+    "items": [
+      "Automation is most useful when the surrounding validation and user workflow are designed together with the core functionality.",
+      "Packaging a Python application introduces platform-specific concerns that do not appear during normal development.",
+      "Automated testing and CI/CD make small desktop utilities significantly easier to maintain and release."
+    ]
+  },
+  "showcase": []
+}
