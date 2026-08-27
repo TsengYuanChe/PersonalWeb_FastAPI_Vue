@@ -1,0 +1,91 @@
+{
+  "slug": "backend-service",
+  "title": "Backend Service",
+  "subtitle": "Personal Analytics Backend Platform",
+  "category": "Backend System",
+  "summary": "A cloud-deployed backend platform providing authentication and shared infrastructure for future analytics and tracking services.",
+  "cover": "/images/projects/covers/backend-service.webp",
+  "cover_alt": "Backend Service project cover",
+  "cover_ready": true,
+  "period": "2026 — Present",
+  "role": "Backend Developer",
+  "status": "live",
+  "website_url": "https://api.adamtseng.com/docs",
+  "source_url": "https://github.com/TsengYuanChe/backend-service",
+  "technologies": [
+    "FastAPI",
+    "PostgreSQL / Cloud SQL",
+    "Docker",
+    "Cloud Run"
+  ],
+  "overview": {
+    "title": "Overview",
+    "paragraphs": [
+      "Backend Service is a reusable backend platform designed to provide shared APIs and centralized data infrastructure for my personal projects.",
+      "The first milestone establishes the production foundation with authentication, PostgreSQL persistence, containerized deployment, and automated delivery. Future analytics and tracking capabilities can be added on top of this foundation as independent backend features."
+    ]
+  },
+  "responsibilities": {
+    "title": "Responsibilities",
+    "items": [
+      "Design and implement the FastAPI backend structure and REST API endpoints.",
+      "Build account authentication using Argon2 password hashing and JWT access tokens.",
+      "Integrate PostgreSQL through SQLAlchemy and deploy the production database on Google Cloud SQL.",
+      "Containerize the application with Docker and deploy it to Google Cloud Run.",
+      "Build an automated deployment pipeline using GitHub Actions and Google Artifact Registry.",
+      "Configure a custom HTTPS API domain and production environment settings."
+    ]
+  },
+  "technical_highlights": {
+    "title": "Technical Highlights",
+    "paragraphs": [
+      "The project establishes a production-ready backend foundation while keeping the application layer largely independent from its cloud infrastructure. Standard PostgreSQL and SQLAlchemy interfaces allow the backend architecture to evolve without tightly coupling application logic to a specific cloud provider."
+    ],
+    "highlights": [
+      "JWT-based authentication",
+      "PostgreSQL / Cloud SQL integration",
+      "Containerized backend deployment",
+      "Automated cloud delivery",
+      "Extensible API foundation"
+    ]
+  },
+  "challenges": {
+    "title": "Challenges",
+    "items": [
+      {
+        "title": "Building an extensible backend foundation",
+        "description": "The service is intended to support multiple future analytics and tracking features, requiring a structure that can grow without tightly coupling unrelated API domains."
+      },
+      {
+        "title": "Moving from local development to cloud infrastructure",
+        "description": "The project required connecting local FastAPI and PostgreSQL development with Cloud SQL, containerized execution, environment-based configuration, and production deployment."
+      },
+      {
+        "title": "Automating production delivery",
+        "description": "The deployment workflow was designed to build Docker images, publish them through Artifact Registry, and deploy new Cloud Run revisions automatically from repository changes."
+      }
+    ]
+  },
+  "outcome": {
+    "title": "Outcome",
+    "paragraphs": [
+      "The first development milestone delivered a working production backend with authentication, persistent cloud storage, containerized deployment, and an automated delivery pipeline."
+    ],
+    "highlights": [
+      "Production FastAPI service",
+      "Cloud SQL persistence",
+      "Automated Cloud Run deployment",
+      "Public Swagger documentation",
+      "Custom HTTPS API domain"
+    ]
+  },
+  "lessons_learned": {
+    "title": "Lessons Learned",
+    "items": [
+      "Building a backend for future expansion requires establishing clear application boundaries before feature complexity grows.",
+      "Containerization and environment-based configuration make the transition between local and cloud environments easier to manage.",
+      "Automating the deployment path reduces operational work and creates a stronger foundation for frequent backend updates."
+    ]
+  },
+  "showcase": []
+}
