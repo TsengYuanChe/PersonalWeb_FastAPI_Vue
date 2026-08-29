@@ -1,0 +1,96 @@
+{
+  "slug": "yt-pod-crawler",
+  "title": "YouTube & Podcast Summarizer",
+  "subtitle": "AI Media Processing Automation",
+  "category": "AI Automation",
+  "summary": "A Python automation tool that collects YouTube and podcast content, transcribes audio with Whisper, and generates structured summaries with GPT.",
+  "cover": "/images/projects/covers/yt-pod-crawler.webp",
+  "cover_alt": "YouTube and podcast AI summarization automation project cover",
+  "cover_ready": true,
+  "period": "2024/10",
+  "role": "Developer",
+  "status": "opensource",
+  "website_url": null,
+  "source_url": "https://github.com/TsengYuanChe/yt_pod_crawler",
+  "technologies": [
+    "Python",
+    "OpenAI Whisper",
+    "GPT-3.5",
+    "YouTube Data API",
+    "yt-dlp",
+    "RSS"
+  ],
+  "overview": {
+    "title": "Overview",
+    "paragraphs": [
+      "YouTube & Podcast Summarizer is a Python automation project developed to collect media content from YouTube channels and podcast RSS feeds and transform it into structured summaries.",
+      "The workflow covers content discovery, date-based filtering, audio downloading, speech transcription with Whisper, and GPT-based summarization, allowing multiple channels to be processed through a repeatable pipeline."
+    ]
+  },
+  "responsibilities": {
+    "title": "Responsibilities",
+    "items": [
+      "Analyze client requirements and define the end-to-end media processing workflow.",
+      "Implement YouTube channel URL parsing, channel information retrieval, and video discovery.",
+      "Build podcast RSS feed discovery and date-based episode filtering.",
+      "Download audio content using yt-dlp and podcast media URLs.",
+      "Integrate OpenAI Whisper for audio transcription.",
+      "Integrate GPT-3.5 for transcript summarization and analysis.",
+      "Support processing multiple channels in a single execution and organize outputs by channel and media title."
+    ]
+  },
+  "technical_highlights": {
+    "title": "Technical Highlights",
+    "paragraphs": [
+      "The project combines media discovery, audio processing, speech recognition, and language-model summarization into a single automated workflow for both YouTube and podcast sources."
+    ],
+    "highlights": [
+      "YouTube channel and video discovery",
+      "Podcast RSS feed processing",
+      "Automated MP3 downloading",
+      "Whisper speech-to-text transcription",
+      "GPT-based structured summarization",
+      "Multi-channel batch processing"
+    ]
+  },
+  "challenges": {
+    "title": "Challenges",
+    "items": [
+      {
+        "title": "Supporting different media sources",
+        "description": "YouTube channels and podcast RSS feeds expose content through different structures, requiring separate collection and filtering logic before entering the same processing pipeline."
+      },
+      {
+        "title": "Processing long-form transcripts",
+        "description": "Transcribed media content could be too large to summarize directly, so transcripts needed to be divided into smaller sections before their summaries were combined into a final result."
+      },
+      {
+        "title": "Creating a practical batch workflow",
+        "description": "The tool needed to support multiple channels while keeping generated transcripts and summaries organized in predictable output directories."
+      }
+    ]
+  },
+  "outcome": {
+    "title": "Outcome",
+    "paragraphs": [
+      "The completed tool automated the workflow from media discovery to structured text output for both YouTube and podcast content.",
+      "It supported multiple channel inputs, organized results automatically, and generated summaries containing both key content and future outlook sections."
+    ],
+    "highlights": [
+      "End-to-end automated media processing",
+      "YouTube and podcast support",
+      "Multi-channel batch execution",
+      "Structured transcription and summary output"
+    ]
+  },
+  "lessons_learned": {
+    "title": "Lessons Learned",
+    "items": [
+      "Breaking a media-processing workflow into independent stages makes integration and troubleshooting easier.",
+      "Different content platforms require source-specific collection logic even when the downstream processing workflow is shared.",
+      "Long-form AI processing requires managing input size and combining intermediate results into a coherent final output.",
+      "Small workflow improvements such as predictable output paths and batch processing can significantly improve usability for the end user."
+    ]
+  },
+  "showcase": []
+}
