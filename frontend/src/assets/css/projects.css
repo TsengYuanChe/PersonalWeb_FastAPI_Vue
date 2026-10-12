@@ -10,6 +10,161 @@
 }
 
 /* Project Card Layout */
+.project-showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.project-showcase-item {
+  min-width: 0;
+  margin: 0;
+}
+
+.project-showcase-thumbnail {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid rgba(143, 163, 189, 0.28);
+  border-radius: 6px;
+  background: rgba(5, 14, 27, 0.72);
+  cursor: zoom-in;
+}
+
+.project-showcase-thumbnail img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.project-showcase-enlarge {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  padding: 0 5px;
+  border-radius: 3px;
+  color: #fff;
+  background: rgba(5, 14, 27, 0.8);
+}
+
+.project-showcase-thumbnail:hover {
+  border-color: #9bbcff;
+}
+
+.project-showcase-thumbnail:focus-visible,
+.showcase-lightbox button:focus-visible {
+  outline: 2px solid #9bbcff;
+  outline-offset: 3px;
+}
+
+.project-showcase-item figcaption {
+  margin-top: 6px;
+  color: var(--site-secondary);
+  font-size: 0.82rem;
+  overflow-wrap: anywhere;
+}
+
+.showcase-lightbox {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: max(64px, env(safe-area-inset-top)) 5vw max(16px, env(safe-area-inset-bottom));
+  border: 0;
+  color: var(--site-text, #fff);
+  background: rgba(5, 10, 20, 0.92);
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+.showcase-lightbox[open] {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 12px;
+}
+
+.showcase-lightbox::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.showcase-lightbox__stage {
+  display: grid;
+  place-items: center;
+  min-height: 0;
+  min-width: 0;
+}
+
+.showcase-lightbox__stage img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 90vw;
+  max-height: min(85vh, 100%);
+  object-fit: contain;
+  min-height: 0;
+}
+
+.showcase-lightbox button {
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(143, 163, 189, 0.5);
+  border-radius: 8px;
+  color: #fff;
+  background: #142237;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.showcase-lightbox button:hover {
+  background: #263d59;
+}
+
+.showcase-lightbox__close {
+  position: absolute;
+  top: max(8px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+}
+
+.showcase-lightbox__footer {
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) 48px;
+  align-items: center;
+  gap: 12px;
+}
+
+.showcase-lightbox__info {
+  grid-column: 2;
+  max-height: 20dvh;
+  overflow: auto;
+  text-align: center;
+  overflow-wrap: anywhere;
+  font-size: 0.9rem;
+}
+
+@media (min-width: 769px) {
+  .showcase-lightbox__stage img {
+    max-width: calc(90vw - 120px);
+  }
+
+  .showcase-lightbox__footer > button {
+    position: absolute;
+    top: calc(50% - 24px);
+    left: 3vw;
+  }
+
+  .showcase-lightbox__footer > button:last-child {
+    left: auto;
+    right: 3vw;
+  }
+}
+
 .projects-section {
   padding-bottom: 3rem;
 }
@@ -330,6 +485,12 @@
   flex-wrap: wrap;
   gap: 10px;
   max-width: 500px;
+}
+
+.project-detail-tags {
+  width: 100%;
+  max-width: none;
+  justify-content: flex-start;
 }
   
 .home-project-list {

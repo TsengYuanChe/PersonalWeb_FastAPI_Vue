@@ -334,7 +334,8 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - 顯示 API 回傳的所有 projects，沒有首頁三筆限制。
 - `ProjectCard.vue` 完全由 backend Project object 建立並負責 Summary Header、toggle 與 transition orchestration；`ProjectDetail.vue` 接收同一物件，依 canonical Project section order render 可用的 detail content，並在最後顯示 technologies。
 - Action 依序判斷 `website_url`、`source_url`；兩者皆無時顯示不可點擊的 `🔒 Internal`。這個判斷與首頁共用 `ProjectAction.vue`，不依賴 `status` 決定連結文字。
-- `showcase` 目前保留在資料 contract 中但三個專案皆為空陣列，因此頁面不 render Showcase 標題或空容器。
+- `ProjectDetail.vue` 依 backend `showcase` 陣列順序呈現縮圖；空陣列不 render 標題或空容器。CSS Grid 在 >1024px／769–1024px／≤768px 分別固定 5／3／2 欄，gap 12px。縮圖容器固定 16:9、圖片使用 contain；建議素材為 1600×900 WebP，caption 位於容器下方。
+- `ShowcaseLightbox.vue` 使用原生 modal dialog；點擊縮圖開啟同一圖片來源，支援按鈕／左右鍵循環切換、Escape／關閉按鈕／背景關閉。單張隱藏切換按鈕，caption 與計數位於圖片下方；關閉及卸載會解除背景 scroll lock 並恢復焦點。
 - Project Card 預設全部收合並永遠顯示 Summary Header；Overview 起的 detail sections 只有展開時才 render。
 - Summary Header 可用滑鼠點擊切換，Meta 中的語意化 More/Less Detail button 提供鍵盤操作、`aria-expanded` 與 `aria-controls`。Live／Source links 不觸發 toggle。
 - 展開狀態由 `ProjectView.vue` 以單一 `expandedProjectSlug` 管理，因此同一時間最多只有一個 Project 展開；狀態不寫入 URL 或 localStorage。
@@ -345,7 +346,7 @@ Profile、Journey、Projects Preview 使用 frontend local JSON，目的是避�
 - Search／Filter 使用直接置於頁面背景的輕量工具列，不使用外層 Card 容器。Desktop 依序排列 Category、Technology、彈性空間／Clear filters 與右側克制寬度的 Search；Tablet、Mobile 依既有 `1024px`、`768px` breakpoint 重排。
 - Field 的可見標題已移除，但原生 label 仍以 visually hidden 方式保留。欄位視覺目前由 Projects feature 的 `projects.css` 與 `projects-rwd.css` 管理，尚未抽成全域表單系統。
 - 詳細頁仍使用既有大型 card 視覺；首頁 Preview styles 使用 `.home-project-*` namespace，不會覆蓋它。
-- 目前是詳細頁初版：完整 backend narrative、基本狀態與單卡收合／展開已接通，但 Showcase、圖片／架構圖與進一步 layout 整理仍待完成。
+- 完整 backend narrative、單卡收合／展開及 Showcase Grid／Lightbox 已接通；Showcase 圖片內容、架構圖與進一步 layout 整理仍待完成。
 
 ## 7. 共用 UI、Navigation、Footer
 

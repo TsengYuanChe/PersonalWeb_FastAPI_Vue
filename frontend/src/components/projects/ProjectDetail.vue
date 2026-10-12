@@ -1,10 +1,20 @@
 <script setup>
-defineProps({
+import { computed, ref } from 'vue'
+import ShowcaseLightbox from '@/components/projects/ShowcaseLightbox.vue'
+
+const props = defineProps({
   project: {
     type: Object,
     required: true,
   },
 })
+
+const lightbox = ref(null)
+const showcase = computed(() => safeArray(props.project.showcase).map((item) => ({
+  src: item.image || item.src,
+  alt: item.image_alt || item.alt || '',
+  caption: item.caption,
+})))
 
 function safeArray(value) {
   return Array.isArray(value) ? value : []
@@ -108,9 +118,29 @@ function safeArray(value) {
     </ul>
   </section>
 
+  <section v-if="showcase.length" class="project-detail-section">
+    <h3 class="text-light h6 mb-2">Showcase</h3>
+    <div class="project-showcase-grid">
+      <figure v-for="(item, index) in showcase" :key="`${index}-${item.src}`" class="project-showcase-item">
+        <button
+          type="button"
+          class="project-showcase-thumbnail"
+          aria-haspopup="dialog"
+          :aria-label="`Enlarge image ${index + 1}: ${item.alt || item.caption || project.title}`"
+          @click="lightbox.open(index, $event.currentTarget)"
+        >
+          <img :src="item.src" :alt="item.alt" loading="lazy" />
+          <span class="project-showcase-enlarge" aria-hidden="true">⤢</span>
+        </button>
+        <figcaption v-if="item.caption">{{ item.caption }}</figcaption>
+      </figure>
+    </div>
+    <ShowcaseLightbox ref="lightbox" :images="showcase" />
+  </section>
+
   <div
     v-if="safeArray(project.technologies).length"
-    class="tag-group mt-3"
+    class="tag-group project-detail-tags mt-3"
     aria-label="Technologies"
   >
     <span v-for="item in safeArray(project.technologies)" :key="item" class="tag tag-tool">

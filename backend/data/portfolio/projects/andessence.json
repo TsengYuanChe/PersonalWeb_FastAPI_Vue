@@ -1,84 +1,117 @@
 {
   "slug": "andessence",
-  "title": " ANDESSENCE",
-  "subtitle": "Commercial Marketing Website",
+  "title": "ANDESSENCE",
+  "subtitle": "Commercial Website & Operations Platform",
   "category": "Commercial",
-  "summary": "Commercial Marketing website focused on branding, SEO, and responsive design.",
+  "summary": "A full-stack commercial platform combining multi-brand storefronts, online ordering, inventory management, and internal business operations.",
   "cover": "/images/projects/covers/andessence.webp",
-  "cover_alt": "ANDESSENCE Website project cover",
+  "cover_alt": "ANDESSENCE commercial website and operations platform cover",
   "cover_ready": true,
   "period": "",
-  "role": "Designer & Developer",
+  "role": "Designer & Full-stack Developer",
   "status": "live",
   "website_url": "https://andessence.shop/",
   "source_url": null,
-  "technologies": ["Vue 3", "Firebase", "SEO", "Responsive Design"],
+  "technologies": [
+    "Vue 3",
+    "TypeScript",
+    "FastAPI",
+    "PostgreSQL",
+    "Firebase",
+    "Cloud Run",
+    "GitHub Actions"
+  ],
   "overview": {
     "title": "Overview",
     "paragraphs": [
-      "Mamatoya is a commercial website developed for a restaurant brand, focusing on presenting the business through a clean, responsive, and visually engaging online experience.",
-      "The project emphasizes translating business requirements into a production-ready website that supports brand identity, improves online visibility, and provides an intuitive browsing experience across devices."
+      "ANDESSENCE is a commercial platform developed for a multi-brand business, combining a customer-facing storefront with backend services and internal management tools.",
+      "The platform supports three sub-brands through dedicated brand pages, product catalogs, and an online ordering workflow. Behind the storefront, a FastAPI backend manages order processing, inventory reservation, and operational data, while an authenticated admin interface supports daily business activities.",
+      "The project covers the full development lifecycle, from translating business requirements into website design and system workflows to cloud deployment and ongoing maintenance."
     ]
   },
   "responsibilities": {
     "title": "Responsibilities",
     "items": [
-      "Gather business requirements and translate them into a structured website.",
-      "Design and implement responsive frontend pages using Vue.",
-      "Build reusable page sections for menus, branding, and business information.",
-      "Optimize page structure, images, and metadata for performance and search visibility.",
-      "Deploy and maintain the production website through Firebase Hosting.",
-      "Support future content updates while preserving a consistent visual experience."
+      "Gather business requirements and translate them into website features, data structures, and operational workflows.",
+      "Design and develop responsive storefront pages, brand presentations, product catalogs, and ordering interfaces using Vue 3 and TypeScript.",
+      "Develop REST APIs using FastAPI and PostgreSQL for order processing, inventory management, authentication, and business data.",
+      "Implement an authenticated admin interface for managing orders and reviewing products, inventory, KOLs, shipments, and operational records.",
+      "Integrate LINE Messaging API notifications, Google Forms backup, and KOL-specific ordering workflows.",
+      "Implement technical SEO, structured content organization, and responsive layouts across desktop and mobile devices.",
+      "Configure cloud deployment and automated delivery using Firebase Hosting, Cloud Run, Docker, and GitHub Actions."
     ]
   },
   "technical_highlights": {
     "title": "Technical Highlights",
     "paragraphs": [
-      "The project focuses on delivering a production-ready commercial website with responsive layouts, maintainable content organization, and foundational SEO, while keeping deployment and future updates straightforward."
+      "The platform integrates a multi-brand Vue storefront with a FastAPI backend and PostgreSQL database. Its order workflow validates product information and pricing against database records, reserves available inventory, and provides operational visibility through an authenticated management interface.",
+      "The frontend and backend are deployed independently, with automated deployment workflows supporting ongoing updates. External integrations extend the platform with order notifications, form backups, and KOL-specific ordering experiences."
     ],
     "highlights": [
-      "Responsive commercial website",
-      "Component-based frontend",
-      "Technical SEO foundation",
-      "Firebase deployment",
-      "Maintainable content structure"
+      "Multi-brand storefront architecture",
+      "Full-stack order processing",
+      "Transactional inventory reservation",
+      "JWT-protected admin interface",
+      "LINE Messaging API integration",
+      "KOL-specific ordering workflows",
+      "Cloud deployment and CI/CD"
     ]
   },
   "challenges": {
     "title": "Challenges",
     "items": [
       {
-        "title": "Translating business requirements",
-        "description": "Understanding business goals and converting them into a website that accurately represents the brand while remaining practical to develop and maintain."
+        "title": "Translating business operations into software",
+        "description": "The business relied on manual order confirmation and fulfillment processes. Designing the platform required converting these activities into practical digital workflows without introducing unnecessary complexity."
       },
       {
-        "title": "Balancing branding and usability",
-        "description": "Creating a visually engaging experience without sacrificing readability, accessibility, or responsive behavior across different devices."
+        "title": "Maintaining consistency across the ordering workflow",
+        "description": "Orders involve product information, pricing, inventory availability, and payment and shipping statuses. Coordinating these elements required backend validation, transactional inventory updates, and clear operational state management."
       },
       {
-        "title": "Delivering within commercial constraints",
-        "description": "Balancing design expectations, development effort, project budget, and future maintainability while delivering a production-ready website."
+        "title": "Balancing brand presentation and system functionality",
+        "description": "The storefront needed to communicate distinct brand identities while supporting product discovery and ordering. The implementation also had to remain responsive, maintainable, and adaptable to changing business requirements."
       }
     ]
   },
   "outcome": {
     "title": "Outcome",
     "paragraphs": [
-      "The project resulted in a production-ready commercial website that strengthens the client's online presence while providing a maintainable foundation for future updates."
+      "The project delivered a deployed commercial platform connecting a multi-brand storefront with an operational backend and internal management interface.",
+      "Customers can explore products and submit orders online, while staff can review orders, update payment and shipping statuses, monitor inventory, and receive LINE notifications. The platform provides a foundation for ongoing business operations and incremental feature development."
     ],
     "highlights": [
-      "Production commercial website",
-      "Responsive user experience",
-      "SEO-ready foundation"
+      "Production multi-brand website",
+      "Integrated online ordering workflow",
+      "Internal operations dashboard",
+      "Inventory and order-status management",
+      "Automated cloud deployment"
     ]
   },
   "lessons_learned": {
     "title": "Lessons Learned",
     "items": [
-      "Understanding business goals is just as important as implementing technical solutions.",
-      "Good commercial websites balance visual design, usability, and long-term maintainability.",
-      "Clear communication with clients leads to better technical decisions and smoother project delivery."
+      "Understanding real business workflows is essential when translating requirements into practical software features.",
+      "Business-critical data such as pricing and inventory should be validated and controlled by the backend rather than trusted from frontend inputs.",
+      "Integrating frontend, backend, database, and external services requires clear data flows and consistent operational states.",
+      "Commercial software development involves balancing visual quality, business usability, delivery constraints, and long-term maintainability."
     ]
   },
-  "showcase": []
+  "showcase": [
+    {
+      "image": "/images/projects/showcases/andessence/home.webp",
+      "image_alt": "ANDESSENCE homepage",
+      "caption": "Multi-brand Storefront"
+    },
+    {
+      "image": "/images/projects/showcases/andessence/products.webp",
+      "image_alt": "ANDESSENCE product catalog",
+      "caption": "Product Catalog"
+    },
+    {
+      "image": "/images/projects/showcases/andessence/order.webp",
+      "image_alt": "ANDESSENCE ordering interface",
+      "caption": "Online Ordering"
+    }
+  ]
 }
