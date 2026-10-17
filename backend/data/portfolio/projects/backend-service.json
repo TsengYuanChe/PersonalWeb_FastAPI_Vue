@@ -7,10 +7,10 @@
   "cover": "/images/projects/covers/backend-service.webp",
   "cover_alt": "Backend Service project cover",
   "cover_ready": true,
-  "period": "2026 — Present",
+  "period": "2026/10 — Present",
   "role": "Backend Developer",
   "status": "live",
-  "website_url": "https://api.adamtseng.com/docs",
+  "website_url": null,
   "source_url": "https://github.com/TsengYuanChe/backend-service",
   "technologies": [
     "FastAPI",

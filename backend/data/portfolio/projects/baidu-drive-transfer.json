@@ -1,0 +1,112 @@
+{
+  "slug": "baidu-drive-transfer",
+  "title": "Baidu Netdisk to Google Drive Transfer",
+  "subtitle": "Cloud-to-Cloud File Transfer Service",
+  "category": "Backend",
+  "summary": "A Python-based cloud-to-cloud file transfer service that streams files from Baidu Netdisk to Google Drive without local disk staging, featuring background job management, progress tracking, and containerized cloud deployment.",
+  "cover": "/images/projects/covers/baidu-drive-transfer.webp",
+  "cover_alt": "Baidu Netdisk to Google Drive cloud transfer project cover",
+  "cover_ready": true,
+  "period": "2026/09 - 2026/10",
+  "role": "Backend Developer",
+  "status": "live",
+  "website_url": null,
+  "source_url": "https://github.com/TsengYuanChe/baidu-drive-transfer",
+  "technologies": [
+    "Python",
+    "FastAPI",
+    "HTTP Streaming",
+    "Google Drive API",
+    "OAuth 2.0",
+    "Docker",
+    "Cloud Run",
+    "GitHub Actions"
+  ],
+  "overview": {
+    "title": "Overview",
+    "paragraphs": [
+      "Baidu Netdisk to Google Drive Transfer is a Python-based backend service designed to transfer files from password-protected Baidu Netdisk shared links directly to Google Drive.",
+      "The service uses a streaming-based architecture to process files in memory rather than downloading entire files to local storage. This approach reduces local disk requirements and enables large files to be transferred through a containerized application.",
+      "Built with FastAPI, the project provides REST APIs for initiating transfers, monitoring progress, and requesting cancellation. The service is containerized with Docker and includes an automated deployment workflow targeting Google Cloud Run."
+    ]
+  },
+  "responsibilities": {
+    "title": "Responsibilities",
+    "items": [
+      "Design and implement a cloud-to-cloud file transfer workflow integrating Baidu Netdisk and Google Drive.",
+      "Develop FastAPI endpoints for creating transfer jobs, monitoring execution status, and requesting cancellation.",
+      "Implement HTTP streaming to transfer file data through memory without staging complete files on local disk.",
+      "Integrate Google Drive OAuth 2.0 authentication and resumable upload sessions.",
+      "Implement background transfer execution using Python threading and in-memory job state management.",
+      "Track transfer progress, transferred bytes, and download and upload speeds.",
+      "Implement recursive file discovery, destination folder creation, and filename-based duplicate detection.",
+      "Containerize the application using Docker and configure automated image builds and Cloud Run deployment through GitHub Actions."
+    ]
+  },
+  "technical_highlights": {
+    "title": "Technical Highlights",
+    "paragraphs": [
+      "The core architecture streams file data from Baidu Netdisk through a memory buffer to Google Drive. Source data is read in 100 KiB chunks and uploaded through Google Drive resumable upload sessions using 8 MiB chunks, avoiding the need to store complete files on the worker's local disk.",
+      "Transfer operations run in background Python threads while FastAPI exposes job management endpoints. The application maintains execution state and progress metrics in memory, supports cooperative cancellation, and limits execution to one active transfer per application process.",
+      "The deployment workflow uses Docker and GitHub Actions to build and publish container images to Google Artifact Registry before deploying to Cloud Run. Google Cloud authentication in the CI/CD pipeline uses Workload Identity Federation."
+    ],
+    "highlights": [
+      "Memory-efficient HTTP streaming",
+      "Google Drive resumable uploads",
+      "Background job processing",
+      "Real-time transfer progress tracking",
+      "Cooperative job cancellation",
+      "OAuth 2.0 integration",
+      "Docker containerization",
+      "Cloud Run CI/CD deployment"
+    ]
+  },
+  "challenges": {
+    "title": "Challenges",
+    "items": [
+      {
+        "title": "Transferring files without local disk staging",
+        "description": "Traditional file transfer workflows often download complete files before uploading them to another service. The implementation instead uses chunked HTTP streaming and in-memory buffering to reduce local storage requirements while coordinating two independent network operations."
+      },
+      {
+        "title": "Integrating different cloud storage interfaces",
+        "description": "Baidu Netdisk shared links require authentication, share verification, file discovery, and download-link retrieval, while Google Drive requires OAuth authorization and resumable upload sessions. Coordinating these different interfaces required a dedicated transfer orchestration workflow."
+      },
+      {
+        "title": "Managing long-running background operations",
+        "description": "File transfers can take significant time and should not block API requests. The service uses background threads, job state tracking, progress reporting, and cooperative cancellation to manage transfer execution while exposing its status through REST endpoints."
+      },
+      {
+        "title": "Balancing simplicity and operational reliability",
+        "description": "The initial implementation uses in-memory job management and a single-active-transfer constraint to keep the architecture lightweight. This simplifies execution but introduces limitations around service restarts, persistent job history, and multi-instance coordination."
+      }
+    ]
+  },
+  "outcome": {
+    "title": "Outcome",
+    "paragraphs": [
+      "The project resulted in a containerized backend service capable of transferring files from Baidu Netdisk shared links to Google Drive through a streaming-based workflow without complete local-file staging.",
+      "The implementation provides transfer initiation, progress monitoring, cancellation requests, and basic duplicate-file handling. A GitHub Actions workflow also supports automated container builds and deployment to Google Cloud Run.",
+      "The project demonstrates practical experience in integrating external APIs, managing background workloads, designing resource-conscious data transfer pipelines, and deploying backend services to cloud infrastructure."
+    ],
+    "highlights": [
+      "Cloud-to-cloud file transfer service",
+      "Streaming-based transfer architecture",
+      "REST API for transfer management",
+      "Transfer progress and cancellation support",
+      "Containerized cloud deployment",
+      "Public source code"
+    ]
+  },
+  "lessons_learned": {
+    "title": "Lessons Learned",
+    "items": [
+      "Streaming data between external services can significantly reduce local storage requirements, but requires careful coordination of buffering, network operations, and upload sessions.",
+      "Long-running background tasks benefit from explicit lifecycle states, progress reporting, and cancellation mechanisms.",
+      "Integrating third-party APIs requires understanding authentication flows, request sequencing, and service-specific constraints.",
+      "In-memory job management is suitable for a lightweight single-process service, but persistent queues and shared state become important when introducing restart recovery or horizontal scaling.",
+      "Containerized deployment requires considering application state, credential management, and the execution characteristics of the target cloud platform."
+    ]
+  },
+  "showcase": []
+}
