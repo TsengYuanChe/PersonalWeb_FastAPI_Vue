@@ -108,5 +108,11 @@
       "Containerized deployment requires considering application state, credential management, and the execution characteristics of the target cloud platform."
     ]
   },
-  "showcase": []
+  "showcase": [
+    {
+        "image": "/images/projects/showcases/baidu-drive-transfer/application.webp",
+        "image_alt": "Baidu Netdisk to Google Drive transfer progress",
+        "caption": "Transfer Progress"
+    }
+  ]
 }
