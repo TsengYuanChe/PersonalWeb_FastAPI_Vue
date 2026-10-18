@@ -10,7 +10,7 @@ export async function trackWebsiteVisit(pagePath) {
       localStorage.setItem('visitor_id', visitorId)
     }
 
-    const response = await fetch(`${API_URL}/website-visits`, {
+    const response = await fetch(`${API_URL}/website-visits/visits`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
