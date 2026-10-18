@@ -30,7 +30,7 @@ router.afterEach((to, from, failure) => {
   if (failure) return
 
   // Ignore query-only changes
-  if (to.path === from.path) return
+  if (from.name !== undefined && to.path === from.path) return
 
   // Exclude admin pages
   if (to.path === '/admin' || to.path.startsWith('/admin/')) return
