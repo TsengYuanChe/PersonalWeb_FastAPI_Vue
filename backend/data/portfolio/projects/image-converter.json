@@ -7,7 +7,7 @@
   "cover": "/images/projects/covers/image-converter.webp",
   "cover_alt": "Image Converter project cover",
   "cover_ready": true,
-  "period": "2026/09",
+  "period": "2026 / 09",
   "role": "Designer & Developer",
   "status": "opensource",
   "website_url": null,
@@ -85,5 +85,16 @@
       "Good documentation is just as important as implementation for open-source projects."
     ]
   },
-  "showcase": []
+  "showcase": [
+    {
+      "image": "/images/projects/showcases/image-converter/options.webp",
+      "image_alt": "Options and usage of the Image Converter CLI",
+      "caption": "CLI Options and Usage"
+    },
+    {
+      "image": "/images/projects/showcases/image-converter/to_webp.webp",
+      "image_alt": "Result of converting images to WebP format using the Image Converter CLI",
+      "caption": "Converting Images to WebP"
+    }
+  ]
 }

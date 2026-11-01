@@ -7,7 +7,7 @@
   "cover": "/images/projects/covers/andessence.webp",
   "cover_alt": "ANDESSENCE commercial website and operations platform cover",
   "cover_ready": true,
-  "period": "2026/08 - Present",
+  "period": "2026 / 08 - Present",
   "role": "Designer & Full-stack Developer",
   "status": "live",
   "website_url": "https://andessence.shop/",
@@ -112,6 +112,16 @@
       "image": "/images/projects/showcases/andessence/order.webp",
       "image_alt": "ANDESSENCE ordering interface",
       "caption": "Online Ordering"
+    },
+    {
+      "image": "/images/projects/showcases/andessence/inventory.webp",
+      "image_alt": "ANDESSENCE admin inventory managenent interface",
+      "caption": "Inventory Managenent"
+    },
+    {
+      "image": "/images/projects/showcases/andessence/shipment.webp",
+      "image_alt": "ANDESSENCE admin order managenent interface",
+      "caption": "Order Management"
     }
   ]
 }
