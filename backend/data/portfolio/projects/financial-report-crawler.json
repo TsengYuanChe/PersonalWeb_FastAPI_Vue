@@ -1,0 +1,107 @@
+
+{
+  "slug": "financial-report-crawler",
+  "title": "Financial Report Crawler",
+  "subtitle": "Automated Financial Report Downloader",
+  "category": "Automation",
+  "summary": "An open-source Python automation tool that uses Selenium to collect and download financial report PDFs from Taiwan's securities reporting website, reducing repetitive manual work for financial professionals.",
+  "cover": "/images/projects/covers/financial-report-crawler.webp",
+  "cover_alt": "Financial Report Crawler project cover",
+  "cover_ready": true,
+  "period": "2024 / 10",
+  "role": "Designer & Developer",
+  "status": "opensource",
+  "website_url": null,
+  "source_url": "https://github.com/TsengYuanChe/Financial_report_crawler",
+  "technologies": [
+    "Python",
+    "Selenium",
+    "Web Scraping",
+    "WebDriver Manager",
+    "Automation"
+  ],
+  "overview": {
+    "title": "Overview",
+    "paragraphs": [
+      "Financial Report Crawler is an open-source Python automation tool developed to simplify the process of collecting annual financial reports for publicly listed companies in Taiwan.",
+      "The project originated from a practical request from a financial industry professional who regularly needed to download financial reports. Instead of manually navigating reporting pages and downloading individual PDF files, the tool automates the workflow using Selenium.",
+      "Users configure a stock code and a reporting year, after which the tool navigates the reporting website, identifies matching PDF links, downloads the available reports, and organizes them into a local folder."
+    ]
+  },
+  "responsibilities": {
+    "title": "Responsibilities",
+    "items": [
+      "Identify repetitive financial report collection tasks and translate the requirements into an automated workflow.",
+      "Develop a Python-based web crawler using Selenium for browser navigation and report discovery.",
+      "Implement configurable stock code and reporting year parameters.",
+      "Extract matching PDF download links and automate batch downloads.",
+      "Organize downloaded reports into local directories based on stock code and reporting year.",
+      "Introduce configurable delays between downloads to reduce excessive requests to the target website.",
+      "Integrate WebDriver Manager to simplify ChromeDriver setup and document installation and usage instructions."
+    ]
+  },
+  "technical_highlights": {
+    "title": "Technical Highlights",
+    "paragraphs": [
+      "The tool uses Selenium to automate browser interactions with Taiwan's financial reporting website. By configuring a stock code and a reporting year, users can execute a repeatable workflow that discovers and downloads matching PDF reports.",
+      "WebDriver Manager handles ChromeDriver installation and configuration, reducing manual environment setup. Downloaded reports are stored in automatically named directories, while configurable delays help control the frequency of download requests.",
+      "The implementation is intentionally lightweight, using a locally executed Python script without requiring a database, backend service, or cloud infrastructure."
+    ],
+    "highlights": [
+      "Selenium browser automation",
+      "Automated PDF link extraction",
+      "Batch financial report downloads",
+      "Configurable stock code and reporting year",
+      "Automatic local file organization",
+      "Configurable request delays",
+      "Simplified ChromeDriver setup"
+    ]
+  },
+  "challenges": {
+    "title": "Challenges",
+    "items": [
+      {
+        "title": "Automating a manual reporting workflow",
+        "description": "Financial report collection involved repeatedly navigating reporting pages, locating relevant documents, and downloading PDF files. The challenge was converting these manual steps into a repeatable automated process."
+      },
+      {
+        "title": "Extracting reports from dynamic web pages",
+        "description": "The tool needed to interact with website elements and identify report download links through browser automation. Its selectors and navigation logic also depend on the target website's structure, which may change over time."
+      },
+      {
+        "title": "Managing automated download requests",
+        "description": "Batch downloading requires balancing execution efficiency with responsible request frequency. Configurable delays were introduced to avoid sending excessive consecutive requests."
+      },
+      {
+        "title": "Reducing environment setup complexity",
+        "description": "Selenium requires a compatible browser driver. Integrating WebDriver Manager simplified the setup process and reduced the need for users to manually install ChromeDriver."
+      }
+    ]
+  },
+  "outcome": {
+    "title": "Outcome",
+    "paragraphs": [
+      "The project delivered a Python-based automation tool that replaces repetitive browser navigation and individual PDF downloads with a configurable batch workflow.",
+      "By automating report discovery, downloading, and local file organization, the tool provides a practical solution for recurring financial document collection tasks.",
+      "The project is published as open-source software with installation instructions and usage documentation, allowing other developers to inspect, use, and adapt the implementation."
+    ],
+    "highlights": [
+      "Automated financial report collection",
+      "Reduced repetitive manual downloading",
+      "Batch PDF download workflow",
+      "Organized local report storage",
+      "Open-source Python utility"
+    ]
+  },
+  "lessons_learned": {
+    "title": "Lessons Learned",
+    "items": [
+      "Understanding an existing manual workflow helps identify opportunities where small automation tools can deliver practical value.",
+      "Browser automation is useful when direct data access is unavailable, but it requires ongoing attention to changes in page structure and selectors.",
+      "Configurable inputs and predictable output directories make automation scripts easier to reuse across different reporting tasks.",
+      "Automated data collection should account for request frequency and the operational constraints of external websites.",
+      "Reducing installation complexity and providing clear documentation improves the usability of developer tools."
+    ]
+  },
+  "showcase": []
+}
