@@ -1,0 +1,115 @@
+
+{
+  "slug": "tracking-trade",
+  "title": "Tracking Trade",
+  "subtitle": "LINE-Based Paper Trading & Performance Tracker",
+  "category": "LINE Bot",
+  "summary": "A cloud-based paper trading tracker built with Python and FastAPI to record simulated Taiwan stock trades through LINE, evaluate trading recommendations using market data, and automatically deliver daily portfolio performance reports.",
+  "cover": "/images/projects/covers/tracking-trade.webp",
+  "cover_alt": "Tracking Trade paper trading and portfolio performance tracking project cover",
+  "cover_ready": true,
+  "period": "2025 / 11 - 2025 / 12",
+  "role": "Designer & Developer",
+  "status": "opensource",
+  "website_url": null,
+  "source_url": "https://github.com/TsengYuanChe/tracking_trade",
+  "technologies": [
+    "Python",
+    "FastAPI",
+    "LINE Messaging API",
+    "Google Cloud Storage",
+    "Cloud Run",
+    "Cloud Build",
+    "Docker",
+    "FinMind",
+    "Pandas"
+  ],
+  "overview": {
+    "title": "Overview",
+    "paragraphs": [
+      "Tracking Trade is a cloud-based paper trading system developed to independently evaluate stock trading recommendations from a financial content creator. Instead of placing real trades, the application records simulated trading decisions and tracks their performance over time.",
+      "Users submit daily trading actions through a LINE bot, including buying, adding to positions, reducing positions, and selling. A FastAPI webhook processes these messages and stores the trading history as a CSV ledger in Google Cloud Storage.",
+      "Every trading day at 4 PM, the system generates a portfolio performance report using market closing prices. The report summarizes completed trades, open positions, average entry costs, and unrealized returns, then delivers the results directly through LINE."
+    ]
+  },
+  "responsibilities": {
+    "title": "Responsibilities",
+    "items": [
+      "Design and develop a personal paper trading system to track and evaluate external stock trading recommendations.",
+      "Implement a FastAPI webhook to receive, validate, and process trading commands from LINE.",
+      "Integrate the LINE Messaging API for trade entry confirmation and automated report delivery.",
+      "Build CSV-based trade storage using Google Cloud Storage for persistent trading records.",
+      "Implement trade parsing and position tracking for buy, add, reduce, and sell actions.",
+      "Integrate FinMind market data to retrieve historical and closing stock prices.",
+      "Develop portfolio performance calculations and text-based reporting for completed trades and open positions.",
+      "Containerize the application with Docker and deploy the webhook and reporting components to Google Cloud Run.",
+      "Configure automated daily report execution at 4 PM.",
+      "Maintain project configuration, deployment scripts, and supporting utilities."
+    ]
+  },
+  "technical_highlights": {
+    "title": "Technical Highlights",
+    "paragraphs": [
+      "The application separates trade collection from performance reporting. A FastAPI webhook handles incoming LINE messages, validates the trading command format, and updates a CSV ledger stored in Google Cloud Storage. This allows trading decisions to be recorded directly from a messaging interface without maintaining a separate frontend application.",
+      "A dedicated reporting job reads the trade history, groups transactions by stock, retrieves market closing prices through FinMind, and calculates performance for open and completed positions. The resulting report includes transaction history, average entry costs, current closing prices, and percentage returns.",
+      "The webhook runs as a Cloud Run service, while the reporting process runs as a separate Cloud Run job. Containerized deployment and Cloud Build configuration support the application's cloud-based execution and maintenance."
+    ],
+    "highlights": [
+      "LINE-based trade entry and notifications",
+      "FastAPI webhook integration",
+      "Cloud Storage CSV persistence",
+      "Simulated trade and position tracking",
+      "Historical stock price integration",
+      "Automated daily performance reporting",
+      "Cloud Run service and batch job separation",
+      "Docker-based cloud deployment"
+    ]
+  },
+  "challenges": {
+    "title": "Challenges",
+    "items": [
+      {
+        "title": "Translating trading recommendations into structured records",
+        "description": "Daily recommendations were originally communicated as informal trading instructions. The system needed a consistent message format to capture stock codes, transaction dates, actions, and prices for subsequent analysis."
+      },
+      {
+        "title": "Tracking positions across multiple transactions",
+        "description": "A single stock could have multiple simulated entries over different dates and prices. The reporting logic needed to organize these transactions, calculate average entry costs, and distinguish open positions from completed trades."
+      },
+      {
+        "title": "Handling missing historical market prices",
+        "description": "Some trading records did not include explicit prices and required historical closing-price lookups. Missing or unresolved price values could propagate into average-cost and return calculations, revealing limitations in data validation and error handling."
+      },
+      {
+        "title": "Integrating messaging, storage, and cloud execution",
+        "description": "The project combined LINE webhooks, persistent CSV storage, external market data, and scheduled reporting. Separating message processing from batch calculations helped organize these responsibilities into independent cloud components."
+      }
+    ]
+  },
+  "outcome": {
+    "title": "Outcome",
+    "paragraphs": [
+      "The project provided a practical way to record simulated trading recommendations and review their performance without manually maintaining spreadsheets or calculating returns.",
+      "Daily LINE reports consolidated trading history, open positions, average entry costs, market closing prices, and performance summaries into a single message, making it easier to monitor the results of followed recommendations over time.",
+      "The project demonstrates hands-on experience in backend development, third-party API integration, cloud storage, containerized deployment, and automated reporting workflows."
+    ],
+    "highlights": [
+      "LINE-based simulated trade tracking",
+      "Daily automated portfolio reports",
+      "Historical and current price comparisons",
+      "Cloud-hosted webhook and reporting jobs",
+      "End-to-end backend and cloud integration"
+    ]
+  },
+  "lessons_learned": {
+    "title": "Lessons Learned",
+    "items": [
+      "Messaging platforms can serve as lightweight interfaces for structured data collection and workflow automation.",
+      "Separating event-driven webhook processing from batch reporting improves the organization of cloud-based applications.",
+      "Financial calculations require careful validation of missing prices and incomplete transaction records to prevent invalid results.",
+      "Consistent transaction modeling is essential when tracking multiple entries and exits for the same stock.",
+      "Building tools around real personal workflows provides valuable experience in integrating external APIs, persistent storage, and automated cloud execution."
+    ]
+  },
+  "showcase": []
+}
